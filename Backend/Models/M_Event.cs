@@ -9,7 +9,7 @@
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public bool IsDone { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime EventCreated { get; set; }
 
         public M_User User { get; set; }
     }

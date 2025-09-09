@@ -36,7 +36,7 @@ namespace Backend.Data
                     Notes = "erste Notizen",
                     Start = GetUTCDate(2025, 9, 9),
                     End = GetUTCDate(2025, 9, 20),
-                    Created = GetUTCDate(2025, 9, 20),
+                    EventCreated = GetUTCDate(2025, 9, 20),
                     IsDone = false
                 },
                 new M_Event
@@ -47,7 +47,7 @@ namespace Backend.Data
                     Notes = "Weitere Notizen zu diesem Event",
                     Start = GetUTCDate(2025, 9, 9),
                     End = GetUTCDate(2025, 9, 20),
-                    Created = GetUTCDate(2025, 9, 20),
+                    EventCreated = GetUTCDate(2025, 9, 20),
                     IsDone = false
                 }
             );

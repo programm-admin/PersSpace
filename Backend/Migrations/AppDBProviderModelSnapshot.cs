@@ -27,10 +27,10 @@ namespace Backend.Migrations
                     b.Property<string>("ID")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("End")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("End")
+                    b.Property<DateTime>("EventCreated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDone")
@@ -61,8 +61,8 @@ namespace Backend.Migrations
                         new
                         {
                             ID = "E-1",
-                            Created = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             End = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EventCreated = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDone = false,
                             Notes = "erste Notizen",
                             Start = new DateTime(2025, 9, 9, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -72,8 +72,8 @@ namespace Backend.Migrations
                         new
                         {
                             ID = "E-2",
-                            Created = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             End = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EventCreated = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDone = false,
                             Notes = "Weitere Notizen zu diesem Event",
                             Start = new DateTime(2025, 9, 9, 0, 0, 0, 0, DateTimeKind.Utc),
