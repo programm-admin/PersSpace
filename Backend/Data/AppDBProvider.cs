@@ -25,6 +25,8 @@ namespace Backend.Data
                 new M_User { ID = "U-1", Name = "Erster Nutzer", Password = "Nutzerpassword" }
             );
 
+            DateTime GetUTCDate(int year, int month, int day) => new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
+
             modelBuilder.Entity<M_Event>().HasData(
                 new M_Event
                 {
@@ -32,9 +34,9 @@ namespace Backend.Data
                     Title = "erstes Event",
                     UserAccountID = "U-1",
                     Notes = "erste Notizen",
-                    Start = new DateTime(2025, 9, 9),
-                    End = new DateTime(2025, 9, 20),
-                    Created = new DateTime(),
+                    Start = GetUTCDate(2025, 9, 9),
+                    End = GetUTCDate(2025, 9, 20),
+                    Created = GetUTCDate(2025, 9, 20),
                     IsDone = false
                 },
                 new M_Event
@@ -43,9 +45,9 @@ namespace Backend.Data
                     Title = "2. Event",
                     UserAccountID = "U-1",
                     Notes = "Weitere Notizen zu diesem Event",
-                    Start = new DateTime(2025, 9, 9),
-                    End = new DateTime(2025, 9, 20),
-                    Created = new DateTime(),
+                    Start = GetUTCDate(2025, 9, 9),
+                    End = GetUTCDate(2025, 9, 20),
+                    Created = GetUTCDate(2025, 9, 20),
                     IsDone = false
                 }
             );
