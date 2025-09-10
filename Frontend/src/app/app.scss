@@ -13,7 +13,9 @@
   position: relative;
   z-index: 10;
   min-height: 100vh;
-  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  box-shadow: 0.2rem 0 0.4rem rgba(0, 21, 41, 0.35);
+  background-color: rgba(255, 56, 106, 0.281);
+  border-right: 0.2rem solid red;
 }
 
 .header-trigger {
@@ -36,23 +38,14 @@
   padding-left: 24px;
   overflow: hidden;
   line-height: 64px;
-  background: #001529;
   transition: all 0.3s;
-}
-
-.sidebar-logo img {
-  display: inline-block;
-  height: 32px;
-  width: 32px;
-  vertical-align: middle;
 }
 
 .sidebar-logo h1 {
   display: inline-block;
-  margin: 0 0 0 20px;
   color: #fff;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 1.2rem;
   font-family:
     Avenir,
     Helvetica Neue,
@@ -70,18 +63,14 @@ nz-header {
 
 .app-header {
   position: relative;
-  height: 64px;
+  height: 4rem;
   padding: 0;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-}
-
-nz-content {
-  margin: 24px;
+  box-shadow: 0 0.3rem 0.6rem rgba(0, 21, 41, 0.08);
 }
 
 .inner-content {
-  padding: 24px;
+  padding: 2rem;
   background: #fff;
   height: 100%;
 }
