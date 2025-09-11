@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './comp-start-page.scss'
 })
 export class CompStartPage {
-
+  
 }
