@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StartPage } from './start-page';
+import { CompStartPage } from './comp-start-page';
 
-describe('StartPage', () => {
-  let component: StartPage;
-  let fixture: ComponentFixture<StartPage>;
+describe('CompStartPage', () => {
+  let component: CompStartPage;
+  let fixture: ComponentFixture<CompStartPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StartPage]
+      imports: [CompStartPage]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StartPage);
+    fixture = TestBed.createComponent(CompStartPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
