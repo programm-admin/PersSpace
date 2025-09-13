@@ -9,6 +9,7 @@ import {
   Signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { CLIENT_ID } from '../../../environment/env';
 
 @Component({
   selector: 'app-comp-login-page',
@@ -24,13 +25,13 @@ export class CompLoginPage implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   async ngAfterViewInit(): Promise<void> {
-    // await this.googleService.loadScript();
-
     if (isPlatformBrowser(this.platformID)) {
       if (typeof google !== 'undefined' && google.accounts) {
         google.accounts.id.initialize({
-          client_id: '',
-          callback: (res: any) => {},
+          client_id: CLIENT_ID,
+          callback: (res: any) => {
+            console.log(res);
+          },
           auto_select: false, // wichtig!
           cancel_on_tap_outside: false, // verhindert, dass der Button verschwindet
         });
@@ -44,14 +45,5 @@ export class CompLoginPage implements OnInit, AfterViewInit {
         });
       }
     }
-
-    // setTimeout(() => {
-    //   google.accounts.id.renderButton(document.getElementById('login-btn'), {
-    //     theme: 'filled_blue',
-    //     size: 'large',
-    //     shape: 'rectangle',
-    //     width: 350,
-    //   });
-    // }, 100);
   }
 }
