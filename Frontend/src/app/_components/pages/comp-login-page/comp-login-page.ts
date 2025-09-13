@@ -23,12 +23,7 @@ import { UC_User_SetUserToken } from '../../../core/use-cases/user/set-user-toke
   imports: [],
   templateUrl: './comp-login-page.html',
   styleUrl: './comp-login-page.scss',
-  providers: [
-    UC_String_GetPathFromRoute,
-    UC_Storage_SetItem,
-    UC_Google_LoadScript,
-    UC_User_SetUserToken,
-  ],
+  providers: [UC_Storage_SetItem, UC_Google_LoadScript, UC_User_SetUserToken],
 })
 export class CompLoginPage implements OnInit, AfterViewInit {
   public isLoading: Signal<boolean> = signal<boolean>(false);
