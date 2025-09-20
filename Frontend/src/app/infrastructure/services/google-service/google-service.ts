@@ -1,13 +1,16 @@
 // google-auth.service.ts
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { T_GoogleRepository } from '../../../core/repositories/google.repository';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BACKEND_ID } from '../../../environment/env';
 
 @Injectable({ providedIn: 'root' })
 export class GoogleAuthService implements T_GoogleRepository {
   private scriptLoaded = false;
-
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  private platformId = inject(PLATFORM_ID);
+  private http = inject(HttpClient);
 
   loadScript(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -38,4 +41,8 @@ export class GoogleAuthService implements T_GoogleRepository {
       document.head.appendChild(script);
     });
   }
+
+  public sendTokenToBackend = (token: string): Observable<string> => {
+    return this.http.post<string>(BACKEND_ID, { token });
+  };
 }
