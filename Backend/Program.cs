@@ -7,10 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
 
-if (string.IsNullOrEmpty(connectionString))
+if (string.IsNullOrEmpty(connectionString) || string.IsNullOrEmpty(jwtSecret)
 {
-    throw new InvalidOperationException("DB connection was not provided in app.");
+    throw new InvalidOperationException("There are missing environment variables that are not provided in app.");
 }
 
 // Add services to the container.

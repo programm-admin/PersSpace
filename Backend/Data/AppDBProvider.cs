@@ -12,6 +12,7 @@ namespace Backend.Data
         public DbSet<M_User> Users { get; set; }
         public DbSet<M_Event> Events { get; set; }
         public DbSet<M_LoginHistory> LoginHistories { get; set; }
+        public DbSet<M_RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,9 +21,14 @@ namespace Backend.Data
                 .WithMany(e => e.Events)
                 .HasForeignKey(e => e.UserAccountID);
 
+            modelBuilder.Entity<M_User>()
+                .HasMany(u => u.RefreshTokens)
+                .WithOne(rt => rt.User)
+                .HasForeignKey(rt => rt.UserAccountID);
+
             // seed data
             modelBuilder.Entity<M_User>().HasData(
-                new M_User { ID = "U-1", Name = "Erster Nutzer", Password = "Nutzerpassword" }
+                new M_User { ID = "U-1", Name = "Erster Nutzer", Email = "vorname.nachname@example.local", PictureUrl = "_blank" }
             );
 
             DateTime GetUTCDate(int year, int month, int day) => new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
