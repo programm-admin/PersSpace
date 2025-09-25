@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
+import { APPLICATION_ROUTES } from './shared/variables/application-routes';
+import { T_ApplicationRoute } from './shared/types-and-interfaces/application-route';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
-  {
-    path: 'welcome',
-    loadChildren: () => import('./pages/welcome/welcome.routes').then((m) => m.WELCOME_ROUTES),
-  },
+  ...Object.entries(APPLICATION_ROUTES).map(
+    (entry: [string, T_ApplicationRoute]) => entry[1].route,
+  ),
 ];

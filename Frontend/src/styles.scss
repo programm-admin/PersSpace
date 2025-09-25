@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --standard--background-color: rgb(255, 56, 105);
+  --standard--padding--left-right: 2rem;
+  --standard--padding--top-bottom: 1rem;
+}
+
+p {
+  text-align: justify;
+}
+
+.paddingFull {
+  padding-left: var(--standard--padding--left-right);
+  padding-right: var(--standard--padding--left-right);
+  padding-top: var(--standard--padding--top-bottom);
+  padding-bottom: var(--standard--padding--top-bottom);
+}
