@@ -1,23 +1,43 @@
 using Backend.Data;
 using Backend.Services;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION") 
+    ?? throw new Exception("DB connection string is not provided.");
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
+    ?? throw new Exception("JWT secret is not provided.");
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
+    ?? throw new Exception("JWT issuer is not provided");
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
+    ?? throw new Exception("JWT audience is not provided.");
+var googleClientID = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
+    ?? throw new Exception("Google client id is not provided.");
 
-if (string.IsNullOrEmpty(connectionString))
-{
-    throw new InvalidOperationException("DB connection was not provided in app.");
-}
 
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDBProvider>(options => options.UseNpgsql(connectionString));
-builder.Services.AddControllers();
 builder.Services.AddScoped<MappingService>();
+builder.Services.AddScoped<TokenService>(sp => new TokenService(jwtSecret, jwtIssuer, jwtAudience));
+builder.Services.AddScoped<GoogleAuthService>(sp => new GoogleAuthService(googleClientID));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
+    };
+});
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -42,6 +62,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
