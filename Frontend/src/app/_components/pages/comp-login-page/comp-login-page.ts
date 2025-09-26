@@ -32,7 +32,7 @@ import { CLIENT_ID } from '../../../environment/env';
         UC_Google_SendTokenToBackend,
     ],
 })
-export class CompLoginPage implements OnInit, AfterViewInit {
+export class CompLoginPage implements AfterViewInit {
     public isLoadingSignal: WritableSignal<boolean> = signal<boolean>(false);
     public isLoaded: boolean = false;
 
@@ -43,8 +43,6 @@ export class CompLoginPage implements OnInit, AfterViewInit {
     private readonly loadScriptUseCase = inject(UC_Google_LoadScript);
     private readonly setUserTokenUseCase = inject(UC_User_SetUserToken);
     private readonly sendTokenToBackendUseCase = inject(UC_Google_SendTokenToBackend);
-
-    ngOnInit(): void {}
 
     async ngAfterViewInit(): Promise<void> {
         if (isPlatformBrowser(this.platformID)) {
