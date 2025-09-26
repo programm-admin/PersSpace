@@ -18,8 +18,8 @@ namespace Backend.Services
 
             try
             {
-                return await GoogleJsonWebSignature.ValidateAsync(idToken, settings); 
-            } 
+                return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+            }
             catch
             {
                 return null;

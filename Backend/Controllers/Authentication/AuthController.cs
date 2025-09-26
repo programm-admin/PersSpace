@@ -15,6 +15,11 @@ namespace Backend.Controllers.Authentication
         private readonly TokenService _tokenService;
         private readonly GoogleAuthService _googleAuthService;
 
+        public class Req_Login
+        {
+            public string token { get; set; } = string.Empty;
+        }
+
         public AuthController(AppDBProvider db, TokenService tokenService, GoogleAuthService googleAuthService)
         {
             _db = db;
@@ -28,17 +33,19 @@ namespace Backend.Controllers.Authentication
             Response.Cookies.Append(AuthConstants.KEY_ACCESS_TOKEN, accessToken, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddMinutes(10)
+                Secure = false,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(10),
+                MaxAge = TimeSpan.FromMinutes(10)
             });
 
             Response.Cookies.Append(AuthConstants.KEY_REFRESH_TOKEN, refreshToken, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddMinutes(30)
+                Secure = false,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                MaxAge = TimeSpan.FromMinutes(10)
             });
         }
 
@@ -52,11 +59,11 @@ namespace Backend.Controllers.Authentication
         /// Frontend sendet Google ID Token → Backend validiert → erstellt eigenen Access + Refresh Token
         /// </summary>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] string idToken)
+        public async Task<IActionResult> Login([FromBody] Req_Login idToken)
         {
-            if (string.IsNullOrEmpty(idToken)) { return BadRequest("[ERROR] id token is required."); }
+            if (string.IsNullOrEmpty(idToken.token)) { return BadRequest("[ERROR] id token is required."); }
 
-            var payload = await _googleAuthService.ValidateAsync(idToken);
+            var payload = await _googleAuthService.ValidateAsync(idToken.token);
 
             if (payload == null) { return Unauthorized("[ERROR] id token is invalid"); }
 

@@ -6,8 +6,6 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
   selector: 'app-comp-app-layout',
   imports: [RouterOutlet, NzLayoutModule],
   templateUrl: './comp-app-layout.html',
-  styleUrl: './comp-app-layout.scss'
+  styleUrl: './comp-app-layout.scss',
 })
-export class CompAppLayout {
-
-}
+export class CompAppLayout {}

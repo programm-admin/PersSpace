@@ -8,9 +8,8 @@ describe('CompAppLayout', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CompAppLayout]
-    })
-    .compileComponents();
+      imports: [CompAppLayout],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CompAppLayout);
     component = fixture.componentInstance;
