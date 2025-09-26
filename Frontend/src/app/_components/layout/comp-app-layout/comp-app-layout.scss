@@ -1,42 +1,42 @@
 .app {
-  height: 100vh;
-  width: 100vw;
+    height: 100vh;
+    width: 100vw;
 }
 
 .header {
-  position: relative;
-  height: 4rem;
-  padding: 0;
-  background: #fff;
-  box-shadow: 0 0.3rem 0.6rem rgba(0, 21, 41, 0.08);
+    position: relative;
+    height: 4rem;
+    padding: 0;
+    background: #fff;
+    box-shadow: 0 0.3rem 0.6rem rgba(0, 21, 41, 0.08);
 }
 
 .content {
-  width: 100%;
-  height: calc(100vh - 4rem);
-  overflow-x: hidden;
-  overflow-y: auto;
+    width: 100%;
+    height: calc(100vh - 4rem);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 nz-header {
-  padding: 0;
-  width: 100%;
-  z-index: 2;
-  padding-left: var(--standard--padding--left-right);
-  padding-right: var(--standard--padding--left-right);
-  padding-top: calc(0.1 * var(--standard--padding--top-bottom));
-  padding-bottom: calc(0.5 * var(--standard--padding--top-bottom));
+    padding: 0;
+    width: 100%;
+    z-index: 2;
+    padding-left: var(--standard--padding--left-right);
+    padding-right: var(--standard--padding--left-right);
+    padding-top: calc(0.1 * var(--standard--padding--top-bottom));
+    padding-bottom: calc(0.5 * var(--standard--padding--top-bottom));
 
-  font-weight: 600;
-  font-size: 1.2rem;
-  font-family:
-    Avenir,
-    Helvetica Neue,
-    Arial,
-    Helvetica,
-    sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    font-family:
+        Avenir,
+        Helvetica Neue,
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 nz-header span {
-  color: white;
+    color: white;
 }

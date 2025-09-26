@@ -3,9 +3,9 @@ import { IT_GOOGLE_REPOSITORY } from '../../repositories/google.repository';
 
 @Injectable()
 export class UC_Google_LoadScript {
-  private readonly googleRepository = inject(IT_GOOGLE_REPOSITORY);
+    private readonly googleRepository = inject(IT_GOOGLE_REPOSITORY);
 
-  public execute = () => {
-    return this.googleRepository.loadScript();
-  };
+    public execute = () => {
+        return this.googleRepository.loadScript();
+    };
 }

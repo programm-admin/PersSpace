@@ -1,8 +1,8 @@
 import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection,
-  importProvidersFrom,
+    ApplicationConfig,
+    provideBrowserGlobalErrorListeners,
+    provideZoneChangeDetection,
+    importProvidersFrom,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -21,16 +21,16 @@ import { getProviders } from './app.providers';
 registerLocaleData(en);
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideClientHydration(withEventReplay()),
-    provideNzIcons(icons),
-    provideNzI18n(en_US),
-    importProvidersFrom(FormsModule),
-    provideAnimationsAsync(),
-    provideHttpClient(),
-    ...getProviders(),
-  ],
+    providers: [
+        provideBrowserGlobalErrorListeners(),
+        provideZoneChangeDetection({ eventCoalescing: true }),
+        provideRouter(routes),
+        provideClientHydration(withEventReplay()),
+        provideNzIcons(icons),
+        provideNzI18n(en_US),
+        importProvidersFrom(FormsModule),
+        provideAnimationsAsync(),
+        provideHttpClient(),
+        ...getProviders(),
+    ],
 };

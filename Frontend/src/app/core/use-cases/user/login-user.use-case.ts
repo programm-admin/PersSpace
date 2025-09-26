@@ -3,9 +3,9 @@ import { IT_USER_REPOSITORY } from '../../repositories/user.repository';
 
 @Injectable()
 export class UC_User_LoginUser {
-  private readonly userRepository = inject(IT_USER_REPOSITORY);
+    private readonly userRepository = inject(IT_USER_REPOSITORY);
 
-  public execute = () => {
-    return this.userRepository.loginUser();
-  };
+    public execute = () => {
+        return this.userRepository.loginUser();
+    };
 }

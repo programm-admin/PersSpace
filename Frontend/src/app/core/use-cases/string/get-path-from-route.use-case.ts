@@ -4,9 +4,9 @@ import { T_ApplicationRoute } from '../../../shared/types-and-interfaces/applica
 
 @Injectable({ providedIn: 'root' })
 export class UC_String_GetPathFromRoute {
-  private readonly stringRepository = inject(IT_STRING_REPOSITORY);
+    private readonly stringRepository = inject(IT_STRING_REPOSITORY);
 
-  public execute = (route: T_ApplicationRoute) => {
-    return this.stringRepository.getPathFromRoute(route);
-  };
+    public execute = (route: T_ApplicationRoute) => {
+        return this.stringRepository.getPathFromRoute(route);
+    };
 }

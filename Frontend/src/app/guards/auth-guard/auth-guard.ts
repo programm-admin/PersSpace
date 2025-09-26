@@ -5,14 +5,14 @@ import { UC_String_GetPathFromRoute } from '../../core/use-cases/string/get-path
 import { APPLICATION_ROUTES } from '../../shared/variables/application-routes';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const getIsLoggedInUseCase = inject(UC_User_GetIsUserLoggedIn);
-  const getPathForRouteUseCase = inject(UC_String_GetPathFromRoute);
-  const router = inject(Router);
+    const getIsLoggedInUseCase = inject(UC_User_GetIsUserLoggedIn);
+    const getPathForRouteUseCase = inject(UC_String_GetPathFromRoute);
+    const router = inject(Router);
 
-  if (!getIsLoggedInUseCase.execute()()) {
-    router.navigate([getPathForRouteUseCase.execute(APPLICATION_ROUTES.start)]);
-    return false;
-  }
+    if (!getIsLoggedInUseCase.execute()()) {
+        router.navigate([getPathForRouteUseCase.execute(APPLICATION_ROUTES.start)]);
+        return false;
+    }
 
-  return true;
+    return true;
 };

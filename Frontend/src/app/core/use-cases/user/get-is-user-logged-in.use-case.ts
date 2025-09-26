@@ -3,9 +3,9 @@ import { IT_USER_REPOSITORY } from '../../repositories/user.repository';
 
 @Injectable({ providedIn: 'root' })
 export class UC_User_GetIsUserLoggedIn {
-  private readonly userRepository = inject(IT_USER_REPOSITORY);
+    private readonly userRepository = inject(IT_USER_REPOSITORY);
 
-  public execute = (): Signal<boolean> => {
-    return this.userRepository.getIsUserLoggedIn();
-  };
+    public execute = (): Signal<boolean> => {
+        return this.userRepository.getIsUserLoggedIn();
+    };
 }

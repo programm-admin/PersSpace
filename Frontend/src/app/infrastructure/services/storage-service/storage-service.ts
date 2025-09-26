@@ -3,24 +3,24 @@ import { T_StorageRepository } from '../../../core/repositories/storage.reposito
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class StorageService implements T_StorageRepository {
-  private readonly platformID = inject(PLATFORM_ID);
+    private readonly platformID = inject(PLATFORM_ID);
 
-  getStorageItem = (key: string): string | null => {
-    if (!isPlatformBrowser(this.platformID)) {
-      return null;
-    }
+    getStorageItem = (key: string): string | null => {
+        if (!isPlatformBrowser(this.platformID)) {
+            return null;
+        }
 
-    return localStorage.getItem(key);
-  };
+        return localStorage.getItem(key);
+    };
 
-  setStorageItem = (key: string, value: string) => {
-    if (!isPlatformBrowser(this.platformID)) {
-      return;
-    }
+    setStorageItem = (key: string, value: string) => {
+        if (!isPlatformBrowser(this.platformID)) {
+            return;
+        }
 
-    localStorage.setItem(key, value);
-  };
+        localStorage.setItem(key, value);
+    };
 }

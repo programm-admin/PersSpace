@@ -9,10 +9,10 @@ import { IT_GOOGLE_REPOSITORY } from './core/repositories/google.repository';
 import { GoogleAuthService } from './infrastructure/services/google-service/google-service';
 
 export const getProviders = (): Provider[] => {
-  return [
-    { provide: IT_USER_REPOSITORY, useClass: UserService },
-    { provide: IT_STRING_REPOSITORY, useClass: StringService },
-    { provide: IT_STORAGE_REPOSITORY, useClass: StorageService },
-    { provide: IT_GOOGLE_REPOSITORY, useClass: GoogleAuthService },
-  ];
+    return [
+        { provide: IT_USER_REPOSITORY, useClass: UserService },
+        { provide: IT_STRING_REPOSITORY, useClass: StringService },
+        { provide: IT_STORAGE_REPOSITORY, useClass: StorageService },
+        { provide: IT_GOOGLE_REPOSITORY, useClass: GoogleAuthService },
+    ];
 };
