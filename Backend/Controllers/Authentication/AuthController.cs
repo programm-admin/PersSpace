@@ -93,7 +93,8 @@ namespace Backend.Controllers.Authentication
                 new
                 {
                     message = "Erfolgreich eingeloggt",
-                    user = new {user.ID, user.Email, user.PictureUrl}
+                    user = new {user.ID, user.Email, image = user.PictureUrl, userName = user.Name},
+                    tokens = new {accessToken, refreshToken = refreshToken.Token},
                 }    
             );
         }

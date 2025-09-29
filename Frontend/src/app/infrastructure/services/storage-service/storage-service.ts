@@ -45,6 +45,7 @@ export class StorageService implements T_StorageRepository {
 
         localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME, value.userName);
         localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE, value.image);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_ID, value.id);
 
         return true;
     };
