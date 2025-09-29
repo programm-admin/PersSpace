@@ -20,12 +20,9 @@ import { isPlatformBrowser } from '@angular/common';
 export class UserService implements T_UserRepository {
     private http = inject(HttpClient);
     private readonly platformID = inject(PLATFORM_ID);
-    private userToken: WritableSignal<string | null> = signal<string | null>(
-        isPlatformBrowser(this.platformID)
-            ? localStorage.getItem(LOCAL_STORAGE_KEY_USER_TOKEN)
-            : null,
-    );
-    private readonly isLoggedIn: Signal<boolean> = computed(() => this.userToken() !== null);
+    private userSubject: WritableSignal<M_User | null> = signal<M_User | null>(null);
+
+    private readonly isLoggedIn: Signal<boolean> = computed(() => this.userSubject() !== null);
 
     public isUserLoggedIn = (): boolean => {
         return true;
@@ -49,7 +46,7 @@ export class UserService implements T_UserRepository {
         return this.isLoggedIn;
     };
 
-    public setUserToken = (token: string | null) => {
-        this.userToken.set(token);
+    public setUserToken = (token: M_User | null) => {
+        this.userSubject.set(token);
     };
 }

@@ -1,6 +1,12 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { T_StorageRepository } from '../../../core/repositories/storage.repository';
 import { isPlatformBrowser } from '@angular/common';
+import { M_Credentials, M_User } from '../../../core/models/user.model';
+import {
+    LOCAL_STORAGE_KEY_USER,
+    LOCAL_STORAGE_KEYS,
+    T_STORAGE_KEYS,
+} from '../../../shared/variables/storage-keys';
 
 @Injectable({
     providedIn: 'root',
@@ -22,5 +28,35 @@ export class StorageService implements T_StorageRepository {
         }
 
         localStorage.setItem(key, value);
+    };
+
+    clearStorage = () => {
+        if (!isPlatformBrowser(this.platformID)) {
+            return;
+        }
+
+        localStorage.clear();
+    };
+
+    setUserToStorage = (value: M_User): boolean => {
+        if (!isPlatformBrowser(this.platformID)) {
+            return false;
+        }
+
+        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME, value.userName);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE, value.image);
+
+        return true;
+    };
+
+    setTokensToStorage = (value: M_Credentials): boolean => {
+        if (!isPlatformBrowser(this.platformID)) {
+            return false;
+        }
+
+        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN, value.accessToken);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_REFRESH_TOKEN, value.refreshToken);
+
+        return true;
     };
 }

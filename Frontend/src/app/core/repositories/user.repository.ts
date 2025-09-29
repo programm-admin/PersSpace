@@ -8,7 +8,7 @@ export type T_UserRepository = {
     logoutUser: () => void;
     registerUser: () => Observable<void>;
     getIsUserLoggedIn: () => Signal<boolean>;
-    setUserToken: (token: string | null) => void;
+    setUserToken: (token: M_User | null) => void;
 };
 
 export const IT_USER_REPOSITORY = new InjectionToken<T_UserRepository>('T_UserRepository');
