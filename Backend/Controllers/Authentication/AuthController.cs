@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers.Authentication
 {
-    [ApiController]
+    [ApiController] 
     [Route("auth")]
     public class AuthController : ControllerBase
     {
@@ -110,7 +110,7 @@ namespace Backend.Controllers.Authentication
 
             M_RefreshToken? storedToken = await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token  == refreshTokenCookie);
 
-            if (storedToken == null || storedToken.RevokedAt != null || storedToken.ExpiresAt < DateTime.UtcNow) { return Unauthorized("[ERROR] Refresh token invalid or expired."); }
+            if (storedToken == null || storedToken.ExpiresAt < DateTime.UtcNow) { return Unauthorized("[ERROR] Refresh token invalid or expired."); }
 
             // delete old refresh token
             storedToken.RevokedAt = DateTime.UtcNow;
@@ -127,7 +127,14 @@ namespace Backend.Controllers.Authentication
             await _db.SaveChangesAsync();
             SetAuthCookies(newAccessToken, newRefreshToken.Token);
 
-            return Ok(new { message = "Tokens refreshed successfully." });
+            return Ok(new 
+            {
+                message = "Tokens refreshed successfully.", token = new 
+                { 
+                refreshToken = newRefreshToken.Token,
+                accessToken = newAccessToken
+                } 
+            });
         }
 
 
