@@ -3,17 +3,18 @@
     width: 100vw;
 }
 
-.header {
+.header,
+nz-header {
     position: relative;
     height: 4rem;
     padding: 0;
-    background: #fff;
+    background: var(--header--background-color);
     box-shadow: 0 0.3rem 0.6rem rgba(0, 21, 41, 0.08);
 }
 
 .content {
     width: 100%;
-    height: calc(100vh - 4rem);
+    height: var(--content--height);
     overflow-x: hidden;
     overflow-y: auto;
 }

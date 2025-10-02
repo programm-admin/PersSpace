@@ -1,12 +1,24 @@
-<div>
-    <h1>Herzlich willkommen</h1>
+@if (!isLoading) {
+    <div>
+        <h1>Herzlich willkommen</h1>
 
-    <p>
-        in PersSpace, deinem persönlichen Bereich. Hier kannst du deine Termine sowie weitere Dinge
-        anlegen und verwalten. Der Kalender zeigt dir ganz einfache deine nächsten Termine an, die
-        du entsprechend verwalten kannst. So weißt du immer, was gerade bei der ansteht. <br />
-        Zudem zeigen dir übersichtliche Dashboards Statistiken deiner letzten Termine sowie letzte
-        Aktivitäten.
-    </p>
-    <button nz-button nzSize="large" (click)="bla()">Zum Login</button>
-</div>
+        <p>
+            in PersSpace, deinem persönlichen Bereich. Hier kannst du deine Termine sowie weitere
+            Dinge anlegen und verwalten. Der Kalender zeigt dir ganz einfache deine nächsten Termine
+            an, die du entsprechend verwalten kannst. So weißt du immer, was gerade bei der ansteht.
+            <br />
+            Zudem zeigen dir übersichtliche Dashboards Statistiken deiner letzten Termine sowie
+            letzte Aktivitäten.
+        </p>
+
+        @if (isUserLoggedIn()) {
+            <button nz-button nzSize="large" (click)="navigateToPage(true)">
+                Zu meiner Startseite
+            </button>
+        } @else {
+            <button nz-button nzSize="large" (click)="navigateToPage(false)">Zum Login</button>
+        }
+    </div>
+} @else {
+    <app-comp-loading-screen />
+}
