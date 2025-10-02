@@ -11,10 +11,18 @@ body {
     --content--height-without-padding: calc(var(--content--height) - 2rem);
     --content--width-without-padding: calc(100vw - 4rem);
 
+    --tranisition--duration: 0.3s;
+
     --standard--font--size: 1.1rem;
 
     --standard--background-color: rgb(255, 56, 105);
     --header--background-color: color-mix(in hsl, var(--standard--background-color) 90%, white 10%);
+    --header--background-color-dark: color-mix(
+        in hsl,
+        var(--standard--background-color) 90%,
+        black 10%
+    );
+    --header--height: 4rem;
 }
 
 p {

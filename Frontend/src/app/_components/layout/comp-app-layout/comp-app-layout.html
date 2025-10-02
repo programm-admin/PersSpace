@@ -2,6 +2,47 @@
     <nz-layout>
         <nz-header>
             <span>PersSpace</span>
+            <button
+                class="headerBUTTON"
+                nz-tooltip
+                nzTooltipTitle="Menü öffnen"
+                nzTooltipPlacement="bottom"
+                nz-dropdown
+                nzTrigger="click"
+                [nzDropdownMenu]="menu"
+            >
+                <nz-icon nzType="plus" nzTheme="outline" />
+            </button>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    @for (item of creationMenu; track $index) {
+                        <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
+                            {{ item.title }}
+                        </li>   
+                    }
+                </ul>
+            </nz-dropdown-menu>
+            <!-- <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item>1st menu item</li>
+                    <li nz-menu-item>2nd menu item</li>
+                    <li nz-menu-divider></li>
+                    <li nz-menu-item nzDisabled>disabled menu item</li>
+                    <li nz-submenu nzTitle="sub menu">
+                        <ul>
+                            <li nz-menu-item>3rd menu item</li>
+                            <li nz-menu-item>4th menu item</li>
+                        </ul>
+                    </li>
+                    <li nz-submenu nzDisabled nzTitle="disabled sub menu">
+                        <ul>
+                            <li nz-menu-item>3rd menu item</li>
+                            <li nz-menu-item>4th menu item</li>
+                        </ul>
+                    </li>
+                </ul>
+            </nz-dropdown-menu> -->
         </nz-header>
         <nz-content>
             <div class="content paddingFull">
