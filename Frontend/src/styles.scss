@@ -5,13 +5,25 @@ body {
 }
 
 :root {
-    --standard--background-color: rgb(255, 56, 105);
     --standard--padding--left-right: 2rem;
     --standard--padding--top-bottom: 1rem;
+    --content--height: calc(100vh - 4rem);
+    --content--height-without-padding: calc(var(--content--height) - 2rem);
+    --content--width-without-padding: calc(100vw - 4rem);
+
+    --standard--font--size: 1.1rem;
+
+    --standard--background-color: rgb(255, 56, 105);
+    --header--background-color: color-mix(in hsl, var(--standard--background-color) 90%, white 10%);
 }
 
 p {
     text-align: justify;
+}
+
+p,
+span {
+    font-size: var(--standard--font--size);
 }
 
 .paddingFull {
