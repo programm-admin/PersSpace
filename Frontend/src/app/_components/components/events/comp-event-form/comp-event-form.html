@@ -1,1 +1,80 @@
-<p>comp-event-form works!</p>
+<div class="eventFORM">
+    <form action="submit" class="form" nz-form [formGroup]="eventForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+            <nz-form-label nzRequired nzFor="inpTitle"
+                ><span class="label">Titel (Pflichtfeld)</span></nz-form-label
+            >
+            <nz-form-control
+                nzErrorTip="Titel ist ein Pflichtfeld und muss mindestens aus zwei Zeichen bestehen!"
+            >
+                <input
+                    type="text"
+                    nz-input
+                    formControlName="title"
+                    id="inpTitle"
+                    nzVariant="outlined"
+                    nzSize="large"
+                    required
+                />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="inpNotes" class="label"
+                ><span class="label">Notizen (optional)</span></nz-form-label
+            >
+            <nz-form-control>
+                <input
+                    type="text"
+                    nz-input
+                    formControlName="notes"
+                    id="inpNotes"
+                    nzVariant="outlined"
+                    nzSize="large"
+                />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzFor="inpTimeRange" class="label" nzRequired
+                ><span class="label"
+                    >Zeitintervall des Ereignisses (Pflichtfeld)</span
+                ></nz-form-label
+            >
+            <nz-form-control
+                nzErrorTip="Das Zeitintervall ist ein Pflichtfeld und beide Daten (Start- und Enddatum) müssen ausgefüllt werden!"
+            >
+                <nz-range-picker
+                    formControlName="timeRange"
+                    id="inpTimeRange"
+                    nzVariant="outlined"
+                    nzSize="large"
+                    [nzPlacement]="'bottomLeft'"
+                    required
+                />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzFor="inpIsDone" class="label" nzRequired
+                ><span class="label">Erledigt? (Pflichtfeld)</span></nz-form-label
+            >
+            <nz-form-control>
+                <nz-switch nzSize="default" formControlName="isDone" id="inpIsDone" required />
+                <span class="label">
+                    @if (eventForm.get('isDone')?.value === true) {
+                        (bereits erledigt)
+                    } @else {
+                        (noch nicht erledigt)
+                    }
+                </span>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <button nz-button nzType="primary" nzSize="large" [disabled]="!eventForm.valid">
+                <nz-icon nzType="check" nzTheme="outline" />
+                Event erstellen
+            </button>
+        </nz-form-item>
+    </form>
+</div>
