@@ -36,16 +36,28 @@ nz-header {
         sans-serif;
 
     box-shadow: 0.1rem 0.2rem 0.1rem rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
 }
 
 nz-header span {
     color: white;
 }
 
+nz-header img {
+    height: 80%;
+
+    &:hover {
+        cursor: pointer;
+        color: white;
+    }
+}
+
 .headerBUTTON {
     height: var(--header--height);
     width: 4rem;
     background-color: transparent;
+    color: var(--header--background-color-light);
     border: 0.1rem solid transparent;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -56,9 +68,8 @@ nz-header span {
     transition-duration: var(--tranisition--duration);
 
     &:hover {
-        color: white;
         cursor: pointer;
-        border: 0.1rem solid black;
-        background-color: var(--header--background-color-dark);
+        border: 0.1rem solid var(--header--background-color-light);
+        background-color: var(--header--button--hover--background-color);
     }
 }

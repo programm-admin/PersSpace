@@ -16,13 +16,23 @@ body {
     --standard--font--size: 1.1rem;
 
     --standard--background-color: rgb(255, 56, 105);
-    --header--background-color: color-mix(in hsl, var(--standard--background-color) 90%, white 10%);
+    --header--background-color: #3c3a36;
+    // color-mix(in hsl, var(--standard--background-color) 90%, white 10%);
     --header--background-color-dark: color-mix(
         in hsl,
         var(--standard--background-color) 90%,
         black 10%
     );
+    --header--background-color-light: white;
     --header--height: 4rem;
+
+    --header--button--hover--background-color: color-mix(in hsl, #faf5f0 60%, black 40%);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 p {
