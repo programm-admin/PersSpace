@@ -8,6 +8,7 @@ export type T_UserRepository = {
     logoutUser: () => void;
     registerUser: () => Observable<void>;
     getIsUserLoggedIn: () => Signal<boolean>;
+    getUser: () => Signal<M_User | null>;
     setUserToken: (token: M_User | null) => void;
 };
 

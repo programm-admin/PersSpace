@@ -11,10 +11,7 @@ import { T_UserRepository } from '../../core/repositories/user.repository';
 import { Observable } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
-import {
-    LOCAL_STORAGE_KEY_USER_TOKEN,
-    LOCAL_STORAGE_KEYS,
-} from '../../shared/variables/storage-keys';
+import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
@@ -53,6 +50,11 @@ export class UserService implements T_UserRepository {
     public isUserLoggedIn = (): boolean => {
         return true;
     };
+
+    public getUser = (): Signal<M_User | null> => {
+        return this.userSubject;
+    };
+
     public loginUser = (): Observable<M_User> => {
         return this.http.post<M_User>('', {});
     };
