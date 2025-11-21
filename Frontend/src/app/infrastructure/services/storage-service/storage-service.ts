@@ -2,11 +2,7 @@ import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { T_StorageRepository } from '../../../core/repositories/storage.repository';
 import { isPlatformBrowser } from '@angular/common';
 import { M_Credentials, M_User } from '../../../core/models/user.model';
-import {
-    LOCAL_STORAGE_KEY_USER,
-    LOCAL_STORAGE_KEYS,
-    T_STORAGE_KEYS,
-} from '../../../shared/variables/storage-keys';
+import { LOCAL_STORAGE_KEYS } from '../../../shared/variables/storage-keys';
 
 @Injectable({
     providedIn: 'root',

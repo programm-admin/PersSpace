@@ -8,3 +8,5 @@ export type M_Model = {
     isDone: boolean;
     eventCreated: Date;
 };
+
+export type M_ModelCreate = Omit<M_Model, 'id' | 'userAccountID'>;

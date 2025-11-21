@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -7,6 +7,8 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { M_Model } from '../../../../core/models/event.model';
 
 @Component({
     selector: 'app-comp-event-form',
@@ -19,12 +21,15 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
         NzSwitchModule,
         NzButtonModule,
         NzIconModule,
+        NzRadioModule,
     ],
     templateUrl: './comp-event-form.html',
     styleUrl: './comp-event-form.scss',
 })
 export class CompEventForm {
     private readonly formBuilder = inject(NonNullableFormBuilder);
+
+    public outSubmitForm = output<M_Model>();
 
     public eventForm = this.formBuilder.group({
         title: this.formBuilder.control<string>('', [Validators.required, Validators.minLength(2)]),
@@ -47,9 +52,21 @@ export class CompEventForm {
             return;
         }
 
+        const rawValues = this.eventForm.getRawValue();
+        const newEvent: M_Model = {
+            id: '',
+            userAccountID: '',
+            title: rawValues.title,
+            notes: rawValues.notes,
+            start: rawValues.timeRange[0],
+            end: rawValues.timeRange[1],
+            isDone: rawValues.isDone,
+            eventCreated: new Date(),
+        };
+
         console.log(
             'event',
-            Object.values(this.eventForm.controls).map((c) => c.value),
+            Object.values(newEvent).map((c) => c),
         );
     };
 }

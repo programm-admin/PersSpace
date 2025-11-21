@@ -4,8 +4,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { T_GoogleRepository } from '../../../core/repositories/google.repository';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { BACKEND_ID } from '../../../environment/env';
 import { M_UserLoginResponse } from '../../../core/models/user.model';
+import { API_ROUTES } from '../../../environment/api-routes';
 
 @Injectable({ providedIn: 'root' })
 export class GoogleAuthService implements T_GoogleRepository {
@@ -46,7 +46,7 @@ export class GoogleAuthService implements T_GoogleRepository {
     public sendTokenToBackend = (token: string): Observable<M_UserLoginResponse> => {
         console.log('token', token);
         return this.http.post<M_UserLoginResponse>(
-            BACKEND_ID + 'auth/login',
+            API_ROUTES.login,
             { token },
             { withCredentials: true },
         );

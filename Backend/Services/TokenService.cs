@@ -46,6 +46,7 @@ namespace Backend.Services
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 UserAccountID = userID,
                 ExpiresAt = DateTime.UtcNow.AddDays(30),
+                CreatedAt = DateTime.UtcNow,
                 Id = Guid.NewGuid().ToString()
             };
         }

@@ -1,34 +1,41 @@
-<div class="app">
-    <nz-layout>
-        <nz-header>
-            <!-- <span>PersSpace</span> -->
-            <img src="logo.svg" alt="PerSpace-Logo" />
-            <button
-                class="headerBUTTON"
-                nz-tooltip
-                nzTooltipTitle="Menü öffnen"
-                nzTooltipPlacement="bottom"
-                nz-dropdown
-                nzTrigger="click"
-                [nzDropdownMenu]="menu"
-            >
-                <nz-icon nzType="plus" nzTheme="outline" />
-            </button>
+@if (!isLoading) {
+    <div class="app">
+        <nz-layout>
+            <nz-header>
+                <!-- <span>PersSpace</span> -->
+                <img src="logo.svg" alt="PerSpace-Logo" />
+                <button
+                    class="headerBUTTON"
+                    nz-tooltip
+                    nzTooltipTitle="Menü öffnen"
+                    nzTooltipPlacement="bottom"
+                    nz-dropdown
+                    nzTrigger="click"
+                    [nzDropdownMenu]="menu"
+                >
+                    <nz-icon nzType="plus" nzTheme="outline" />
+                </button>
 
-            <nz-dropdown-menu #menu="nzDropdownMenu">
-                <ul nz-menu>
-                    @for (item of creationMenu; track $index) {
-                        <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
-                            {{ item.title }}
-                        </li>
-                    }
-                </ul>
-            </nz-dropdown-menu>
-        </nz-header>
-        <nz-content>
-            <div class="content paddingFull">
-                <router-outlet></router-outlet>
-            </div>
-        </nz-content>
-    </nz-layout>
-</div>
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                    <ul nz-menu>
+                        @for (item of creationMenu; track $index) {
+                            <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
+                                {{ item.title }}
+                            </li>
+                        }
+                    </ul>
+                </nz-dropdown-menu>
+            </nz-header>
+            <nz-content>
+                <div class="content paddingFull">
+                    <router-outlet></router-outlet>
+                </div>
+            </nz-content>
+        </nz-layout>
+    </div>
+} @else {
+    <div class="app">
+        <img src="logo.svg" alt="PerSpace-Logo" />
+        Laden ...
+    </div>
+}

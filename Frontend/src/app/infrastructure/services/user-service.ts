@@ -8,11 +8,13 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { T_UserRepository } from '../../core/repositories/user.repository';
-import { Observable } from 'rxjs';
+import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
+import { API_ROUTES } from '../../environment/api-routes';
+import { StorageService } from './storage-service/storage-service';
 
 @Injectable({
     providedIn: 'root',
@@ -20,6 +22,8 @@ import { isPlatformBrowser } from '@angular/common';
 export class UserService implements T_UserRepository {
     private http = inject(HttpClient);
     private readonly platformID = inject(PLATFORM_ID);
+    private readonly storageService = inject(StorageService);
+
     private userSubject: WritableSignal<M_User | null> = signal<M_User | null>(
         (() => {
             if (!isPlatformBrowser(this.platformID)) {
@@ -51,6 +55,41 @@ export class UserService implements T_UserRepository {
         return true;
     };
 
+    /**
+     * Function for checking whether user is logged in at backend side.
+     * @returns Observable<M_User>
+     */
+    public getUserFromBackend = (): Observable<M_User> => {
+        const user: M_User | null = this.getUserFromLocalStorage();
+
+        if (!user) {
+            return EMPTY;
+        }
+
+        return this.http.get<M_User>(API_ROUTES.checkUserSession).pipe(
+            tap((response) => {
+                // user is logged in -> session is valid
+                this.userSubject.set(response);
+
+                // set information in local storage
+                this.storageService.setStorageItem(LOCAL_STORAGE_KEYS.KEY_USER_ID, response.id);
+                this.storageService.setStorageItem(
+                    LOCAL_STORAGE_KEYS.KEY_USER_NAME,
+                    response.userName,
+                );
+                this.storageService.setStorageItem(
+                    LOCAL_STORAGE_KEYS.KEY_USER_PICTURE,
+                    response.image,
+                );
+            }),
+            catchError((err) => {
+                // user is not logged in -> session invalid or expired
+                this.userSubject.set(null);
+                return throwError(() => err);
+            }),
+        );
+    };
+
     public getUser = (): Signal<M_User | null> => {
         return this.userSubject;
     };
@@ -78,7 +117,7 @@ export class UserService implements T_UserRepository {
         this.userSubject.set(token);
     };
 
-    private getUserFromLocalStorage = (): M_User | null => {
+    public getUserFromLocalStorage = (): M_User | null => {
         if (!isPlatformBrowser(this.platformID)) {
             return null;
         }

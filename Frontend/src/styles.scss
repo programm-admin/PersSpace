@@ -54,3 +54,12 @@ span {
 .label {
     font-size: var(--standard--font--size);
 }
+
+.actionDIV {
+    width: 100%;
+    height: 8rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
