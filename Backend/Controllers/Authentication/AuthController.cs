@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Backend.Controllers.Authentication
 {
-    [ApiController] 
+    [ApiController]
     [Route("auth")]
     public class AuthController : ControllerBase
     {
@@ -104,9 +104,13 @@ namespace Backend.Controllers.Authentication
                 new
                 {
                     message = "Erfolgreich eingeloggt",
-                    user = new {user.ID, user.Email, image = user.PictureUrl, userName = user.Name},
-                    tokens = new {accessToken, refreshToken = refreshToken.Token},
-                }    
+                    userID = user.ID,
+                    email = user.Email,
+                    picture = user.PictureUrl,
+                    userName = user.Name,
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken.Token
+                }
             );
         }
 
@@ -120,7 +124,7 @@ namespace Backend.Controllers.Authentication
 
             if (string.IsNullOrEmpty(refreshTokenCookie)) { return Unauthorized("[ERROR] No refresh token found."); }
 
-            M_RefreshToken? storedToken = await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token  == refreshTokenCookie);
+            M_RefreshToken? storedToken = await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token == refreshTokenCookie);
 
             if (storedToken == null || storedToken.ExpiresAt < DateTime.UtcNow) { return Unauthorized("[ERROR] Refresh token invalid or expired."); }
 
@@ -128,7 +132,7 @@ namespace Backend.Controllers.Authentication
             storedToken.RevokedAt = DateTime.UtcNow;
 
             // create new tokens
-            var newAccessToken = _tokenService.CreateAccessToken(storedToken.User);
+            var newAccessToken = _tokenService.CreateAccessToken(storedToken.User!);
             var newRefreshToken = _tokenService.CreateRefreshToken(storedToken.UserAccountID);
 
             newRefreshToken.ParentId = storedToken.Id;
@@ -139,13 +143,14 @@ namespace Backend.Controllers.Authentication
             await _db.SaveChangesAsync();
             SetAuthCookies(newAccessToken, newRefreshToken.Token);
 
-            return Ok(new 
+            return Ok(new
             {
-                message = "Tokens refreshed successfully.", token = new 
-                { 
-                refreshToken = newRefreshToken.Token,
-                accessToken = newAccessToken
-                } 
+                message = "Tokens refreshed successfully.",
+                token = new
+                {
+                    refreshToken = newRefreshToken.Token,
+                    accessToken = newAccessToken
+                }
             });
         }
 
@@ -183,9 +188,11 @@ namespace Backend.Controllers.Authentication
             // -----------------------------
             // 0. Header lesen
             // -----------------------------
-            string accessToken = Request.Headers["access_token"].FirstOrDefault();
-            string refreshToken = Request.Headers["refresh_token"].FirstOrDefault();
-            string userId = Request.Headers["user_id"].FirstOrDefault();
+
+            Console.Write("[ENDPUNKT] triggered");
+            string? accessToken = Request.Headers["access_token"].FirstOrDefault();
+            string? refreshToken = Request.Headers["refresh_token"].FirstOrDefault();
+            string? userId = Request.Headers["user_id"].FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(accessToken) ||
                 string.IsNullOrWhiteSpace(refreshToken) ||
@@ -193,6 +200,8 @@ namespace Backend.Controllers.Authentication
             {
                 return Unauthorized(new { success = false, error = "Missing headers." });
             }
+
+            Console.Write("alles: ", accessToken, refreshToken, userId);
 
 
             // -----------------------------
@@ -278,17 +287,17 @@ namespace Backend.Controllers.Authentication
             return Ok(new
             {
                 success = true,
-                user = new { user.ID, user.Email, image = user.PictureUrl, userName = user.Name },
-                tokens = new
-                {
-                    accessToken = newAccessToken,
-                    refreshToken = newRefreshToken.Token
-                }
+                userID = user.ID,
+                email = user.Email,
+                picture = user.PictureUrl,
+                userName = user.Name,
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken.Token
             });
         }
 
 
-        
+
 
 
 

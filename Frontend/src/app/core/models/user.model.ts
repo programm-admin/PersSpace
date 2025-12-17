@@ -1,15 +1,7 @@
 export type M_User = {
+    userID: string;
     userName: string;
-    image: string;
-    id: string;
-};
-
-export type M_Credentials = {
+    picture: string;
     refreshToken: string;
     accessToken: string;
-};
-
-export type M_UserLoginResponse = {
-    tokens: M_Credentials;
-    user: M_User;
 };

@@ -29,7 +29,9 @@ import { M_Model } from '../../../../core/models/event.model';
 export class CompEventForm {
     private readonly formBuilder = inject(NonNullableFormBuilder);
 
+    // output variables
     public outSubmitForm = output<M_Model>();
+    public outCancelForm = output<void>();
 
     public eventForm = this.formBuilder.group({
         title: this.formBuilder.control<string>('', [Validators.required, Validators.minLength(2)]),
@@ -68,5 +70,9 @@ export class CompEventForm {
             'event',
             Object.values(newEvent).map((c) => c),
         );
+    };
+
+    public cancelForm = () => {
+        this.outCancelForm.emit();
     };
 }

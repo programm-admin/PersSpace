@@ -1,11 +1,10 @@
 import { InjectionToken } from '@angular/core';
-import { M_Credentials, M_User } from '../models/user.model';
+import { M_User } from '../models/user.model';
 import { T_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 
 export type T_StorageRepository = {
     setStorageItem: (key: T_STORAGE_KEYS, value: string) => void;
     setUserToStorage: (value: M_User) => boolean;
-    setTokensToStorage: (value: M_Credentials) => boolean;
     getStorageItem: (key: string) => string | null;
     clearStorage: () => void;
 };

@@ -31,7 +31,6 @@
                     nzVariant="outlined"
                     nzSize="large"
                     rows="4"
-                    
                 ></textarea>
             </nz-form-control>
         </nz-form-item>
@@ -67,11 +66,17 @@
         </nz-form-item>
 
         <div class="actionDIV">
-            <button nz-button nzType="primary" nzSize="large" [disabled]="!eventForm.valid">
+            <button
+                nz-button
+                nzType="primary"
+                type="submit"
+                nzSize="large"
+                [disabled]="!eventForm.valid"
+            >
                 <nz-icon nzType="check" nzTheme="outline" />
                 Event erstellen
             </button>
-            <button nz-button nzType="default" nzSize="large">
+            <button nz-button nzType="default" nzSize="large" (click)="cancelForm()">
                 <nz-icon nzType="close" nzTheme="outline" />
                 Abbrechen
             </button>

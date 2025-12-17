@@ -10,6 +10,7 @@ import { UC_User_GetUserFromBackend } from '../../../core/use-cases/user/get-use
 import { M_User } from '../../../core/models/user.model';
 import { UC_User_GetUserFromLocalStorage } from '../../../core/use-cases/user/get-user-from-local-storage.use-case';
 import { UC_User_LogoutUser } from '../../../core/use-cases/user/logout-user.use-case';
+import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
 
 @Component({
     selector: 'app-comp-app-layout',
@@ -28,16 +29,11 @@ export class CompAppLayout implements OnInit {
     private readonly router = inject(Router);
 
     ngOnInit(): void {
-        this.isLoading = true;
+        // this.isLoading = true;
 
         const user: M_User | null = this.getUserFromLocalStorageUseCase.execute();
+        console.log('[COMP EVENT FORM] user', user);
 
-        if (!user) {
-            // local storage pattern is false or not set -> logout user
-            this.logoutUserUseCase.execute();
-            this.isLoading = false;
-            return;
-        }
 
         this.getUserFromBackendUseCase.execute().subscribe({
             next: (user: M_User) => {
@@ -45,7 +41,8 @@ export class CompAppLayout implements OnInit {
             },
             error: (err) => {
                 // error handling -> logout user
-                this.logoutUserUseCase.execute();
+                // this.logoutUserUseCase.execute();
+                console.log('[ERROR] from backend');
                 this.isLoading = false;
             },
         });
@@ -55,5 +52,10 @@ export class CompAppLayout implements OnInit {
         if (!path) return;
 
         this.router.navigateByUrl(path);
+    };
+
+    public navigateToLoginPage = () => {
+        console.log('clicked');
+        this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path!);
     };
 }

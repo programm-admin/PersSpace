@@ -15,12 +15,14 @@ import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 import { API_ROUTES } from '../../environment/api-routes';
 import { StorageService } from './storage-service/storage-service';
+import { IT_STORAGE_REPOSITORY } from '../../core/repositories/storage.repository';
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserService implements T_UserRepository {
     private http = inject(HttpClient);
+    private localStorageService = inject(IT_STORAGE_REPOSITORY);
     private readonly platformID = inject(PLATFORM_ID);
     private readonly storageService = inject(StorageService);
 
@@ -33,18 +35,30 @@ export class UserService implements T_UserRepository {
             const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
             const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);
             const userID: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_ID);
+            const accessToken: string | null = localStorage.getItem(
+                LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
+            );
+            const refreshToken: string | null = localStorage.getItem(
+                LOCAL_STORAGE_KEYS.KEY_REFRESH_TOKEN,
+            );
 
             return !image ||
                 !userID ||
                 !userName ||
+                !accessToken ||
+                !refreshToken ||
                 (image && !image.trim()) ||
                 (userID && !userID.trim()) ||
-                (userName && !userName.trim())
+                (userName && !userName.trim()) ||
+                (accessToken && !accessToken.trim()) ||
+                (refreshToken && !refreshToken.trim())
                 ? null
                 : {
-                      id: userID,
-                      image,
+                      userID: userID,
+                      picture: image,
                       userName: userName,
+                      accessToken: accessToken,
+                      refreshToken: refreshToken,
                   };
         })(),
     );
@@ -62,32 +76,33 @@ export class UserService implements T_UserRepository {
     public getUserFromBackend = (): Observable<M_User> => {
         const user: M_User | null = this.getUserFromLocalStorage();
 
+        console.log('[GET USER FROM BACKEND] user', user);
         if (!user) {
             return EMPTY;
         }
 
-        return this.http.get<M_User>(API_ROUTES.checkUserSession).pipe(
-            tap((response) => {
-                // user is logged in -> session is valid
-                this.userSubject.set(response);
+        return this.http
+            .get<M_User>(API_ROUTES.checkUserSession, {
+                headers: {
+                    access_token: user.accessToken,
+                    refresh_token: user.refreshToken,
+                    user_id: user.userID,
+                },
+            })
+            .pipe(
+                tap((response: M_User) => {
+                    // user is logged in -> session is valid
+                    this.userSubject.set(response);
 
-                // set information in local storage
-                this.storageService.setStorageItem(LOCAL_STORAGE_KEYS.KEY_USER_ID, response.id);
-                this.storageService.setStorageItem(
-                    LOCAL_STORAGE_KEYS.KEY_USER_NAME,
-                    response.userName,
-                );
-                this.storageService.setStorageItem(
-                    LOCAL_STORAGE_KEYS.KEY_USER_PICTURE,
-                    response.image,
-                );
-            }),
-            catchError((err) => {
-                // user is not logged in -> session invalid or expired
-                this.userSubject.set(null);
-                return throwError(() => err);
-            }),
-        );
+                    // set information in local storage
+                    this.localStorageService.setUserToStorage(response);
+                }),
+                catchError((err) => {
+                    // user is not logged in -> session invalid or expired
+                    this.userSubject.set(null);
+                    return throwError(() => err);
+                }),
+            );
     };
 
     public getUser = (): Signal<M_User | null> => {
@@ -125,13 +140,30 @@ export class UserService implements T_UserRepository {
         const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
         const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);
         const userID: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_ID);
+        const accessToken: string | null = localStorage.getItem(
+            LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
+        );
+        const refreshToken: string | null = localStorage.getItem(
+            LOCAL_STORAGE_KEYS.KEY_REFRESH_TOKEN,
+        );
 
-        return !image || !userID || !userName
+        return !image ||
+            !userID ||
+            !userName ||
+            !accessToken ||
+            !refreshToken ||
+            (image && !image.trim()) ||
+            (userID && !userID.trim()) ||
+            (userName && !userName.trim()) ||
+            (accessToken && !accessToken.trim()) ||
+            (refreshToken && !refreshToken.trim())
             ? null
             : {
-                  id: userID,
-                  image,
-                  userName: userName,
+                  userID,
+                  picture: image,
+                  userName,
+                  accessToken,
+                  refreshToken,
               };
     };
 }
