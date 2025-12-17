@@ -43,7 +43,8 @@ export class CompEventForm {
         isDone: this.formBuilder.control<boolean>(false, [Validators.required]),
     });
 
-    public submitForm = () => {
+    public submitForm = (event: SubmitEvent) => {
+        event.preventDefault();
         if (this.eventForm.invalid) {
             Object.values(this.eventForm.controls).forEach((control) => {
                 if (control.invalid) {
