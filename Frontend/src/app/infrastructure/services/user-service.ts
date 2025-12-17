@@ -74,7 +74,6 @@ export class UserService implements T_UserRepository {
     public getUserFromBackend = (): Observable<M_User> => {
         const user: M_User | null = this.getUserFromLocalStorage();
 
-        console.log('[GET USER FROM BACKEND] user', user);
         if (!user) {
             return EMPTY;
         }

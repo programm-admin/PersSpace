@@ -189,7 +189,6 @@ namespace Backend.Controllers.Authentication
             // 0. Header lesen
             // -----------------------------
 
-            Console.Write("[ENDPUNKT] triggered");
             string? accessToken = Request.Headers["access_token"].FirstOrDefault();
             string? refreshToken = Request.Headers["refresh_token"].FirstOrDefault();
             string? userId = Request.Headers["user_id"].FirstOrDefault();
@@ -201,7 +200,6 @@ namespace Backend.Controllers.Authentication
                 return Unauthorized(new { success = false, error = "Missing headers." });
             }
 
-            Console.Write("alles: ", accessToken, refreshToken, userId);
 
 
             // -----------------------------

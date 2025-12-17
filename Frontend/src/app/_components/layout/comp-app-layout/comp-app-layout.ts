@@ -53,7 +53,6 @@ export class CompAppLayout implements OnInit {
         this.user = this.getUserUseCase.execute();
 
         const user: M_User | null = this.getUserFromLocalStorageUseCase.execute();
-        console.log('[COMP EVENT FORM] user', user);
 
         this.getUserFromBackendUseCase.execute().subscribe({
             next: (user: M_User) => {
@@ -62,7 +61,6 @@ export class CompAppLayout implements OnInit {
             error: (err) => {
                 // error handling -> logout user
                 this.logoutUserUseCase.execute();
-                console.log('[ERROR] from backend');
                 this.isLoading = false;
             },
         });
@@ -75,7 +73,6 @@ export class CompAppLayout implements OnInit {
     };
 
     public navigateToLoginPage = () => {
-        console.log('clicked');
         this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path!);
     };
 }

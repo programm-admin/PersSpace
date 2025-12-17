@@ -44,7 +44,6 @@ export class GoogleAuthService implements T_GoogleRepository {
     }
 
     public sendTokenToBackend = (token: string): Observable<M_User> => {
-        console.log('token', token);
         return this.http.post<M_User>(API_ROUTES.login, { token }, { withCredentials: true });
     };
 }

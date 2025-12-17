@@ -66,7 +66,6 @@ export class CompLoginPage implements AfterViewInit {
                         next: (res: M_User) => {
                             // set data into storage
                             const userSet: boolean = this.setUserToStorageUseCase.execute(res);
-                            console.log('[COMP LOGIN PAGE] response from backend user:', res);
                             if (!userSet) {
                                 // clear storage and navigate user back to start page
                                 this.clearStorageUseCase.execute();
