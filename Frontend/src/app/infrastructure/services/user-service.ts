@@ -14,7 +14,6 @@ import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 import { API_ROUTES } from '../../environment/api-routes';
-import { StorageService } from './storage-service/storage-service';
 import { IT_STORAGE_REPOSITORY } from '../../core/repositories/storage.repository';
 
 @Injectable({
@@ -24,7 +23,6 @@ export class UserService implements T_UserRepository {
     private http = inject(HttpClient);
     private localStorageService = inject(IT_STORAGE_REPOSITORY);
     private readonly platformID = inject(PLATFORM_ID);
-    private readonly storageService = inject(StorageService);
 
     private userSubject: WritableSignal<M_User | null> = signal<M_User | null>(
         (() => {

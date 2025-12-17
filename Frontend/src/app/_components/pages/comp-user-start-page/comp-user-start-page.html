@@ -1,7 +1,7 @@
 @if (
     getUserUseCase.execute()() &&
-    getUserUseCase.execute()()?.id &&
-    getUserUseCase.execute()()?.image &&
+    getUserUseCase.execute()()?.userID &&
+    getUserUseCase.execute()()?.picture &&
     getUserUseCase.execute()()?.userName
 ) {
     <h1>Hallo, {{ getUserUseCase.execute()()?.userName }}</h1>

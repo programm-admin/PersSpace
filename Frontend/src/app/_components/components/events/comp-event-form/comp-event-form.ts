@@ -16,7 +16,7 @@ import { M_Model } from '../../../../core/models/event.model';
         NzInputModule,
         ReactiveFormsModule,
         NzFormModule,
-        NzTooltipDirective,
+        // NzTooltipDirective,
         NzDatePickerModule,
         NzSwitchModule,
         NzButtonModule,

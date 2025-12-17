@@ -1,7 +1,7 @@
 @if (!isLoading) {
     <div class="app">
         <nz-layout>
-            <nz-header>
+            <nz-header ngSkipHydration>
                 <!-- <span>PersSpace</span> -->
                 <img src="logo.svg" alt="PerSpace-Logo" (click)="navigateToLoginPage()" />
                 <button
@@ -15,7 +15,6 @@
                 >
                     <nz-icon nzType="plus" nzTheme="outline" />
                 </button>
-
                 <nz-dropdown-menu #menu="nzDropdownMenu">
                     <ul nz-menu>
                         @for (item of creationMenu; track $index) {
@@ -25,6 +24,10 @@
                         }
                     </ul>
                 </nz-dropdown-menu>
+
+                @if (user()) {
+                    <app-comp-user-button [inpButtonContent]="user()?.userName ?? ''" />
+                }
             </nz-header>
             <nz-content>
                 <div class="content paddingFull">
