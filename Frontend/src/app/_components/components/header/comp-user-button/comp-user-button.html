@@ -1,1 +1,16 @@
-<nz-avatar [nzText]="inpButtonContent().substring(0, 2)" />
+<div>
+    <nz-avatar
+        nz-dropdown
+        nzTrigger="click"
+        [nzDropdownMenu]="menu"
+        [nzText]="inpButtonContent().substring(0, 2)"
+        nz-tooltip
+        [nzTooltipTitle]="inpButtonContent()"
+    />
+
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+            <li nz-menu-item>Hallo</li>
+        </ul>
+    </nz-dropdown-menu>
+</div>
