@@ -11,10 +11,28 @@ body {
     --content--height-without-padding: calc(var(--content--height) - 2rem);
     --content--width-without-padding: calc(100vw - 4rem);
 
+    --tranisition--duration: 0.3s;
+
     --standard--font--size: 1.1rem;
 
     --standard--background-color: rgb(255, 56, 105);
-    --header--background-color: color-mix(in hsl, var(--standard--background-color) 90%, white 10%);
+    --header--background-color: #3c3a36;
+    // color-mix(in hsl, var(--standard--background-color) 90%, white 10%);
+    --header--background-color-dark: color-mix(
+        in hsl,
+        var(--standard--background-color) 90%,
+        black 10%
+    );
+    --header--background-color-light: white;
+    --header--height: 4rem;
+
+    --header--button--hover--background-color: color-mix(in hsl, #faf5f0 60%, black 40%);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 p {
@@ -31,4 +49,17 @@ span {
     padding-right: var(--standard--padding--left-right);
     padding-top: var(--standard--padding--top-bottom);
     padding-bottom: var(--standard--padding--top-bottom);
+}
+
+.label {
+    font-size: var(--standard--font--size);
+}
+
+.actionDIV {
+    width: 100%;
+    height: 8rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }

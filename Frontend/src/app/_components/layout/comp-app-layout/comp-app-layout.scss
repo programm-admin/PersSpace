@@ -6,7 +6,7 @@
 .header,
 nz-header {
     position: relative;
-    height: 4rem;
+    height: var(--header--height);
     padding: 0;
     background: var(--header--background-color);
     box-shadow: 0 0.3rem 0.6rem rgba(0, 21, 41, 0.08);
@@ -25,8 +25,6 @@ nz-header {
     z-index: 2;
     padding-left: var(--standard--padding--left-right);
     padding-right: var(--standard--padding--left-right);
-    padding-top: calc(0.1 * var(--standard--padding--top-bottom));
-    padding-bottom: calc(0.5 * var(--standard--padding--top-bottom));
 
     font-weight: 600;
     font-size: 1.2rem;
@@ -36,8 +34,42 @@ nz-header {
         Arial,
         Helvetica,
         sans-serif;
+
+    box-shadow: 0.1rem 0.2rem 0.1rem rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
 }
 
 nz-header span {
     color: white;
+}
+
+nz-header img {
+    height: 80%;
+
+    &:hover {
+        cursor: pointer;
+        color: white;
+    }
+}
+
+.headerBUTTON {
+    height: var(--header--height);
+    width: 4rem;
+    background-color: transparent;
+    color: var(--header--background-color-light);
+    border: 0.1rem solid transparent;
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+    align-content: center;
+    justify-content: center;
+
+    transition-duration: var(--tranisition--duration);
+
+    &:hover {
+        cursor: pointer;
+        border: 0.1rem solid var(--header--background-color-light);
+        background-color: var(--header--button--hover--background-color);
+    }
 }

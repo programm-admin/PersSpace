@@ -4,10 +4,11 @@ using Backend.Services;
 using Backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Backend.Controllers.Authentication
 {
-    [ApiController] 
+    [ApiController]
     [Route("auth")]
     public class AuthController : ControllerBase
     {
@@ -55,6 +56,16 @@ namespace Backend.Controllers.Authentication
             Response.Cookies.Delete(AuthConstants.KEY_REFRESH_TOKEN);
         }
 
+        private async Task InvalidateRefreshToken(string token)
+        {
+            var dbToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+            if (dbToken != null)
+            {
+                dbToken.RevokedAt = DateTime.UtcNow;
+                await _db.SaveChangesAsync();
+            }
+        }
+
         /// <summary>
         /// Frontend sendet Google ID Token → Backend validiert → erstellt eigenen Access + Refresh Token
         /// </summary>
@@ -93,9 +104,13 @@ namespace Backend.Controllers.Authentication
                 new
                 {
                     message = "Erfolgreich eingeloggt",
-                    user = new {user.ID, user.Email, image = user.PictureUrl, userName = user.Name},
-                    tokens = new {accessToken, refreshToken = refreshToken.Token},
-                }    
+                    userID = user.ID,
+                    email = user.Email,
+                    picture = user.PictureUrl,
+                    userName = user.Name,
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken.Token
+                }
             );
         }
 
@@ -109,7 +124,7 @@ namespace Backend.Controllers.Authentication
 
             if (string.IsNullOrEmpty(refreshTokenCookie)) { return Unauthorized("[ERROR] No refresh token found."); }
 
-            M_RefreshToken? storedToken = await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token  == refreshTokenCookie);
+            M_RefreshToken? storedToken = await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token == refreshTokenCookie);
 
             if (storedToken == null || storedToken.ExpiresAt < DateTime.UtcNow) { return Unauthorized("[ERROR] Refresh token invalid or expired."); }
 
@@ -117,7 +132,7 @@ namespace Backend.Controllers.Authentication
             storedToken.RevokedAt = DateTime.UtcNow;
 
             // create new tokens
-            var newAccessToken = _tokenService.CreateAccessToken(storedToken.User);
+            var newAccessToken = _tokenService.CreateAccessToken(storedToken.User!);
             var newRefreshToken = _tokenService.CreateRefreshToken(storedToken.UserAccountID);
 
             newRefreshToken.ParentId = storedToken.Id;
@@ -128,13 +143,14 @@ namespace Backend.Controllers.Authentication
             await _db.SaveChangesAsync();
             SetAuthCookies(newAccessToken, newRefreshToken.Token);
 
-            return Ok(new 
+            return Ok(new
             {
-                message = "Tokens refreshed successfully.", token = new 
-                { 
-                refreshToken = newRefreshToken.Token,
-                accessToken = newAccessToken
-                } 
+                message = "Tokens refreshed successfully.",
+                token = new
+                {
+                    refreshToken = newRefreshToken.Token,
+                    accessToken = newAccessToken
+                }
             });
         }
 
@@ -161,6 +177,126 @@ namespace Backend.Controllers.Authentication
             DeleteAuthCookies();
             return Ok(new { message = "Logout user successfully." });
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [HttpGet("check")]
+        public async Task<IActionResult> CheckAuthStatus()
+        {
+            // -----------------------------
+            // 0. Header lesen
+            // -----------------------------
+
+            string? accessToken = Request.Headers["access_token"].FirstOrDefault();
+            string? refreshToken = Request.Headers["refresh_token"].FirstOrDefault();
+            string? userId = Request.Headers["user_id"].FirstOrDefault();
+
+            if (string.IsNullOrWhiteSpace(accessToken) ||
+                string.IsNullOrWhiteSpace(refreshToken) ||
+                string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized(new { success = false, error = "Missing headers." });
+            }
+
+
+
+            // -----------------------------
+            // 1. Access Token – check expiration
+            // -----------------------------
+            var handler = new JwtSecurityTokenHandler();
+
+            JwtSecurityToken jwt;
+            try
+            {
+                jwt = handler.ReadJwtToken(accessToken);
+            }
+            catch
+            {
+                await InvalidateRefreshToken(refreshToken);
+                return Unauthorized(new { success = false, error = "Invalid access token." });
+            }
+
+            var expClaim = jwt.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
+            if (expClaim == null || !long.TryParse(expClaim, out var expSeconds))
+            {
+                await InvalidateRefreshToken(refreshToken);
+                return Unauthorized(new { success = false, error = "Access token missing exp." });
+            }
+
+            DateTime tokenExpiry = DateTimeOffset.FromUnixTimeSeconds(expSeconds).UtcDateTime;
+
+            if (tokenExpiry <= DateTime.UtcNow)
+            {
+                await InvalidateRefreshToken(refreshToken);
+                return Unauthorized(new { success = false, error = "Access token expired." });
+            }
+
+
+            // -----------------------------
+            // 2. Refresh Token – check expiration
+            // -----------------------------
+            var dbToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt =>
+                rt.Token == refreshToken && rt.UserAccountID == userId);
+
+            if (dbToken == null)
+            {
+                return Unauthorized(new { success = false, error = "Refresh token not found." });
+            }
+
+            if (dbToken.RevokedAt != default)
+            {
+                return Unauthorized(new { success = false, error = "Refresh token revoked." });
+            }
+
+            if (dbToken.ExpiresAt <= DateTime.UtcNow)
+            {
+                await InvalidateRefreshToken(refreshToken);
+                return Unauthorized(new { success = false, error = "Refresh token expired." });
+            }
+
+
+            // -----------------------------
+            // 3. check user in db
+            // -----------------------------
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.ID == userId);
+            if (user == null)
+            {
+                await InvalidateRefreshToken(refreshToken);
+                return Unauthorized(new { success = false, error = "User not found." });
+            }
+
+
+            // -----------------------------
+            // 4. Tokens erneuern
+            // -----------------------------
+            string newAccessToken = _tokenService.CreateAccessToken(user);
+            var newRefreshToken = _tokenService.CreateRefreshToken(user.ID);
+
+            _db.RefreshTokens.Add(newRefreshToken);
+
+            // optional: alten refresh token invalidieren
+            dbToken.RevokedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+
+
+            return Ok(new
+            {
+                success = true,
+                userID = user.ID,
+                email = user.Email,
+                picture = user.PictureUrl,
+                userName = user.Name,
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken.Token
+            });
+        }
+
+
+
+
 
 
         /// <summary>

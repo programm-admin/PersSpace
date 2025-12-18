@@ -1,8 +1,90 @@
-// Custom Theming for NG-ZORRO
-// For more information: https://ng.ant.design/docs/customize-theme/en
+// // Custom Theming for NG-ZORRO
+// // For more information: https://ng.ant.design/docs/customize-theme/en
+// @import '../node_modules/ng-zorro-antd/ng-zorro-antd.less';
+
+// // Override less variables to here
+// // View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+
+// @primary-color: rgb(255, 56, 105);
+
+// =========================================
+//  Custom Theming for NG-ZORRO
+// =========================================
+// Reference: https://ng.ant.design/docs/customize-theme/en
+// =========================================
+
 @import '../node_modules/ng-zorro-antd/ng-zorro-antd.less';
 
-// Override less variables to here
-// View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+// =========================================
+//  Farbpalette (Japanisch inspiriert, hell, ruhig, modern)
+// =========================================
 
-@primary-color: rgb(255, 56, 105);
+// Grundfarben
+@bg-base: #faf5f0; // Hauptseiten-Hintergrund
+@bg-panel: #f2ece8; // Sekundärer Hintergrund (Karten, Sektionen)
+@bg-hover: #d8d0c8; // Leichte Kontrastfläche (Hover, Footer etc.)
+
+// Textfarben
+@text-color: #3c3a36; // Haupttext (weiches Dunkelgrau)
+@text-color-secondary: #6e6b68; // Sekundärer Text
+@heading-color: #3c3a36;
+
+// Akzentfarben
+@accent-warm: #d17e5b; // Terrakotta / Hauptakzent
+@accent-light: #e8cfc2; // Sanftes Rosa / helle Akzentfläche
+@accent-cool: #7e8fa3; // Taubenblau / kühler Akzent
+
+// Rahmen / Linien / Schatten
+@border-color-base: #cac4bc;
+@shadow-color: rgba(0, 0, 0, 0.08);
+@box-shadow-base: 0 2px 8px @shadow-color;
+
+// =========================================
+//  NG-ZORRO Overrides
+// =========================================
+
+// Primärfarben (Buttons, Links, aktive Elemente)
+@primary-color: @accent-warm;
+@primary-color-hover: lighten(@accent-warm, 8%);
+@primary-color-active: darken(@accent-warm, 8%);
+@link-color: @accent-cool;
+@link-hover-color: lighten(@accent-cool, 10%);
+@link-active-color: darken(@accent-cool, 10%);
+
+// Hintergrundfarben
+@body-background: @bg-base;
+@component-background: @bg-panel;
+
+// Layout
+@layout-body-background: @bg-base;
+@layout-header-background: @bg-panel;
+@layout-footer-background: @bg-hover;
+@layout-header-color: @text-color;
+
+// Buttons
+@btn-primary-bg: @primary-color;
+@btn-primary-color: #fff;
+@btn-default-bg: #fff;
+@btn-default-color: @text-color;
+@btn-default-border: @border-color-base;
+
+// =========================================
+//  CSS Variable Export (für Nutzung in styles.scss etc.)
+// =========================================
+:root {
+    --bg-base: @{bg-base};
+    --bg-panel: @{bg-panel};
+    --bg-hover: @{bg-hover};
+
+    --text-color: @{text-color};
+    --text-secondary: @{text-color-secondary};
+
+    --accent-warm: @{accent-warm};
+    --accent-light: @{accent-light};
+    --accent-cool: @{accent-cool};
+
+    --border-light: @{border-color-base};
+    --shadow-color: @{shadow-color};
+
+    --header-color: @{heading-color};
+}

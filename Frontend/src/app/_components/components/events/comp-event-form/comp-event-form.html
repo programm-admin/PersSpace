@@ -1,0 +1,90 @@
+<div class="eventFORM">
+    <form
+        action="submit"
+        class="form"
+        nz-form
+        [formGroup]="eventForm"
+        (ngSubmit)="submitForm($event)"
+    >
+        <nz-form-item>
+            <nz-form-label nzRequired nzFor="inpTitle"
+                ><span class="label">Titel (Pflichtfeld)</span></nz-form-label
+            >
+            <nz-form-control
+                nzErrorTip="Titel ist ein Pflichtfeld und muss mindestens aus zwei Zeichen bestehen!"
+            >
+                <input
+                    type="text"
+                    nz-input
+                    formControlName="title"
+                    id="inpTitle"
+                    nzVariant="outlined"
+                    nzSize="large"
+                    required
+                />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="inpNotes" class="label"
+                ><span class="label">Notizen (optional)</span></nz-form-label
+            >
+            <nz-form-control>
+                <textarea
+                    type="text"
+                    nz-input
+                    formControlName="notes"
+                    id="inpNotes"
+                    nzVariant="outlined"
+                    nzSize="large"
+                    rows="4"
+                ></textarea>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzFor="inpTimeRange" class="label" nzRequired
+                ><span class="label"
+                    >Zeitintervall des Ereignisses (Pflichtfeld)</span
+                ></nz-form-label
+            >
+            <nz-form-control
+                nzErrorTip="Das Zeitintervall ist ein Pflichtfeld und beide Daten (Start- und Enddatum) müssen ausgefüllt werden!"
+            >
+                <nz-range-picker
+                    formControlName="timeRange"
+                    id="inpTimeRange"
+                    nzVariant="outlined"
+                    nzSize="large"
+                    [nzPlacement]="'bottomLeft'"
+                    required
+                />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzFor="inpIsDone" class="label" nzRequired
+                ><span class="label">Erledigt? (Pflichtfeld)</span></nz-form-label
+            >
+            <nz-radio-group formControlName="isDone">
+                <label nz-radio-button [nzValue]="true">ja</label>
+                <label nz-radio-button [nzValue]="false">nein</label>
+            </nz-radio-group>
+        </nz-form-item>
+        <div class="actionDIV">
+            <button
+                nz-button
+                nzType="primary"
+                type="submit"
+                nzSize="large"
+                [disabled]="!eventForm.valid"
+            >
+                <nz-icon nzType="check" nzTheme="outline" />
+                Event erstellen
+            </button>
+            <button nz-button nzType="default" nzSize="large" (click)="cancelForm()" type="button">
+                <nz-icon nzType="close" nzTheme="outline" />
+                Abbrechen
+            </button>
+        </div>
+    </form>
+</div>

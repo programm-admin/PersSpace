@@ -20,7 +20,7 @@ namespace Backend.Controllers.Event
             _mappingService = mappingService;
         }
 
-        public class EventRequest { public string ID { get; set; } }
+        public class EventRequest { public required string ID { get; set; } }
 
 
 
