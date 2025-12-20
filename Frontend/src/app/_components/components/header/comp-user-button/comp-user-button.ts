@@ -12,19 +12,21 @@ import { UC_User_GetUser } from '../../../../core/use-cases/user/get-user.use-ca
 import { M_User } from '../../../../core/models/user.model';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
+import { UC_Message_ShowMessage } from '../../../../core/use-cases/message/show-message.use-case';
 
 @Component({
     selector: 'app-comp-user-button',
     imports: [NzAvatarModule, NzDropDownModule, NzTooltipModule, NzIconModule, NzButtonModule],
     templateUrl: './comp-user-button.html',
     styleUrl: './comp-user-button.scss',
-    providers: [UC_User_LogoutUser, UC_User_GetUser],
+    providers: [UC_User_LogoutUser, UC_User_GetUser, UC_Message_ShowMessage],
 })
 export class CompUserButton implements OnInit {
     // dependency injections
-    private router = inject(Router);
-    private logoutUserUseCase = inject(UC_User_LogoutUser);
-    private readonly getUserUseCase = inject(UC_User_GetUser);
+    private readonly router = inject(Router);
+    private readonly UC_LogoutUser = inject(UC_User_LogoutUser);
+    private readonly UC_GetUser = inject(UC_User_GetUser);
+    private readonly UC_ShowMessage = inject(UC_Message_ShowMessage);
 
     public readonly menuPosition: NzPlacementType = MENU_POSITION;
     public user: Signal<M_User | null> = signal(null);
@@ -36,7 +38,7 @@ export class CompUserButton implements OnInit {
     public userMenu: T_ApplicationRoute[] = getUserSettingsRoutes();
 
     ngOnInit(): void {
-        this.user = this.getUserUseCase.execute();
+        this.user = this.UC_GetUser.execute();
     }
 
     public navigateToItemPage = (path: string | undefined) => {
@@ -46,7 +48,8 @@ export class CompUserButton implements OnInit {
     };
 
     public logoutUser = () => {
-        this.logoutUserUseCase.execute();
+        this.UC_LogoutUser.execute();
+        this.UC_ShowMessage.execute('success', 'Erfolgreich ausgeloggt.');
     };
 
     public navigateToLoginPage = () => {

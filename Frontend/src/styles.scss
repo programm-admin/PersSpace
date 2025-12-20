@@ -68,3 +68,18 @@ span {
 .menuUL {
     border: 0.1rem solid var(--standard--divider-color);
 }
+
+// /* Hintergrundfarbe aller Messages */
+// .ant-message-notice {
+//     background-color: #f0f5ff; /* hellblau */
+//     border-radius: 0.5rem;
+//     padding: 1rem 1.5rem;
+// }
+
+/* Textfarbe */
+.ant-message-notice-content {
+    color: white;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 0.1rem solid white;
+}

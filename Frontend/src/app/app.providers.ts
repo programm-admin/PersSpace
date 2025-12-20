@@ -7,6 +7,8 @@ import { IT_STORAGE_REPOSITORY } from './core/repositories/storage.repository';
 import { StorageService } from './infrastructure/services/storage-service/storage-service';
 import { IT_GOOGLE_REPOSITORY } from './core/repositories/google.repository';
 import { GoogleAuthService } from './infrastructure/services/google-service/google-service';
+import { IT_MESSAGE_REPOSITORY } from './core/repositories/message.repository';
+import { MessageService } from './infrastructure/services/message-service/message-service';
 
 export const getProviders = (): Provider[] => {
     return [
@@ -14,5 +16,6 @@ export const getProviders = (): Provider[] => {
         { provide: IT_STRING_REPOSITORY, useClass: StringService },
         { provide: IT_STORAGE_REPOSITORY, useClass: StorageService },
         { provide: IT_GOOGLE_REPOSITORY, useClass: GoogleAuthService },
+        { provide: IT_MESSAGE_REPOSITORY, useClass: MessageService },
     ];
 };
