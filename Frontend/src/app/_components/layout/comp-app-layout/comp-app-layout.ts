@@ -13,6 +13,8 @@ import { UC_User_LogoutUser } from '../../../core/use-cases/user/logout-user.use
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
 import { CompUserButton } from '../../components/header/comp-user-button/comp-user-button';
 import { UC_User_GetUser } from '../../../core/use-cases/user/get-user.use-case';
+import { MENU_POSITION } from '../../../shared/variables/menu-position';
+import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 
 @Component({
     selector: 'app-comp-app-layout',
@@ -34,12 +36,14 @@ import { UC_User_GetUser } from '../../../core/use-cases/user/get-user.use-case'
     ],
 })
 export class CompAppLayout implements OnInit {
+    // dependency injections
     private readonly getUserUseCase = inject(UC_User_GetUser);
     public readonly creationMenu: T_ApplicationRoute[] = getEventCreationRoutes();
     public readonly getUserFromBackendUseCase = inject(UC_User_GetUserFromBackend);
     public readonly logoutUserUseCase = inject(UC_User_LogoutUser);
     public readonly getUserFromLocalStorageUseCase = inject(UC_User_GetUserFromLocalStorage);
 
+    public readonly menuPosition: NzPlacementType = MENU_POSITION;
     public isLoading: boolean = false;
     public user: Signal<M_User | null> = signal(null);
 
