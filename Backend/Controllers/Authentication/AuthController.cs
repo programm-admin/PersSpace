@@ -94,11 +94,8 @@ namespace Backend.Controllers.Authentication
             }
 
             string accessToken = _tokenService.CreateAccessToken(user);
-            M_RefreshToken refreshToken = _tokenService.CreateRefreshToken(user.ID);
 
-            user.RefreshTokens.Add(refreshToken);
             await _db.SaveChangesAsync();
-            SetAuthCookies(accessToken, refreshToken.Token);
 
             return Ok(
                 new
@@ -109,51 +106,9 @@ namespace Backend.Controllers.Authentication
                     picture = user.PictureUrl,
                     userName = user.Name,
                     AccessToken = accessToken,
-                    RefreshToken = refreshToken.Token
                 }
             );
         }
-
-        /// <summary>
-        /// Erstellt neue Tokens auf Basis eines gültigen Refresh Tokens
-        /// </summary>
-        [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh()
-        {
-            string? refreshTokenCookie = Request.Cookies[AuthConstants.KEY_REFRESH_TOKEN];
-
-            if (string.IsNullOrEmpty(refreshTokenCookie)) { return Unauthorized("[ERROR] No refresh token found."); }
-
-            M_RefreshToken? storedToken = await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token == refreshTokenCookie);
-
-            if (storedToken == null || storedToken.ExpiresAt < DateTime.UtcNow) { return Unauthorized("[ERROR] Refresh token invalid or expired."); }
-
-            // delete old refresh token
-            storedToken.RevokedAt = DateTime.UtcNow;
-
-            // create new tokens
-            var newAccessToken = _tokenService.CreateAccessToken(storedToken.User!);
-            var newRefreshToken = _tokenService.CreateRefreshToken(storedToken.UserAccountID);
-
-            newRefreshToken.ParentId = storedToken.Id;
-            _db.RefreshTokens.Add(newRefreshToken);
-            // Optional: alten Refresh-Token komplett löschen statt nur revoked markieren:
-            // _db.RefreshTokens.Remove(storedToken);
-
-            await _db.SaveChangesAsync();
-            SetAuthCookies(newAccessToken, newRefreshToken.Token);
-
-            return Ok(new
-            {
-                message = "Tokens refreshed successfully.",
-                token = new
-                {
-                    refreshToken = newRefreshToken.Token,
-                    accessToken = newAccessToken
-                }
-            });
-        }
-
 
         /// <summary>
         /// Beendet die Session und widerruft den Refresh Token
@@ -161,19 +116,6 @@ namespace Backend.Controllers.Authentication
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            string? refreshTokenCookie = Request.Cookies[AuthConstants.KEY_REFRESH_TOKEN];
-
-            if (!string.IsNullOrEmpty(refreshTokenCookie))
-            {
-                M_RefreshToken? storedToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token.Equals(refreshTokenCookie));
-
-                if (storedToken != null)
-                {
-                    storedToken.RevokedAt = DateTime.UtcNow;
-                    await _db.SaveChangesAsync();
-                }
-            }
-
             DeleteAuthCookies();
             return Ok(new { message = "Logout user successfully." });
         }
