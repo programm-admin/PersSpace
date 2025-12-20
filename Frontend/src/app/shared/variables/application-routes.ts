@@ -33,9 +33,9 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
         route: {
             path: 'user/event/create',
             loadComponent: () =>
-                import(
-                    '../../_components/pages/comp-create-event-page/comp-create-event-page'
-                ).then((comp) => comp.CompCreateEventPage),
+                import('../../_components/pages/comp-create-event-page/comp-create-event-page').then(
+                    (comp) => comp.CompCreateEventPage,
+                ),
         },
         isVisible: true,
         title: 'Event erstellen',
