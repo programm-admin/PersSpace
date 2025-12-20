@@ -15,13 +15,17 @@ import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 import { API_ROUTES } from '../../environment/api-routes';
 import { IT_STORAGE_REPOSITORY } from '../../core/repositories/storage.repository';
+import { Router } from '@angular/router';
+import { APPLICATION_ROUTES } from '../../shared/variables/application-routes';
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserService implements T_UserRepository {
-    private http = inject(HttpClient);
-    private localStorageService = inject(IT_STORAGE_REPOSITORY);
+    // dependency injections
+    private readonly http = inject(HttpClient);
+    private readonly router = inject(Router);
+    private readonly localStorageService = inject(IT_STORAGE_REPOSITORY);
     private readonly platformID = inject(PLATFORM_ID);
 
     private userSubject: WritableSignal<M_User | null> = signal<M_User | null>(
@@ -115,6 +119,9 @@ export class UserService implements T_UserRepository {
             localStorage.clear();
             this.setUserToken(null);
         }
+
+        // navigate back to start page
+        this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path ?? '');
     };
 
     public registerUser = (): Observable<void> => {

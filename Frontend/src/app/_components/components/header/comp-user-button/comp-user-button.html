@@ -1,16 +1,42 @@
-<div>
-    <nz-avatar
-        nz-dropdown
-        nzTrigger="click"
-        [nzDropdownMenu]="menu"
-        [nzText]="inpButtonContent().substring(0, 2)"
-        nz-tooltip
-        [nzTooltipTitle]="inpButtonContent()"
-    />
+@if (user()) {
+    <div>
+        <nz-avatar
+            nz-dropdown
+            nzTrigger="click"
+            [nzDropdownMenu]="menu"
+            [nzSrc]="inpButtonPicture()"
+            nz-tooltip
+            [nzText]="inpButtonName()"
+            [nzTooltipTitle]="inpButtonName()"
+            id="userAvatar"
+            [nzPlacement]="menuPosition"
+            [nzArrow]="menuPosition"
+        />
 
-    <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-            <li nz-menu-item>Hallo</li>
-        </ul>
-    </nz-dropdown-menu>
-</div>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu class="menuUL">
+                @for (item of userMenu; track $index) {
+                    <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
+                        {{ item.title }}
+                    </li>
+                    <li nz-menu-divider class="dividerLI"></li>
+                }
+                <li nz-menu-item (click)="logoutUser()">
+                    <nz-icon nzType="logout" nzTheme="outline" /> Logout
+                </li>
+            </ul>
+        </nz-dropdown-menu>
+    </div>
+} @else {
+    <div>
+        <button
+            nz-button
+            nzShape="round"
+            class="loginBUTTON"
+            nzSize="large"
+            (click)="navigateToLoginPage()"
+        >
+            Login
+        </button>
+    </div>
+}

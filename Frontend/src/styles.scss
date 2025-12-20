@@ -27,6 +27,7 @@ body {
     --header--height: 4rem;
 
     --header--button--hover--background-color: color-mix(in hsl, #faf5f0 60%, black 40%);
+    --standard--divider-color: rgba(0, 0, 0, 0.1);
 }
 
 *,
@@ -62,4 +63,23 @@ span {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.menuUL {
+    border: 0.1rem solid var(--standard--divider-color);
+}
+
+// /* Hintergrundfarbe aller Messages */
+// .ant-message-notice {
+//     background-color: #f0f5ff; /* hellblau */
+//     border-radius: 0.5rem;
+//     padding: 1rem 1.5rem;
+// }
+
+/* Textfarbe */
+.ant-message-notice-content {
+    color: white;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 0.1rem solid white;
 }

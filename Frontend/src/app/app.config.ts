@@ -17,6 +17,12 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { getProviders } from './app.providers';
+import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
+
+const ngZorroConfig: NzConfig = {
+    message: { nzTop: 10, nzDuration: 10000 },
+    notification: { nzTop: 240 },
+};
 
 registerLocaleData(en);
 
@@ -32,5 +38,6 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         provideHttpClient(withFetch()),
         ...getProviders(),
+        provideNzConfig(ngZorroConfig),
     ],
 };
