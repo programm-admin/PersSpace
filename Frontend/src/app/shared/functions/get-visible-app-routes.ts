@@ -15,3 +15,12 @@ export const getEventCreationRoutes = (): T_ApplicationRoute[] => {
         )
         .map((entry: [string, T_ApplicationRoute]) => entry[1]);
 };
+
+export const getUserSettingsRoutes = (): T_ApplicationRoute[] => {
+    return Object.entries(APPLICATION_ROUTES)
+        .filter(
+            (entry: [string, T_ApplicationRoute]) =>
+                entry[1].isVisible && entry[1].route.path?.startsWith('user/'),
+        )
+        .map((entry: [string, T_ApplicationRoute]) => entry[1]);
+};
