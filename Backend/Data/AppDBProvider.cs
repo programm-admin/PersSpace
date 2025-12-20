@@ -3,7 +3,7 @@ using Backend.Models;
 
 namespace Backend.Data
 {
-    public class AppDBProvider: DbContext
+    public class AppDBProvider : DbContext
     {
         public AppDBProvider(DbContextOptions options) : base(options)
         {
@@ -12,7 +12,6 @@ namespace Backend.Data
         public DbSet<M_User> Users { get; set; }
         public DbSet<M_Event> Events { get; set; }
         public DbSet<M_LoginHistory> LoginHistories { get; set; }
-        public DbSet<M_RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,10 +20,6 @@ namespace Backend.Data
                 .WithMany(e => e.Events)
                 .HasForeignKey(e => e.UserAccountID);
 
-            modelBuilder.Entity<M_User>()
-                .HasMany(u => u.RefreshTokens)
-                .WithOne(rt => rt.User)
-                .HasForeignKey(rt => rt.UserAccountID);
 
             // seed data
             modelBuilder.Entity<M_User>().HasData(

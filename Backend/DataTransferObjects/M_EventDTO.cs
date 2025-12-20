@@ -2,13 +2,13 @@
 {
     public class M_EventDTO
     {
-        public string ID { get; set; }
-        public string UserAccountID { get; set; }
-        public string Title { get; set; }
-        public string Notes { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-        public bool IsDone { get; set; }
-        public DateTime EventCreated { get; set; }
+        public required string ID { get; set; }
+        public required string UserAccountID { get; set; }
+        public required string Title { get; set; }
+        public required string Notes { get; set; }
+        public required DateTime Start { get; set; }
+        public required DateTime End { get; set; }
+        public required bool IsDone { get; set; }
+        public required DateTime EventCreated { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class M_LoginHistory
     {
-        public string ID { get; set; }
-        public string UserAccountID { get; set; }
-        public DateTime Login { get; set; }
+        public required string ID { get; set; }
+        public required string UserAccountID { get; set; }
+        public required DateTime Login { get; set; }
     }
 }

@@ -56,15 +56,6 @@ namespace Backend.Controllers.Authentication
             Response.Cookies.Delete(AuthConstants.KEY_REFRESH_TOKEN);
         }
 
-        private async Task InvalidateRefreshToken(string token)
-        {
-            var dbToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
-            if (dbToken != null)
-            {
-                dbToken.RevokedAt = DateTime.UtcNow;
-                await _db.SaveChangesAsync();
-            }
-        }
 
         /// <summary>
         /// Frontend sendet Google ID Token → Backend validiert → erstellt eigenen Access + Refresh Token
@@ -78,7 +69,7 @@ namespace Backend.Controllers.Authentication
 
             if (payload == null) { return Unauthorized("[ERROR] id token is invalid"); }
 
-            var user = await _db.Users.Include(user => user.RefreshTokens).FirstOrDefaultAsync(user => user.ID == payload.Subject);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.ID == payload.Subject);
 
             if (user == null)
             {
@@ -156,14 +147,12 @@ namespace Backend.Controllers.Authentication
             }
             catch
             {
-                await InvalidateRefreshToken(refreshToken);
                 return Unauthorized(new { success = false, error = "Invalid access token." });
             }
 
             var expClaim = jwt.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
             if (expClaim == null || !long.TryParse(expClaim, out var expSeconds))
             {
-                await InvalidateRefreshToken(refreshToken);
                 return Unauthorized(new { success = false, error = "Access token missing exp." });
             }
 
@@ -171,55 +160,24 @@ namespace Backend.Controllers.Authentication
 
             if (tokenExpiry <= DateTime.UtcNow)
             {
-                await InvalidateRefreshToken(refreshToken);
                 return Unauthorized(new { success = false, error = "Access token expired." });
             }
 
-
             // -----------------------------
-            // 2. Refresh Token – check expiration
-            // -----------------------------
-            var dbToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt =>
-                rt.Token == refreshToken && rt.UserAccountID == userId);
-
-            if (dbToken == null)
-            {
-                return Unauthorized(new { success = false, error = "Refresh token not found." });
-            }
-
-            if (dbToken.RevokedAt != default)
-            {
-                return Unauthorized(new { success = false, error = "Refresh token revoked." });
-            }
-
-            if (dbToken.ExpiresAt <= DateTime.UtcNow)
-            {
-                await InvalidateRefreshToken(refreshToken);
-                return Unauthorized(new { success = false, error = "Refresh token expired." });
-            }
-
-
-            // -----------------------------
-            // 3. check user in db
+            // 2. check user in db
             // -----------------------------
             var user = await _db.Users.FirstOrDefaultAsync(u => u.ID == userId);
             if (user == null)
             {
-                await InvalidateRefreshToken(refreshToken);
                 return Unauthorized(new { success = false, error = "User not found." });
             }
 
 
             // -----------------------------
-            // 4. Tokens erneuern
+            // 3. Tokens erneuern
             // -----------------------------
             string newAccessToken = _tokenService.CreateAccessToken(user);
-            var newRefreshToken = _tokenService.CreateRefreshToken(user.ID);
 
-            _db.RefreshTokens.Add(newRefreshToken);
-
-            // optional: alten refresh token invalidieren
-            dbToken.RevokedAt = DateTime.UtcNow;
 
             await _db.SaveChangesAsync();
 
@@ -232,7 +190,6 @@ namespace Backend.Controllers.Authentication
                 picture = user.PictureUrl,
                 userName = user.Name,
                 AccessToken = newAccessToken,
-                RefreshToken = newRefreshToken.Token
             });
         }
 

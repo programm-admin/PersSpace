@@ -9,6 +9,5 @@
 
         public ICollection<M_Event> Events { get; set; } = [];
         public ICollection<M_LoginHistory> LoginHistories { get; set; } = [];
-        public ICollection<M_RefreshToken> RefreshTokens { get; set; } = [];
     }
 }
