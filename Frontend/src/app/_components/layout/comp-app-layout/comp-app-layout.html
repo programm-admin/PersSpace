@@ -5,33 +5,36 @@
                 <!-- <span>PersSpace</span> -->
                 <div class="headerLeftDIV">
                     <img src="logo.svg" alt="PerSpace-Logo" (click)="navigateToLoginPage()" />
-                    <button
-                        class="headerBUTTON"
-                        nz-tooltip
-                        nzTooltipTitle="Menü öffnen"
-                        nzTooltipPlacement="bottom"
-                        nz-dropdown
-                        nzTrigger="click"
-                        [nzDropdownMenu]="menu"
-                        [nzPlacement]="menuPosition"
-                        [nzArrow]="menuPosition"
-                    >
-                        <nz-icon nzType="plus" nzTheme="outline" />
-                    </button>
-                    <nz-dropdown-menu #menu="nzDropdownMenu">
-                        <ul nz-menu class="menuUL">
-                            @for (item of creationMenu; track $index) {
-                                <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
-                                    {{ item.title }}
-                                </li>
-                            }
-                        </ul>
-                    </nz-dropdown-menu>
+                    @if (user()) {
+                        <button
+                            class="headerBUTTON"
+                            nz-tooltip
+                            nzTooltipTitle="Menü öffnen"
+                            nzTooltipPlacement="bottom"
+                            nz-dropdown
+                            nzTrigger="click"
+                            [nzDropdownMenu]="menu"
+                            [nzPlacement]="menuPosition"
+                            [nzArrow]="menuPosition"
+                        >
+                            <nz-icon nzType="plus" nzTheme="outline" />
+                        </button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu class="menuUL">
+                                @for (item of creationMenu; track $index) {
+                                    <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
+                                        {{ item.title }}
+                                    </li>
+                                }
+                            </ul>
+                        </nz-dropdown-menu>
+                    }
                 </div>
 
-                @if (user()) {
-                    <app-comp-user-button [inpButtonContent]="user()?.userName ?? ''" />
-                }
+                <app-comp-user-button
+                    [inpButtonName]="user()?.userName ?? ''"
+                    [inpButtonPicture]="user()?.picture ?? ''"
+                />
             </nz-header>
             <nz-content>
                 <div class="content paddingFull">
