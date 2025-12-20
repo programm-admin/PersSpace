@@ -34,7 +34,7 @@ namespace Backend.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(issuer: _jwtIssuer, audience: _jwtAudience, claims: claims, expires: DateTime.UtcNow.AddMinutes(10), signingCredentials: credentials);
+            var token = new JwtSecurityToken(issuer: _jwtIssuer, audience: _jwtAudience, claims: claims, expires: DateTime.UtcNow.AddDays(2), signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
