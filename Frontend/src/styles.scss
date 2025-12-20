@@ -27,6 +27,7 @@ body {
     --header--height: 4rem;
 
     --header--button--hover--background-color: color-mix(in hsl, #faf5f0 60%, black 40%);
+    --standard--divider-color: rgba(0, 0, 0, 0.1);
 }
 
 *,
@@ -62,4 +63,8 @@ span {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.menuUL {
+    border: 0.1rem solid var(--standard--divider-color);
 }

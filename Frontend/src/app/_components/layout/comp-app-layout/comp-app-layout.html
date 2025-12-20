@@ -17,7 +17,7 @@
                         <nz-icon nzType="plus" nzTheme="outline" />
                     </button>
                     <nz-dropdown-menu #menu="nzDropdownMenu">
-                        <ul nz-menu>
+                        <ul nz-menu class="menuUL">
                             @for (item of creationMenu; track $index) {
                                 <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
                                     {{ item.title }}

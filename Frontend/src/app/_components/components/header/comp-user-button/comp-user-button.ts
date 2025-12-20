@@ -5,16 +5,20 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { T_ApplicationRoute } from '../../../../shared/types-and-interfaces/application-route';
 import { getUserSettingsRoutes } from '../../../../shared/functions/get-visible-app-routes';
 import { Router } from '@angular/router';
+import { UC_User_LogoutUser } from '../../../../core/use-cases/user/logout-user.use-case';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
     selector: 'app-comp-user-button',
-    imports: [NzAvatarModule, NzDropDownModule, NzTooltipModule],
+    imports: [NzAvatarModule, NzDropDownModule, NzTooltipModule, NzIconModule],
     templateUrl: './comp-user-button.html',
     styleUrl: './comp-user-button.scss',
+    providers: [UC_User_LogoutUser],
 })
 export class CompUserButton {
     // dependency injedtions
     private router = inject(Router);
+    private logoutUserUseCase = inject(UC_User_LogoutUser);
 
     // input variables
     public inpButtonContent: InputSignal<string> = input.required<string>();
@@ -24,5 +28,9 @@ export class CompUserButton {
         if (!path) return;
 
         this.router.navigateByUrl(path);
+    };
+
+    public logoutUser = () => {
+        this.logoutUserUseCase.execute();
     };
 }

@@ -10,13 +10,16 @@
     />
 
     <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
+        <ul nz-menu class="menuUL">
             @for (item of userMenu; track $index) {
                 <li nz-menu-item (click)="navigateToItemPage(item.route.path)">
                     {{ item.title }}
                 </li>
+                <li nz-menu-divider class="dividerLI"></li>
             }
-            <li nz-menu-item>Logout</li>
+            <li nz-menu-item (click)="logoutUser()">
+                <nz-icon nzType="logout" nzTheme="outline" /> Logout
+            </li>
         </ul>
     </nz-dropdown-menu>
 </div>
