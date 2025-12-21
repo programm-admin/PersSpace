@@ -9,7 +9,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION") 
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION")
     ?? throw new Exception("DB connection string is not provided.");
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
     ?? throw new Exception("JWT secret is not provided.");
@@ -76,6 +76,12 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups";
+    context.Response.Headers["Cross-Origin-Embedder-Policy"] = "unsafe-none";
+    await next();
+});
 app.MapControllers();
 
 app.Run();
