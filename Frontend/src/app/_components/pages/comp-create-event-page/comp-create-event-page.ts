@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CompEventForm } from '../../components/events/comp-event-form/comp-event-form';
 import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
-import { M_Model } from '../../../core/models/event.model';
+import { M_MediaEvent } from '../../../core/models/event.model';
 
 @Component({
     selector: 'app-comp-create-event-page',
@@ -18,7 +18,7 @@ export class CompCreateEventPage {
         this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path!);
     };
 
-    public submitForm = (object: M_Model) => {
+    public submitForm = (object: M_MediaEvent) => {
         console.log('object: ', object);
     };
 }

@@ -8,7 +8,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { M_Model } from '../../../../core/models/event.model';
+import { M_MediaEvent } from '../../../../core/models/event.model';
 
 @Component({
     selector: 'app-comp-event-form',
@@ -30,7 +30,7 @@ export class CompEventForm {
     private readonly formBuilder = inject(NonNullableFormBuilder);
 
     // output variables
-    public outSubmitForm = output<M_Model>();
+    public outSubmitForm = output<M_MediaEvent>();
     public outCancelForm = output<void>();
 
     public eventForm = this.formBuilder.group({
@@ -56,7 +56,7 @@ export class CompEventForm {
         }
 
         const rawValues = this.eventForm.getRawValue();
-        const newEvent: M_Model = {
+        const newEvent: M_MediaEvent = {
             id: '',
             userAccountID: '',
             title: rawValues.title,
