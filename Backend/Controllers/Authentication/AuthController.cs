@@ -123,11 +123,9 @@ namespace Backend.Controllers.Authentication
             // -----------------------------
 
             string? accessToken = Request.Headers["access_token"].FirstOrDefault();
-            string? refreshToken = Request.Headers["refresh_token"].FirstOrDefault();
             string? userId = Request.Headers["user_id"].FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(accessToken) ||
-                string.IsNullOrWhiteSpace(refreshToken) ||
                 string.IsNullOrWhiteSpace(userId))
             {
                 return Unauthorized(new { success = false, error = "Missing headers." });
@@ -192,10 +190,6 @@ namespace Backend.Controllers.Authentication
                 AccessToken = newAccessToken,
             });
         }
-
-
-
-
 
 
         /// <summary>
