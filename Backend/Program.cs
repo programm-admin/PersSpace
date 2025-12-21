@@ -1,5 +1,6 @@
 using Backend.Data;
 using Backend.Services;
+using Backend.Middleware;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,14 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseWhen(
+    context =>
+        !context.Request.Path.StartsWithSegments("/auth/login") && !context.Request.Path.StartsWithSegments("/auth/logout"),
+    appBuilder =>
+    {
+        appBuilder.UseMiddleware<UserMiddleware>();
+    }
+);
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups";

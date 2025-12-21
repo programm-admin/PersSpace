@@ -29,36 +29,37 @@ namespace Backend.Controllers.Authentication
         }
 
 
-        private void SetAuthCookies(string accessToken, string refreshToken)
-        {
-            Response.Cookies.Append(AuthConstants.KEY_ACCESS_TOKEN, accessToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMinutes(10),
-                MaxAge = TimeSpan.FromMinutes(10)
-            });
+        // private void SetAuthCookies(string accessToken, string refreshToken)
+        // {
+        //     Response.Cookies.Append(AuthConstants.KEY_ACCESS_TOKEN, accessToken, new CookieOptions
+        //     {
+        //         HttpOnly = true,
+        //         Secure = false,
+        //         SameSite = SameSiteMode.None,
+        //         Expires = DateTime.UtcNow.AddMinutes(10),
+        //         MaxAge = TimeSpan.FromMinutes(10)
+        //     });
 
-            Response.Cookies.Append(AuthConstants.KEY_REFRESH_TOKEN, refreshToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMinutes(30),
-                MaxAge = TimeSpan.FromMinutes(10)
-            });
-        }
+        //     Response.Cookies.Append(AuthConstants.KEY_REFRESH_TOKEN, refreshToken, new CookieOptions
+        //     {
+        //         HttpOnly = true,
+        //         Secure = false,
+        //         SameSite = SameSiteMode.None,
+        //         Expires = DateTime.UtcNow.AddMinutes(30),
+        //         MaxAge = TimeSpan.FromMinutes(10)
+        //     });
+        // }
 
-        private void DeleteAuthCookies()
-        {
-            Response.Cookies.Delete(AuthConstants.KEY_ACCESS_TOKEN);
-            Response.Cookies.Delete(AuthConstants.KEY_REFRESH_TOKEN);
-        }
+        // private void DeleteAuthCookies()
+        // {
+        //     Response.Cookies.Delete(AuthConstants.KEY_ACCESS_TOKEN);
+        //     Response.Cookies.Delete(AuthConstants.KEY_REFRESH_TOKEN);
+        // }
 
 
         /// <summary>
-        /// Frontend sendet Google ID Token → Backend validiert → erstellt eigenen Access + Refresh Token
+        /// Endpoint for user login. | 
+        /// get Google ID Token (JWT) from frontend -> validating token via backend -> creating new access token for sending to frontend (for session check)
         /// </summary>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Req_Login idToken)
@@ -101,84 +102,18 @@ namespace Backend.Controllers.Authentication
             );
         }
 
-        /// <summary>
-        /// Beendet die Session und widerruft den Refresh Token
-        /// </summary>
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            DeleteAuthCookies();
-            return Ok(new { message = "Logout user successfully." });
-        }
-
 
         /// <summary>
-        /// 
+        /// Endpoint for checking whether session of user login is still active.
         /// </summary>
         [HttpGet("check")]
         public async Task<IActionResult> CheckAuthStatus()
         {
-            // -----------------------------
-            // 0. Header lesen
-            // -----------------------------
+            // getting user from user middleware
+            var user = HttpContext.Items["User"] as M_User;
 
-            string? accessToken = Request.Headers["access_token"].FirstOrDefault();
-            string? userId = Request.Headers["user_id"].FirstOrDefault();
-
-            if (string.IsNullOrWhiteSpace(accessToken) ||
-                string.IsNullOrWhiteSpace(userId))
-            {
-                return Unauthorized(new { success = false, error = "Missing headers." });
-            }
-
-
-
-            // -----------------------------
-            // 1. Access Token – check expiration
-            // -----------------------------
-            var handler = new JwtSecurityTokenHandler();
-
-            JwtSecurityToken jwt;
-            try
-            {
-                jwt = handler.ReadJwtToken(accessToken);
-            }
-            catch
-            {
-                return Unauthorized(new { success = false, error = "Invalid access token." });
-            }
-
-            var expClaim = jwt.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
-            if (expClaim == null || !long.TryParse(expClaim, out var expSeconds))
-            {
-                return Unauthorized(new { success = false, error = "Access token missing exp." });
-            }
-
-            DateTime tokenExpiry = DateTimeOffset.FromUnixTimeSeconds(expSeconds).UtcDateTime;
-
-            if (tokenExpiry <= DateTime.UtcNow)
-            {
-                return Unauthorized(new { success = false, error = "Access token expired." });
-            }
-
-            // -----------------------------
-            // 2. check user in db
-            // -----------------------------
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.ID == userId);
             if (user == null)
-            {
-                return Unauthorized(new { success = false, error = "User not found." });
-            }
-
-
-            // -----------------------------
-            // 3. Tokens erneuern
-            // -----------------------------
-            string newAccessToken = _tokenService.CreateAccessToken(user);
-
-
-            await _db.SaveChangesAsync();
-
+                return Unauthorized(new { success = false });
 
             return Ok(new
             {
@@ -186,34 +121,8 @@ namespace Backend.Controllers.Authentication
                 userID = user.ID,
                 email = user.Email,
                 picture = user.PictureUrl,
-                userName = user.Name,
-                AccessToken = newAccessToken,
+                userName = user.Name
             });
-        }
-
-
-        /// <summary>
-        /// Beispiel-Endpoint, der Authentifizierung benötigt
-        /// </summary>
-        [HttpGet("test")]
-        public async Task<IActionResult> Testing()
-        {
-            string? userId = User.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
-
-            if (userId == null) { return Unauthorized("[ERROR] not found"); }
-
-            var user = await _db.Users.FirstOrDefaultAsync(user => user.ID == userId);
-
-            if (user == null) { return NotFound(); }
-
-            return Ok(new
-            {
-                user.ID,
-                user.Email,
-                user.Name,
-                user.PictureUrl
-            });
-
         }
     }
 }

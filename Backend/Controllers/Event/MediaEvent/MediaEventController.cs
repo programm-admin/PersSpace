@@ -70,5 +70,20 @@ namespace Backend.Controllers.Event
                 });
             }
         }
+
+        // [HttpPost("create")]
+        // public async Task<ActionResult<M_MediaEvent>> createNewMediaEvent([FromBody] M_MediaEvent reqEvent)
+        // {
+        //     // check incoming event for required properties
+        //     var errors = ValidationHelper.ValidateObject(reqEvent);
+
+        //     if (errors.Any())
+        //     {
+        //         return BadRequest(new { status = "error", Errors = errors });
+        //     }
+
+        //     // validate user
+
+        // }
     }
 }
