@@ -40,27 +40,21 @@ export class UserService implements T_UserRepository {
             const accessToken: string | null = localStorage.getItem(
                 LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
             );
-            const refreshToken: string | null = localStorage.getItem(
-                LOCAL_STORAGE_KEYS.KEY_REFRESH_TOKEN,
-            );
 
             return !image ||
                 !userID ||
                 !userName ||
                 !accessToken ||
-                !refreshToken ||
                 (image && !image.trim()) ||
                 (userID && !userID.trim()) ||
                 (userName && !userName.trim()) ||
-                (accessToken && !accessToken.trim()) ||
-                (refreshToken && !refreshToken.trim())
+                (accessToken && !accessToken.trim())
                 ? null
                 : {
                       userID: userID,
                       picture: image,
                       userName: userName,
                       accessToken: accessToken,
-                      refreshToken: refreshToken,
                   };
         })(),
     );
@@ -86,7 +80,6 @@ export class UserService implements T_UserRepository {
             .get<M_User>(API_ROUTES.checkUserSession, {
                 headers: {
                     access_token: user.accessToken,
-                    refresh_token: user.refreshToken,
                     user_id: user.userID,
                 },
             })
@@ -147,27 +140,21 @@ export class UserService implements T_UserRepository {
         const accessToken: string | null = localStorage.getItem(
             LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
         );
-        const refreshToken: string | null = localStorage.getItem(
-            LOCAL_STORAGE_KEYS.KEY_REFRESH_TOKEN,
-        );
 
         return !image ||
             !userID ||
             !userName ||
             !accessToken ||
-            !refreshToken ||
             (image && !image.trim()) ||
             (userID && !userID.trim()) ||
             (userName && !userName.trim()) ||
-            (accessToken && !accessToken.trim()) ||
-            (refreshToken && !refreshToken.trim())
+            (accessToken && !accessToken.trim())
             ? null
             : {
                   userID,
                   picture: image,
                   userName,
                   accessToken,
-                  refreshToken,
               };
     };
 }
