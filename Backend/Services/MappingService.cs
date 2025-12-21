@@ -5,7 +5,7 @@ namespace Backend.Services
 {
     public class MappingService
     {
-        public List<M_EventDTO> mapEventsToDTO(List<M_Event> events)
+        public List<M_EventDTO> mapEventsToDTO(List<M_MediaEvent> events)
         {
             return events.Select(ev => new M_EventDTO
             {

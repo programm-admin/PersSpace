@@ -10,12 +10,12 @@ namespace Backend.Data
         }
 
         public DbSet<M_User> Users { get; set; }
-        public DbSet<M_Event> Events { get; set; }
+        public DbSet<M_MediaEvent> Events { get; set; }
         public DbSet<M_LoginHistory> LoginHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<M_Event>()
+            modelBuilder.Entity<M_MediaEvent>()
                 .HasOne(e => e.User)
                 .WithMany(e => e.Events)
                 .HasForeignKey(e => e.UserAccountID);
@@ -28,8 +28,8 @@ namespace Backend.Data
 
             DateTime GetUTCDate(int year, int month, int day) => new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
 
-            modelBuilder.Entity<M_Event>().HasData(
-                new M_Event
+            modelBuilder.Entity<M_MediaEvent>().HasData(
+                new M_MediaEvent
                 {
                     ID = "E-1",
                     Title = "erstes Event",
@@ -40,7 +40,7 @@ namespace Backend.Data
                     EventCreated = GetUTCDate(2025, 9, 20),
                     IsDone = false
                 },
-                new M_Event
+                new M_MediaEvent
                 {
                     ID = "E-2",
                     Title = "2. Event",

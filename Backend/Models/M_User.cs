@@ -7,7 +7,7 @@
         public required string Email { get; set; }
         public required string PictureUrl { get; set; }
 
-        public ICollection<M_Event> Events { get; set; } = [];
+        public ICollection<M_MediaEvent> Events { get; set; } = [];
         public ICollection<M_LoginHistory> LoginHistories { get; set; } = [];
     }
 }

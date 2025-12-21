@@ -1,6 +1,6 @@
 ﻿namespace Backend.Models
 {
-    public class M_Event
+    public class M_MediaEvent
     {
         public required string ID { get; set; }
         public required string UserAccountID { get; set; }

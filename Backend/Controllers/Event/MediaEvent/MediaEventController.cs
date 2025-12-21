@@ -9,12 +9,12 @@ namespace Backend.Controllers.Event
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventController : Controller
+    public class MediaEventController : Controller
     {
         private readonly AppDBProvider _db;
         private readonly MappingService _mappingService;
 
-        public EventController(AppDBProvider db, MappingService mappingService)
+        public MediaEventController(AppDBProvider db, MappingService mappingService)
         {
             _db = db;
             _mappingService = mappingService;
@@ -29,7 +29,7 @@ namespace Backend.Controllers.Event
         {
             if (string.IsNullOrEmpty(request.ID)) return BadRequest("[ERROR] id is empty");
 
-            List<M_Event>? events = await _db.Events.AsNoTracking().Where(ev => ev.UserAccountID == request.ID).ToListAsync();
+            List<M_MediaEvent>? events = await _db.Events.AsNoTracking().Where(ev => ev.UserAccountID == request.ID).ToListAsync();
 
             if (events == null || events.Count == 0) return BadRequest("[ERROR] no events found");
 
