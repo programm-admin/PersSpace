@@ -16,7 +16,7 @@ namespace Backend.Services
                 Start = ev.Start,
                 End = ev.End,
                 IsDone = ev.IsDone,
-                EventCreated = ev.EventCreated
+                EventCreated = ev.MediaEventCreated
             }).ToList();
         }
     }
