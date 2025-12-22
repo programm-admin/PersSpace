@@ -107,22 +107,20 @@ namespace Backend.Controllers.Authentication
         /// Endpoint for checking whether session of user login is still active.
         /// </summary>
         [HttpGet("check")]
-        public async Task<IActionResult> CheckAuthStatus()
+        public Task<IActionResult> CheckAuthStatus()
         {
             // getting user from user middleware
-            var user = HttpContext.Items["User"] as M_User;
+            if (HttpContext.Items["User"] is not M_User user)
+                return Task.FromResult<IActionResult>(Unauthorized(new { success = false }));
 
-            if (user == null)
-                return Unauthorized(new { success = false });
-
-            return Ok(new
+            return Task.FromResult<IActionResult>(Ok(new
             {
                 success = true,
                 userID = user.ID,
                 email = user.Email,
                 picture = user.PictureUrl,
                 userName = user.Name
-            });
+            }));
         }
     }
 }
