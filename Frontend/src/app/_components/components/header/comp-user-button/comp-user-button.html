@@ -1,17 +1,19 @@
 @if (user()) {
     <div>
-        <nz-avatar
-            nz-dropdown
-            nzTrigger="click"
-            [nzDropdownMenu]="menu"
-            [nzSrc]="inpButtonPicture()"
-            nz-tooltip
-            [nzText]="inpButtonName()"
-            [nzTooltipTitle]="inpButtonName()"
-            id="userAvatar"
-            [nzPlacement]="menuPosition"
-            [nzArrow]="menuPosition"
-        />
+        @if (isPlatformBrowser) {
+            <nz-avatar
+                nz-dropdown
+                nzTrigger="click"
+                [nzDropdownMenu]="menu"
+                [nzSrc]="avatarSrc()"
+                nz-tooltip
+                [nzText]="inpButtonName().substring(0, 2)"
+                [nzTooltipTitle]="inpButtonName()"
+                id="userAvatar"
+                [nzPlacement]="menuPosition"
+                [nzArrow]="menuPosition"
+            />
+        }
 
         <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu class="menuUL">
