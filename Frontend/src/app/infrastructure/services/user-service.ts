@@ -25,7 +25,6 @@ export class UserService implements T_UserRepository {
     // dependency injections
     private readonly http = inject(HttpClient);
     private readonly router = inject(Router);
-    private readonly localStorageService = inject(IT_STORAGE_REPOSITORY);
     private readonly platformID = inject(PLATFORM_ID);
 
     private userSubject: WritableSignal<M_User | null> = signal<M_User | null>(
@@ -76,36 +75,29 @@ export class UserService implements T_UserRepository {
             return EMPTY;
         }
 
-        return this.http
-            .get<M_User>(API_ROUTES.checkUserSession, {
-                headers: {
-                    access_token: user.accessToken,
-                    user_id: user.userID,
-                },
-            })
-            .pipe(
-                tap((response: M_User) => {
-                    // user is logged in -> session is valid
-                    this.userSubject.set(response);
-
-                    // set information in local storage
-                    this.localStorageService.setUserToStorage(response);
-                }),
-                catchError((err) => {
-                    // user is not logged in -> session invalid or expired
-                    this.userSubject.set(null);
-                    return throwError(() => err);
-                }),
-            );
+        return this.http.get<M_User>(API_ROUTES.checkUserSession, {
+            headers: {
+                access_token: user.accessToken,
+            },
+        });
     };
 
+    /**
+     * Function for getting current login status of user via user signal.
+     * @returns Signal<M_User | null>
+     */
     public getUser = (): Signal<M_User | null> => {
         return this.userSubject;
     };
 
-    public loginUser = (): Observable<M_User> => {
-        return this.http.post<M_User>('', {});
+    /**
+     * Function for setting login status (user signal) for user.
+     * @param newUser M_User | null
+     */
+    public setUser = (newUser: M_User | null) => {
+        this.userSubject.set(newUser);
     };
+
 
     public logoutUser = () => {
         if (isPlatformBrowser(this.platformID)) {
@@ -117,9 +109,6 @@ export class UserService implements T_UserRepository {
         this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path ?? '');
     };
 
-    public registerUser = (): Observable<void> => {
-        return this.http.post<void>('', {});
-    };
 
     public getIsUserLoggedIn = (): Signal<boolean> => {
         return this.isLoggedIn;
