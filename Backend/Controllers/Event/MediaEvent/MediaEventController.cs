@@ -101,7 +101,34 @@ namespace Backend.Controllers.Event
             await _db.SaveChangesAsync();
 
             return Ok(new { mediaEvent = newMediaEvent });
+        }
 
+        [HttpPatch("update")]
+        public async Task<ActionResult<M_MediaEvent>> updateMediaEvent([FromBody] M_MediaEvent body)
+        {
+            // get user ID from http context (user middleware)
+            Guid userID = HttpContext.GetUserID();
+            var errors = ValidationHelper.ValidateObject(body);
+
+            if (errors.Any())
+            {
+                return BadRequest(new { status = "error", Errors = errors });
+            }
+
+            // updating event
+            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == body.ID);
+
+            if (foundMediaEvent == null) return NotFound();
+
+            // updating properties
+            foundMediaEvent.Title = body.Title;
+            foundMediaEvent.Notes = body.Notes;
+            foundMediaEvent.Start = body.Start;
+            foundMediaEvent.End = body.End;
+            foundMediaEvent.IsDone = body.IsDone;
+
+            await _db.SaveChangesAsync();
+            return Ok(new { mediaEvent = foundMediaEvent, status = "success" });
         }
     }
 }
