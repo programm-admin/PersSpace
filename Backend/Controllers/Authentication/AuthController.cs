@@ -70,16 +70,18 @@ namespace Backend.Controllers.Authentication
 
             if (payload == null) { return Unauthorized("[ERROR] id token is invalid"); }
 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.ID == payload.Subject);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.GoogleID == payload.Subject);
 
             if (user == null)
             {
+                // create user if not already existing
                 user = new M_User
                 {
-                    ID = payload.Subject,
+                    ID = Guid.NewGuid(),
                     Email = payload.Email,
                     Name = payload.Name,
                     PictureUrl = payload.Picture,
+                    GoogleID = payload.Subject,
                 };
 
                 _db.Users.Add(user);

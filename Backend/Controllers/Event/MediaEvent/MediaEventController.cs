@@ -28,15 +28,15 @@ namespace Backend.Controllers.Event
         [HttpPost("all")]
         public async Task<ActionResult<ICollection<M_EventDTO>>> getAllEvents([FromBody] EventRequest request)
         {
-            if (string.IsNullOrEmpty(request.UserID)) return BadRequest("[ERROR] id is empty");
+            var userID = HttpContext.GetUserID();
 
             try
             {
-                List<M_MediaEvent>? events = await _db.Events.AsNoTracking().Where(ev => ev.UserAccountID == request.UserID).ToListAsync();
+                List<M_MediaEvent>? mediaEvents = await _db.MediaEvents.AsNoTracking().Where(ev => ev.UserAccountID == userID).ToListAsync();
 
-                if (events == null) return BadRequest("[ERROR] no events found");
+                if (mediaEvents == null) return BadRequest("[ERROR] no events found");
 
-                List<M_EventDTO> mappedEvents = _mappingService.mapEventsToDTO(events);
+                List<M_EventDTO> mappedEvents = _mappingService.mapEventsToDTO(mediaEvents);
 
                 return Ok(new
                 {
@@ -71,19 +71,37 @@ namespace Backend.Controllers.Event
             }
         }
 
-        // [HttpPost("create")]
-        // public async Task<ActionResult<M_MediaEvent>> createNewMediaEvent([FromBody] M_MediaEvent reqEvent)
-        // {
-        //     // check incoming event for required properties
-        //     var errors = ValidationHelper.ValidateObject(reqEvent);
+        [HttpPost("create")]
+        public async Task<ActionResult<M_MediaEvent>> createNewMediaEvent([FromBody] M_MediaEvent body)
+        {
+            // get user ID from http context (user middleware)
+            Guid userID = HttpContext.GetUserID();
+            // check incoming event for required properties
+            var errors = ValidationHelper.ValidateObject(body);
 
-        //     if (errors.Any())
-        //     {
-        //         return BadRequest(new { status = "error", Errors = errors });
-        //     }
+            if (errors.Any())
+            {
+                return BadRequest(new { status = "error", Errors = errors });
+            }
 
-        //     // validate user
+            // writing new media event to DB
+            var newMediaEvent = new M_MediaEvent
+            {
+                ID = Guid.NewGuid(),
+                UserAccountID = userID,
+                Title = body.Title,
+                Notes = body.Notes,
+                Start = body.Start,
+                End = body.End,
+                IsDone = body.IsDone,
+                MediaEventCreated = DateTime.UtcNow
+            };
 
-        // }
+            _db.MediaEvents.Add(newMediaEvent);
+            await _db.SaveChangesAsync();
+
+            return Ok(new { mediaEvent = newMediaEvent });
+
+        }
     }
 }

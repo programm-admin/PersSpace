@@ -56,15 +56,20 @@ public class UserMiddleware
         }
 
         // get user from user account ID from access token
-        string? userId = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+        string? userIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
 
-        if (string.IsNullOrWhiteSpace(userId))
+        if (string.IsNullOrWhiteSpace(userIdClaim))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsync("[ERROR] UserID is missing in token.");
             return;
         }
-
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("[ERROR] UserID is invalid in token.");
+            return;
+        }
         // check user in DB
         var user = await db.Users.FirstOrDefaultAsync(u => u.ID == userId);
 
@@ -77,7 +82,7 @@ public class UserMiddleware
 
         // provide user for next instance, e.g. controller
         context.Items["User"] = user;
-        context.Items["UserID"] = userId;
+        context.Items["UserID"] = userIdClaim;
 
         await _next(context);
     }

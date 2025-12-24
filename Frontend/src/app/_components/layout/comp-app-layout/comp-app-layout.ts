@@ -68,6 +68,7 @@ export class CompAppLayout implements OnInit {
                 this.isLoading = false;
             },
         });
+        this.isLoading = false;
     }
 
     public navigateToItemPage = (path: string | undefined) => {
