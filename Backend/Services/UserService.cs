@@ -14,9 +14,9 @@ namespace Backend.Services
         /// <summary>
         /// Checks, whether user exists in DB with given UserAccountID.
         /// </summary>
-        public async Task<bool> ExistsAsync(string userAccountID)
+        public async Task<bool> ExistsAsync(Guid? userAccountID)
         {
-            if (string.IsNullOrWhiteSpace(userAccountID)) return false;
+            if (!userAccountID.HasValue || userAccountID == Guid.Empty) return false;
 
             return await _db.Users.AnyAsync(u => u.ID == userAccountID);
         }
@@ -24,9 +24,9 @@ namespace Backend.Services
         /// <summary>
         /// Loading user from DB for given user account ID.
         /// </summary>
-        public async Task<M_User?> GetUserAsync(string userAccountID)
+        public async Task<M_User?> GetUserAsync(Guid? userAccountID)
         {
-            if (string.IsNullOrWhiteSpace(userAccountID))
+            if (!userAccountID.HasValue || userAccountID == Guid.Empty)
                 return null;
 
             return await _db.Users.FirstOrDefaultAsync(u => u.ID == userAccountID);

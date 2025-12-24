@@ -9,8 +9,8 @@ namespace Backend.Services
         {
             return events.Select(ev => new M_EventDTO
             {
-                ID = ev.ID,
-                UserAccountID = ev.UserAccountID,
+                ID = ev.ID.ToString(),
+                UserAccountID = ev.UserAccountID.ToString(),
                 Title = ev.Title,
                 Notes = ev.Notes,
                 Start = ev.Start,
