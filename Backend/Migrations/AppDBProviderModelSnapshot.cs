@@ -30,8 +30,8 @@ namespace Backend.Migrations
                     b.Property<DateTime>("Login")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("M_UserID")
-                        .HasColumnType("uuid");
+                    b.Property<string>("M_UserID")
+                        .HasColumnType("text");
 
                     b.Property<string>("UserAccountID")
                         .IsRequired()
@@ -41,14 +41,13 @@ namespace Backend.Migrations
 
                     b.HasIndex("M_UserID");
 
-                    b.ToTable("LoginHistories");
+                    b.ToTable("LoginHistories", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.M_MediaEvent", b =>
                 {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("ID")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("End")
                         .HasColumnType("timestamp with time zone");
@@ -70,27 +69,47 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserAccountID")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserAccountID")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("ID");
 
                     b.HasIndex("UserAccountID");
 
-                    b.ToTable("MediaEvents");
+                    b.ToTable("Events", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            ID = "E-1",
+                            End = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDone = false,
+                            MediaEventCreated = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Notes = "erste Notizen",
+                            Start = new DateTime(2025, 9, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Title = "erstes Event",
+                            UserAccountID = "U-1"
+                        },
+                        new
+                        {
+                            ID = "E-2",
+                            End = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDone = false,
+                            MediaEventCreated = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Notes = "Weitere Notizen zu diesem Event",
+                            Start = new DateTime(2025, 9, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Title = "2. Event",
+                            UserAccountID = "U-1"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Models.M_User", b =>
                 {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("ID")
                         .HasColumnType("text");
 
-                    b.Property<string>("GoogleID")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -104,7 +123,16 @@ namespace Backend.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            ID = "U-1",
+                            Email = "vorname.nachname@example.local",
+                            Name = "Erster Nutzer",
+                            PictureUrl = "_blank"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Models.M_LoginHistory", b =>
@@ -117,7 +145,7 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.M_MediaEvent", b =>
                 {
                     b.HasOne("Backend.Models.M_User", "User")
-                        .WithMany("MediaEvents")
+                        .WithMany("Events")
                         .HasForeignKey("UserAccountID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -127,9 +155,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.M_User", b =>
                 {
-                    b.Navigation("LoginHistories");
+                    b.Navigation("Events");
 
-                    b.Navigation("MediaEvents");
+                    b.Navigation("LoginHistories");
                 });
 #pragma warning restore 612, 618
         }
