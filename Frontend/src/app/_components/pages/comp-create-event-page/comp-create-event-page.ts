@@ -40,7 +40,7 @@ export class CompCreateEventPage {
                 error: (err: any) => {
                     this.UC_ShowMessage.execute(
                         'error',
-                        `Beim Anlegen von '${object.title} ist ein Fehler aufgetreten.'`,
+                        `Beim Anlegen von '${object.title}' ist ein Fehler aufgetreten.`,
                     );
                 },
             });

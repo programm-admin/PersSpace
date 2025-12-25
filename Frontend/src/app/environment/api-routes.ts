@@ -5,7 +5,7 @@ export const API_ROUTES: T_APIRoute = {
     login: BACKEND_ID + 'auth/login',
     checkUserSession: BACKEND_ID + 'auth/check',
     mediaEvent: {
-        create: 'user/MediaEvent/create',
-        getAll: 'user/MediaEvent/all',
+        create: BACKEND_ID + 'user/MediaEvent/create',
+        getAll: BACKEND_ID + 'user/MediaEvent/all',
     },
 };

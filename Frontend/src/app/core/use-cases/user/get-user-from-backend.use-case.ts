@@ -16,7 +16,6 @@ export class UC_User_GetUserFromBackend {
         return this.userRepository.getUserFromBackend().pipe(
             tap((response: M_User) => {
                 // user is logged in -> session is valid
-                this.userRepository.setUser(response);
                 this.storageRepository.setUserToStorage(response, updateAccessToken);
             }),
             catchError((err) => {
