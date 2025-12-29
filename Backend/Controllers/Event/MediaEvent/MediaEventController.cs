@@ -26,7 +26,7 @@ namespace Backend.Controllers.Event
 
 
         [HttpPost("all")]
-        public async Task<ActionResult<ICollection<M_EventDTO>>> getAllEvents([FromBody] EventRequest request)
+        public async Task<ActionResult<ICollection<M_MediaEventRequestDTO>>> getAllEvents([FromBody] EventRequest request)
         {
             var userID = HttpContext.GetUserID();
 
@@ -36,7 +36,7 @@ namespace Backend.Controllers.Event
 
                 if (mediaEvents == null) return BadRequest("[ERROR] no events found");
 
-                List<M_EventDTO> mappedEvents = _mappingService.mapEventsToDTO(mediaEvents);
+                List<M_MediaEventResponseDTO> mappedEvents = _mappingService.mapEventsToResponseDTO(mediaEvents);
 
                 return Ok(new
                 {
@@ -72,7 +72,7 @@ namespace Backend.Controllers.Event
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<M_MediaEvent>> CreateNewMediaEvent([FromBody] M_MediaEvent body)
+        public async Task<ActionResult<M_MediaEvent>> CreateNewMediaEvent([FromBody] M_MediaEventRequestDTO body)
         {
             // get user ID from http context (user middleware)
             Guid userID = HttpContext.GetUserID();
@@ -100,7 +100,7 @@ namespace Backend.Controllers.Event
             _db.MediaEvents.Add(newMediaEvent);
             await _db.SaveChangesAsync();
 
-            return Ok(new { mediaEvent = newMediaEvent });
+            return Ok(new { mediaEvent = _mappingService.mapSingleEventToResponseDTO(newMediaEvent) });
         }
 
         [HttpPatch("update")]

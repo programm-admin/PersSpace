@@ -9,9 +9,10 @@ namespace Backend.Services
             ArgumentNullException.ThrowIfNull(obj);
             List<ValidationResult>? results = [];
             var context = new ValidationContext(obj, serviceProvider: null, items: null);
-            bool isValid = Validator.TryValidateObject(obj, context, results, validateAllProperties: true);
 
-            return results.Select(res => res.ErrorMessage!).ToList();
+            Validator.TryValidateObject(obj, context, results, validateAllProperties: true);
+
+            return [.. results.Select(res => res.ErrorMessage!)];
         }
     }
 }

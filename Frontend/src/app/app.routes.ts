@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { APPLICATION_ROUTES } from './shared/variables/application-routes';
-import { T_ApplicationRoute } from './shared/types-and-interfaces/application-route';
 
 export const routes: Routes = [
-    ...Object.entries(APPLICATION_ROUTES).map(
-        (entry: [string, T_ApplicationRoute]) => entry[1].route,
-    ),
+    APPLICATION_ROUTES.initial,
+    APPLICATION_ROUTES.start,
+    APPLICATION_ROUTES.userStart,
+    APPLICATION_ROUTES.login,
+    APPLICATION_ROUTES.mediaEvent.createEvent,
+    APPLICATION_ROUTES.mediaEvent.showAllEvents,
 ];

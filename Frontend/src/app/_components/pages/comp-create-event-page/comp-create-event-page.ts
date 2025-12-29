@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject } from '@angular/core';
 import { CompEventForm } from '../../components/events/comp-event-form/comp-event-form';
 import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
-import { M_MediaEvent } from '../../../core/models/event.model';
+import { M_MediaEvent, M_MediaEventResponse } from '../../../core/models/event.model';
 import { UC_MediaEvent_CreateMediaEvent } from '../../../core/use-cases/event/media-event/create-media-event.use-case';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UC_Message_ShowMessage } from '../../../core/use-cases/message/show-message.use-case';
@@ -31,10 +31,10 @@ export class CompCreateEventPage {
         this.UC_CreateMediaEvent.execute(object)
             .pipe(takeUntilDestroyed(this.destroyReference))
             .subscribe({
-                next: (val: M_MediaEvent) => {
+                next: (val: M_MediaEventResponse) => {
                     this.UC_ShowMessage.execute(
                         'success',
-                        `Medienevent '${val.title}' erfolgreich angelegt.`,
+                        `Medienevent '${val.mediaEvent.title}' erfolgreich angelegt.`,
                     );
                 },
                 error: (err: any) => {

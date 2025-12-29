@@ -71,6 +71,7 @@ export class CompEventForm {
             'event',
             Object.values(newEvent).map((c) => c),
         );
+        this.outSubmitForm.emit(newEvent);
     };
 
     public cancelForm = () => {

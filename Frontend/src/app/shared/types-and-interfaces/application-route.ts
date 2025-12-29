@@ -11,5 +11,10 @@ export type T_ApplicationRoutes = {
     start: T_ApplicationRoute;
     login: T_ApplicationRoute;
     userStart: T_ApplicationRoute;
-    createEvent: T_ApplicationRoute;
+    mediaEvent: {
+        createEvent: T_ApplicationRoute;
+        showAllEvents: T_ApplicationRoute;
+    };
 };
+
+export type ApplicationRouteNode = T_ApplicationRoute | { [key: string]: ApplicationRouteNode };

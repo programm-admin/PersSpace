@@ -82,7 +82,7 @@ public class UserMiddleware
 
         // provide user for next instance, e.g. controller
         context.Items["User"] = user;
-        context.Items["UserID"] = userIdClaim;
+        context.Items["UserID"] = userId;
 
         await _next(context);
     }
