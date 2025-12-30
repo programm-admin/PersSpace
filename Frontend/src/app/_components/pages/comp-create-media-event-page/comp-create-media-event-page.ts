@@ -27,7 +27,6 @@ export class CompCreateMediaEventPage {
     };
 
     public submitForm = (object: M_MediaEvent) => {
-        console.log('object: ', object);
         this.UC_CreateMediaEvent.execute(object)
             .pipe(takeUntilDestroyed(this.destroyReference))
             .subscribe({

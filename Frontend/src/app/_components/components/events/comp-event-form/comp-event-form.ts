@@ -67,10 +67,6 @@ export class CompEventForm {
             eventCreated: new Date(),
         };
 
-        console.log(
-            'event',
-            Object.values(newEvent).map((c) => c),
-        );
         this.outSubmitForm.emit(newEvent);
     };
 
