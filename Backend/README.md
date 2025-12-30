@@ -5,3 +5,4 @@ Backend commands:
 -   remove migration: `dotnet ef migrations remove`
 -   drop DB: `dotnet ef database drop`
 -   start backend over HTTPS: `dotnet run --launch-profile https`
+-   start backend over HTTPS with automatic reload: `dotnet watch run`
