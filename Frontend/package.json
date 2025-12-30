@@ -5,6 +5,8 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
+        "build:ssr": "ng build --configuration=production --output-mode=server",
+        "serve:ssr": "node dist/Frontend/server/main.js",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "serve:ssr:Frontend": "node dist/Frontend/server/server.mjs",
