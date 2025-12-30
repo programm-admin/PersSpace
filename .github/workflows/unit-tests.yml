@@ -13,12 +13,22 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Frontend
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
+          cache-dependency-path: Frontend/package-lock.json
+
       - run: npm ci
+        working-directory: Frontend
+
       - name: Run Angular Unit Tests
         run: npm run test -- --watch=false --browsers=ChromeHeadless
+        working-directory: Frontend
