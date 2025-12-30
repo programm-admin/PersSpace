@@ -98,7 +98,6 @@ export class UserService implements T_UserRepository {
         this.userSubject.set(newUser);
     };
 
-
     public logoutUser = () => {
         if (isPlatformBrowser(this.platformID)) {
             localStorage.clear();
@@ -108,7 +107,6 @@ export class UserService implements T_UserRepository {
         // navigate back to start page
         this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path ?? '');
     };
-
 
     public getIsUserLoggedIn = (): Signal<boolean> => {
         return this.isLoggedIn;
