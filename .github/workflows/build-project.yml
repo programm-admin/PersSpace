@@ -31,8 +31,8 @@ jobs:
 
       - name: Create env.ts from Secrets
         run: |
-          printf "export const CLIENT_ID: string = 'DUMMY_CLIENT_ID';\n" > src/app/environment/env.ts
-          printf "export const BACKEND_ID: string = 'DUMMY_BACKEND_ID';\n" >> src/app/environment/env.ts
+                    echo "export const CLIENT_ID = 'DUMMY_API_KEY';" >> src/app/environment/env.ts
+          echo "export const BACKEND_ID: string = 'http://localhost';" >> src/app/environment/env.ts
 
       - name: Build Browser App
         run: npm run build
