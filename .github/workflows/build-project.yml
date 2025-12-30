@@ -1,0 +1,44 @@
+name: Build Frontend & SSR
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Frontend/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Frontend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Frontend
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: Frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Create env.ts from Secrets
+        run: |
+          echo "export const CLIENT_ID = 'DUMMY_API_KEY';" >> src/app/environment/env.ts
+          echo "export const BACKEND_ID: string = 'http://localhost';" >> src/app/environment/env.ts
+
+      - name: Build Browser App
+        run: npm run build
+
+      - name: Build SSR App
+        run: npm run build:ssr
+
+      - name: Remove env.ts
+        run: rm src/app/environment/env.ts
