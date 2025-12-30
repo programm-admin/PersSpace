@@ -31,11 +31,11 @@ jobs:
 
       - name: Create env.ts from Secrets
         run: |
-          echo "export const environment = {" > Frontend/src/environments/env.ts
-          echo "  apiKey: 'DUMMY_API_KEY'," >> Frontend/src/environments/env.ts
-          echo "  appId: 'DUMMY_APP_ID'," >> Frontend/src/environments/env.ts
-          echo "  backendUrl: 'http://localhost'" >> Frontend/src/environments/env.ts
-          echo "};" >> Frontend/src/environments/env.ts
+          echo "export const environment = {" > Frontend/src/app/environment/env.ts
+          echo "  apiKey: 'DUMMY_API_KEY'," >> Frontend/src/app/environment/env.ts
+          echo "  appId: 'DUMMY_APP_ID'," >> Frontend/src/app/environment/env.ts
+          echo "  backendUrl: 'http://localhost'" >> Frontend/src/app/environment/env.ts
+          echo "};" >> Frontend/src/app/environment/env.ts
 
       - name: Build Browser App
         run: npm run build
@@ -44,4 +44,4 @@ jobs:
         run: npm run build:ssr
 
       - name: Remove env.ts
-        run: rm Frontend/src/environments/env.ts
+        run: rm Frontend/src/app/environment/env.ts
