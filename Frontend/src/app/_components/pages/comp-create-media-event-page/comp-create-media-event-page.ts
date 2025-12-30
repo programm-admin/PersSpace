@@ -10,11 +10,11 @@ import { UC_Message_ShowMessage } from '../../../core/use-cases/message/show-mes
 @Component({
     selector: 'app-comp-create-event-page',
     imports: [CompEventForm],
-    templateUrl: './comp-create-event-page.html',
-    styleUrl: './comp-create-event-page.scss',
+    templateUrl: './comp-create-media-event-page.html',
+    styleUrl: './comp-create-media-event-page.scss',
     providers: [UC_MediaEvent_CreateMediaEvent, UC_Message_ShowMessage],
 })
-export class CompCreateEventPage {
+export class CompCreateMediaEventPage {
     // dependency injections
     public router = inject(Router);
     private readonly UC_CreateMediaEvent = inject(UC_MediaEvent_CreateMediaEvent);

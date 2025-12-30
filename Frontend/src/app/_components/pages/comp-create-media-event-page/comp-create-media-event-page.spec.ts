@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompCreateEventPage } from './comp-create-event-page';
+import { CompCreateMediaEventPage } from './comp-create-media-event-page';
 
-describe('CompCreateEventPage', () => {
-    let component: CompCreateEventPage;
-    let fixture: ComponentFixture<CompCreateEventPage>;
+describe('CompCreateMediaEventPage', () => {
+    let component: CompCreateMediaEventPage;
+    let fixture: ComponentFixture<CompCreateMediaEventPage>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CompCreateEventPage],
+            imports: [CompCreateMediaEventPage],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(CompCreateEventPage);
+        fixture = TestBed.createComponent(CompCreateMediaEventPage);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

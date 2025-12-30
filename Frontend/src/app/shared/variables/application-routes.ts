@@ -34,8 +34,8 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             route: {
                 path: 'user/media-event/create',
                 loadComponent: () =>
-                    import('../../_components/pages/comp-create-event-page/comp-create-event-page').then(
-                        (comp) => comp.CompCreateEventPage,
+                    import('../../_components/pages/comp-create-media-event-page/comp-create-media-event-page').then(
+                        (comp) => comp.CompCreateMediaEventPage,
                     ),
             },
             isVisible: true,
