@@ -26,9 +26,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: Frontend/package-lock.json
 
-      - run: npm ci
-        working-directory: Frontend
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Create env.ts from Secrets
+        run: |
+          echo "export const environment = {" > Frontend/src/environments/env.ts
+          echo "  apiKey: 'DUMMY_API_KEY'," >> Frontend/src/environments/env.ts
+          echo "  appId: 'DUMMY_APP_ID'," >> Frontend/src/environments/env.ts
+          echo "  backendUrl: 'http://localhost'" >> Frontend/src/environments/env.ts
+          echo "};" >> Frontend/src/environments/env.ts
 
       - name: Run Angular Unit Tests
         run: npm run test -- --watch=false --browsers=ChromeHeadless
-        working-directory: Frontend
