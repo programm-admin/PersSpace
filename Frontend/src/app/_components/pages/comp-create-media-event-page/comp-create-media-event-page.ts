@@ -36,6 +36,9 @@ export class CompCreateMediaEventPage {
                         'success',
                         `Medienevent '${val.mediaEvent.title}' erfolgreich angelegt.`,
                     );
+                    this.router.navigateByUrl(
+                        APPLICATION_ROUTES.mediaEvent.showAllEvents.route.path!,
+                    );
                 },
                 error: (err: any) => {
                     this.UC_ShowMessage.execute(
