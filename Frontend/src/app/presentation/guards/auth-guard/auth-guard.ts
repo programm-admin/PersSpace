@@ -1,18 +1,23 @@
-import { inject } from '@angular/core';
+import { effect, inject, Signal } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { UC_User_GetIsUserLoggedIn } from '../../../core/use-cases/user/get-is-user-logged-in.use-case';
-import { UC_String_GetPathFromRoute } from '../../../core/use-cases/string/get-path-from-route.use-case';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
+import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
+import { M_User } from '../../../core/models/user.model';
 
-export const authGuard: CanActivateFn = (route, state) => {
-    const getIsLoggedInUseCase = inject(UC_User_GetIsUserLoggedIn);
-    const getPathForRouteUseCase = inject(UC_String_GetPathFromRoute);
+/**
+ * Authguard for checking user routes and only give access to if user is logged in.
+ * @returns
+ */
+export const authGuard: CanActivateFn = () => {
+    const userRepository = inject(IT_USER_REPOSITORY);
     const router = inject(Router);
+    const userSignal: Signal<M_User | null> = userRepository.getUser();
 
-    if (!getIsLoggedInUseCase.execute()()) {
-        router.navigate([getPathForRouteUseCase.execute(APPLICATION_ROUTES.start)]);
-        return false;
-    }
+    effect(() => {
+        if (userSignal() === null) {
+            router.navigateByUrl(APPLICATION_ROUTES.login.route.path!);
+        }
+    });
 
-    return true;
+    return userSignal() !== null;
 };

@@ -1,4 +1,3 @@
-
 import { authGuard } from '../../presentation/guards/auth-guard/auth-guard';
 import { CompLoginPage } from '../../presentation/pages/comp-login-page/comp-login-page';
 import { CompStartPage } from '../../presentation/pages/comp-start-page/comp-start-page';
@@ -38,6 +37,7 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
                     import('../../presentation/pages/comp-create-media-event-page/comp-create-media-event-page').then(
                         (comp) => comp.CompCreateMediaEventPage,
                     ),
+                canActivate: [authGuard],
             },
             isVisible: true,
             title: 'Medienevent erstellen',
@@ -49,6 +49,7 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
                     import('../../presentation/pages/media-events/comp-media-event-list-page/comp-media-event-list-page').then(
                         (comp) => comp.CompMediaEventListPage,
                     ),
+                canActivate: [authGuard],
             },
             isVisible: true,
             title: 'Meine Medienevents',
