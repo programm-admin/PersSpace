@@ -1,9 +1,7 @@
 ﻿namespace Backend.DataTransferObjects
 {
-    public class M_EventDTO
+    public class M_MediaEventRequestDTO
     {
-        public required string ID { get; set; }
-        public required string UserAccountID { get; set; }
         public required string Title { get; set; }
         public required string Notes { get; set; }
         public required DateTime Start { get; set; }

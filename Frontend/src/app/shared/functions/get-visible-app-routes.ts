@@ -1,26 +1,45 @@
-import { T_ApplicationRoute } from '../types-and-interfaces/application-route';
+import {
+    ApplicationRouteNode,
+    T_ApplicationRoute,
+} from '../types-and-interfaces/application-route';
 import { APPLICATION_ROUTES } from '../variables/application-routes';
 
-export const getVisibleAppRoutes = (): T_ApplicationRoute[] => {
-    return Object.entries(APPLICATION_ROUTES)
-        .filter((entry: [string, T_ApplicationRoute]) => entry[1].isVisible)
-        .map((entry: [string, T_ApplicationRoute]) => entry[1]);
+const isEntryOfTypeObject = (entry: any): entry is T_ApplicationRoute => {
+    return typeof entry === 'object' && entry !== null && 'isVisible' in entry;
 };
 
-export const getEventCreationRoutes = (): T_ApplicationRoute[] => {
-    return Object.entries(APPLICATION_ROUTES)
-        .filter(
-            (entry: [string, T_ApplicationRoute]) =>
-                entry[1].isVisible && entry[1].route.path?.includes('/create'),
-        )
-        .map((entry: [string, T_ApplicationRoute]) => entry[1]);
+export const getVisibleAppRoutes = (
+    routes: ApplicationRouteNode = APPLICATION_ROUTES,
+): T_ApplicationRoute[] => {
+    return Object.values(routes).flatMap((value) => {
+        if (isEntryOfTypeObject(value)) {
+            return value.isVisible ? [value] : [];
+        }
+
+        return getVisibleAppRoutes(value);
+    });
 };
 
-export const getUserSettingsRoutes = (): T_ApplicationRoute[] => {
-    return Object.entries(APPLICATION_ROUTES)
-        .filter(
-            (entry: [string, T_ApplicationRoute]) =>
-                entry[1].isVisible && entry[1].route.path?.startsWith('user/'),
-        )
-        .map((entry: [string, T_ApplicationRoute]) => entry[1]);
+export const getEventCreationRoutes = (
+    routes: ApplicationRouteNode = APPLICATION_ROUTES,
+): T_ApplicationRoute[] => {
+    return Object.values(routes).flatMap((value) => {
+        if (isEntryOfTypeObject(value)) {
+            return value.isVisible && value.route.path?.includes('/create') ? [value] : [];
+        }
+
+        return getVisibleAppRoutes(value);
+    });
+};
+
+export const getUserSettingsRoutes = (
+    routes: ApplicationRouteNode = APPLICATION_ROUTES,
+): T_ApplicationRoute[] => {
+    return Object.values(routes).flatMap((value) => {
+        if (isEntryOfTypeObject(value)) {
+            return value.isVisible && value.route.path?.startsWith('user/') ? [value] : [];
+        }
+
+        return getVisibleAppRoutes(value);
+    });
 };

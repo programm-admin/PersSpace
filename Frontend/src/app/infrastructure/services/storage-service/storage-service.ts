@@ -34,7 +34,7 @@ export class StorageService implements T_StorageRepository {
         localStorage.clear();
     };
 
-    setUserToStorage = (value: M_User): boolean => {
+    setUserToStorage = (value: M_User, updateAccessToken: boolean): boolean => {
         if (!isPlatformBrowser(this.platformID)) {
             return false;
         }
@@ -42,6 +42,10 @@ export class StorageService implements T_StorageRepository {
         localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME, value.userName);
         localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE, value.picture);
         localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_ID, value.userID);
+
+        if (!updateAccessToken) return true;
+
+        // only update access token if new token is needed (not e.g. if checking session)
         localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN, value.accessToken);
 
         return true;

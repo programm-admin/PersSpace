@@ -1,5 +1,6 @@
 using Backend.Data;
 using Backend.Services;
+using Backend.Middleware;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,20 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// exception handling
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            error = "Unexpected server error"
+        });
+    });
+});
+
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDBProvider>();
@@ -76,6 +91,14 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseWhen(
+    context =>
+        !context.Request.Path.StartsWithSegments("/auth/login") && !context.Request.Path.StartsWithSegments("/auth/logout"),
+    appBuilder =>
+    {
+        appBuilder.UseMiddleware<UserMiddleware>();
+    }
+);
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups";

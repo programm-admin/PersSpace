@@ -1,4 +1,4 @@
-export type M_Model = {
+export type M_MediaEvent = {
     id: string;
     userAccountID: string;
     title: string;
@@ -9,4 +9,8 @@ export type M_Model = {
     eventCreated: Date;
 };
 
-export type M_ModelCreate = Omit<M_Model, 'id' | 'userAccountID'>;
+export type M_MediaEventResponse = {
+    mediaEvent: M_MediaEvent;
+};
+
+export type M_ModelCreate = Omit<M_MediaEvent, 'id' | 'userAccountID'>;

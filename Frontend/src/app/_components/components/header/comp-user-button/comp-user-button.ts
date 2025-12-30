@@ -1,4 +1,15 @@
-import { Component, inject, input, InputSignal, OnInit, signal, Signal } from '@angular/core';
+import {
+    Component,
+    effect,
+    inject,
+    input,
+    InputSignal,
+    OnInit,
+    PLATFORM_ID,
+    signal,
+    Signal,
+    WritableSignal,
+} from '@angular/core';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule, NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
@@ -13,6 +24,7 @@ import { M_User } from '../../../../core/models/user.model';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
 import { UC_Message_ShowMessage } from '../../../../core/use-cases/message/show-message.use-case';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-comp-user-button',
@@ -24,12 +36,15 @@ import { UC_Message_ShowMessage } from '../../../../core/use-cases/message/show-
 export class CompUserButton implements OnInit {
     // dependency injections
     private readonly router = inject(Router);
+    private readonly platformID = inject(PLATFORM_ID);
     private readonly UC_LogoutUser = inject(UC_User_LogoutUser);
     private readonly UC_GetUser = inject(UC_User_GetUser);
     private readonly UC_ShowMessage = inject(UC_Message_ShowMessage);
 
     public readonly menuPosition: NzPlacementType = MENU_POSITION;
     public user: Signal<M_User | null> = signal(null);
+    public isPlatformBrowser: boolean = isPlatformBrowser(this.platformID);
+    public avatarSrc: WritableSignal<string | undefined> = signal(undefined);
 
     // input variables
     public inpButtonName: InputSignal<string> = input.required<string>();
@@ -39,6 +54,15 @@ export class CompUserButton implements OnInit {
 
     ngOnInit(): void {
         this.user = this.UC_GetUser.execute();
+    }
+
+    constructor() {
+        effect(() => {
+            const picture = this.inpButtonPicture();
+            if (picture && !this.avatarSrc()) {
+                this.avatarSrc.set(picture);
+            }
+        });
     }
 
     public navigateToItemPage = (path: string | undefined) => {

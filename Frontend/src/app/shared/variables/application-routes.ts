@@ -29,15 +29,28 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
         isVisible: false,
         title: 'Persönliche Startseite',
     },
-    createEvent: {
-        route: {
-            path: 'user/event/create',
-            loadComponent: () =>
-                import('../../_components/pages/comp-create-event-page/comp-create-event-page').then(
-                    (comp) => comp.CompCreateEventPage,
-                ),
+    mediaEvent: {
+        createEvent: {
+            route: {
+                path: 'user/media-event/create',
+                loadComponent: () =>
+                    import('../../_components/pages/comp-create-media-event-page/comp-create-media-event-page').then(
+                        (comp) => comp.CompCreateMediaEventPage,
+                    ),
+            },
+            isVisible: true,
+            title: 'Medienevent erstellen',
         },
-        isVisible: true,
-        title: 'Event erstellen',
+        showAllEvents: {
+            route: {
+                path: 'user/media-event/all',
+                loadComponent: () =>
+                    import('../../_components/pages/media-events/comp-media-event-list-page/comp-media-event-list-page').then(
+                        (comp) => comp.CompMediaEventListPage,
+                    ),
+            },
+            isVisible: true,
+            title: 'Meine Medienevents',
+        },
     },
 };

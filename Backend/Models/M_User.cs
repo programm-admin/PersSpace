@@ -2,12 +2,13 @@
 {
     public class M_User
     {
-        public required string ID { get; set; }
+        public required Guid ID { get; set; }
         public required string Name { get; set; }
         public required string Email { get; set; }
         public required string PictureUrl { get; set; }
+        public required string GoogleID { get; set; }
 
-        public ICollection<M_Event> Events { get; set; } = [];
+        public ICollection<M_MediaEvent> MediaEvents { get; set; } = [];
         public ICollection<M_LoginHistory> LoginHistories { get; set; } = [];
     }
 }

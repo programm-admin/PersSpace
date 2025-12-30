@@ -6,7 +6,7 @@ import { M_User } from '../../models/user.model';
 export class UC_Storage_SetUserToStorage {
     private readonly storageRepository = inject(IT_STORAGE_REPOSITORY);
 
-    public execute = (value: M_User): boolean => {
-        return this.storageRepository.setUserToStorage(value);
+    public execute = (value: M_User, updateAccessToken: boolean): boolean => {
+        return this.storageRepository.setUserToStorage(value, updateAccessToken);
     };
 }

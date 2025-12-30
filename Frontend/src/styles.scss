@@ -78,8 +78,8 @@ span {
 
 /* Textfarbe */
 .ant-message-notice-content {
-    color: white;
+    color: var(--header--background-color);
     font-weight: 500;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 0.1rem solid white;
+    background-color: white;
+    border: 0.1rem solid var(--standard--divider-color);
 }

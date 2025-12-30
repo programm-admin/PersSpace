@@ -15,11 +15,11 @@ import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes
 import { UC_String_GetPathFromRoute } from '../../../core/use-cases/string/get-path-from-route.use-case';
 import { UC_Google_LoadScript } from '../../../core/use-cases/google/load-script.use-case';
 import { UC_User_SetUserSubject } from '../../../core/use-cases/user/set-user-subject.use-case';
-import { UC_Google_SendTokenToBackend } from '../../../core/use-cases/google/send-token-to-backend.use-case';
 import { CLIENT_ID } from '../../../environment/env';
 import { UC_Storage_SetUserToStorage } from '../../../core/use-cases/storage/set-user-to-storage.use-case';
 import { UC_Storage_ClearStorage } from '../../../core/use-cases/storage/clear-storage.use-case';
 import { M_User } from '../../../core/models/user.model';
+import { IT_GOOGLE_REPOSITORY } from '../../../core/repositories/google.repository';
 
 @Component({
     selector: 'app-comp-login-page',
@@ -29,7 +29,6 @@ import { M_User } from '../../../core/models/user.model';
     providers: [
         UC_Google_LoadScript,
         UC_User_SetUserSubject,
-        UC_Google_SendTokenToBackend,
         UC_Storage_SetUserToStorage,
         UC_Storage_ClearStorage,
     ],
@@ -40,10 +39,10 @@ export class CompLoginPage implements AfterViewInit {
 
     private readonly platformID = inject(PLATFORM_ID);
     private readonly router: Router = inject(Router);
+    private readonly googleRepository = inject(IT_GOOGLE_REPOSITORY);
     private readonly getPathFromRouteUseCase = inject(UC_String_GetPathFromRoute);
     private readonly loadScriptUseCase = inject(UC_Google_LoadScript);
     private readonly setUserSubjectUseCase = inject(UC_User_SetUserSubject);
-    private readonly sendTokenToBackendUseCase = inject(UC_Google_SendTokenToBackend);
     private readonly setUserToStorageUseCase = inject(UC_Storage_SetUserToStorage);
     private readonly clearStorageUseCase = inject(UC_Storage_ClearStorage);
 
@@ -62,10 +61,13 @@ export class CompLoginPage implements AfterViewInit {
                     const token: string = res.credential;
 
                     this.isLoadingSignal.set(true);
-                    this.sendTokenToBackendUseCase.execute(token).subscribe({
+                    this.googleRepository.sendTokenToBackend(token).subscribe({
                         next: (res: M_User) => {
                             // set data into storage
-                            const userSet: boolean = this.setUserToStorageUseCase.execute(res);
+                            const userSet: boolean = this.setUserToStorageUseCase.execute(
+                                res,
+                                true,
+                            );
                             if (!userSet) {
                                 // clear storage and navigate user back to start page
                                 this.clearStorageUseCase.execute();
@@ -87,8 +89,8 @@ export class CompLoginPage implements AfterViewInit {
                         },
                     });
                 },
-                auto_select: false, // wichtig!
-                cancel_on_tap_outside: false, // verhindert, dass der Button verschwindet
+                auto_select: false, // important!
+                cancel_on_tap_outside: false, // prevents the Google button from disappearing
             });
 
             google.accounts.id.renderButton(document.getElementById('login-btn'), {

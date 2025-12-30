@@ -53,12 +53,12 @@ export class CompAppLayout implements OnInit {
     menu!: NzDropdownMenuComponent;
 
     ngOnInit(): void {
-        // this.isLoading = true;
+        this.isLoading = true;
         this.user = this.getUserUseCase.execute();
 
         const user: M_User | null = this.getUserFromLocalStorageUseCase.execute();
 
-        this.getUserFromBackendUseCase.execute().subscribe({
+        this.getUserFromBackendUseCase.execute(false).subscribe({
             next: (user: M_User) => {
                 this.isLoading = false;
             },
@@ -68,6 +68,7 @@ export class CompAppLayout implements OnInit {
                 this.isLoading = false;
             },
         });
+        this.isLoading = false;
     }
 
     public navigateToItemPage = (path: string | undefined) => {
