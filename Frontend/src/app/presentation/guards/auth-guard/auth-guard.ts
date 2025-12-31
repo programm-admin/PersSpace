@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
 import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 import { M_User } from '../../../core/models/user.model';
+import { E_RedirectUser } from '../../../shared/variables/redirect-user-state';
 
 /**
  * Authguard for checking user routes and only give access to if user is logged in.
@@ -15,7 +16,10 @@ export const authGuard: CanActivateFn = () => {
 
     effect(() => {
         if (userSignal() === null) {
-            router.navigateByUrl(APPLICATION_ROUTES.login.route.path!);
+            // show no access message in UI
+            router.navigate([APPLICATION_ROUTES.login.route.path!], {
+                queryParams: { error: E_RedirectUser.notAuthorized },
+            });
         }
     });
 

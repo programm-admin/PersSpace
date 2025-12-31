@@ -14,8 +14,10 @@ export class MessageService implements T_MessageRepository {
 
     public showMessage = (messageType: M_MessageType, messageContent: string) => {
         if (!isPlatformBrowser(this.platformID)) {
+            console.log('[showMessage()] platform not browser');
             return;
         }
+        console.log('[showMessage()] platform browser');
         this.ngMessageService.create(messageType, messageContent);
     };
 }
