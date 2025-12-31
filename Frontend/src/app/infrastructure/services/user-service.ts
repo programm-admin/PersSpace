@@ -8,13 +8,12 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { T_UserRepository } from '../../core/repositories/user.repository';
-import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 import { API_ROUTES } from '../../environment/api-routes';
-import { IT_STORAGE_REPOSITORY } from '../../core/repositories/storage.repository';
 import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../shared/variables/application-routes';
 
@@ -29,9 +28,7 @@ export class UserService implements T_UserRepository {
 
     private userSubject: WritableSignal<M_User | null> = signal<M_User | null>(
         (() => {
-            if (!isPlatformBrowser(this.platformID)) {
-                return null;
-            }
+            if (!isPlatformBrowser(this.platformID)) return null;
 
             const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
             const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);

@@ -25,10 +25,11 @@ namespace Backend.Controllers.Event
         public class DeleteMediaEventRequest { public required Guid mediaID { get; set; } }
 
 
-        [HttpPost("all")]
+        [HttpGet("all")]
         public async Task<ActionResult<ICollection<M_MediaEventRequestDTO>>> getAllEvents([FromBody] EventRequest request)
         {
             var userID = HttpContext.GetUserID();
+            Console.Write("[GET ALL] endpoint triggered");
 
             try
             {

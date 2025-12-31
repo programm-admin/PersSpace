@@ -1,1 +1,17 @@
-<p>comp-media-event-list-page works!</p>
+@if (isLoading) {
+    <app-comp-loading-screen />
+
+} @else {
+    @if (isError) {
+        <p>Ein Fehler ist aufgetreten.</p>
+
+    } 
+
+    @if (userMediaEvents()) {
+        @for (mediaEvent of userMediaEvents(); track $index) {
+            <nz-card>
+                <nz-card-meta [nzTitle]="mediaEvent.title" />
+            </nz-card>
+        }
+    }
+}
