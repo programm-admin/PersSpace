@@ -1,5 +1,6 @@
 declare var google: any;
 import {
+    afterNextRender,
     AfterViewInit,
     Component,
     inject,
@@ -10,7 +11,7 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
 import { UC_String_GetPathFromRoute } from '../../../core/use-cases/string/get-path-from-route.use-case';
 import { UC_Google_LoadScript } from '../../../core/use-cases/google/load-script.use-case';
@@ -20,6 +21,8 @@ import { UC_Storage_SetUserToStorage } from '../../../core/use-cases/storage/set
 import { UC_Storage_ClearStorage } from '../../../core/use-cases/storage/clear-storage.use-case';
 import { M_User } from '../../../core/models/user.model';
 import { IT_GOOGLE_REPOSITORY } from '../../../core/repositories/google.repository';
+import { E_RedirectUser } from '../../../shared/variables/redirect-user-state';
+import { IT_MESSAGE_REPOSITORY } from '../../../core/repositories/message.repository';
 
 @Component({
     selector: 'app-comp-login-page',
@@ -39,12 +42,31 @@ export class CompLoginPage implements AfterViewInit {
 
     private readonly platformID = inject(PLATFORM_ID);
     private readonly router: Router = inject(Router);
+    private readonly activatedRoute = inject(ActivatedRoute);
     private readonly googleRepository = inject(IT_GOOGLE_REPOSITORY);
+    private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
     private readonly getPathFromRouteUseCase = inject(UC_String_GetPathFromRoute);
     private readonly loadScriptUseCase = inject(UC_Google_LoadScript);
     private readonly setUserSubjectUseCase = inject(UC_User_SetUserSubject);
     private readonly setUserToStorageUseCase = inject(UC_Storage_SetUserToStorage);
     private readonly clearStorageUseCase = inject(UC_Storage_ClearStorage);
+
+    constructor() {
+        afterNextRender(() => {
+            const userUnauthorizedError: string | null =
+                this.activatedRoute.snapshot.queryParamMap.get('error');
+
+            if (userUnauthorizedError !== E_RedirectUser.notAuthorized) return;
+
+            this.messageRepository.showMessage('error', 'Zugriff verweigert');
+            // clean up URL
+            this.router.navigate([], {
+                queryParams: { error: null },
+                queryParamsHandling: 'merge',
+                replaceUrl: true,
+            });
+        });
+    }
 
     async ngAfterViewInit(): Promise<void> {
         if (isPlatformBrowser(this.platformID)) {

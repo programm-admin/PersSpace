@@ -1,7 +1,7 @@
-import { CompLoginPage } from '../../_components/pages/comp-login-page/comp-login-page';
-import { CompStartPage } from '../../_components/pages/comp-start-page/comp-start-page';
-import { CompUserStartPage } from '../../_components/pages/comp-user-start-page/comp-user-start-page';
-import { authGuard } from '../../guards/auth-guard/auth-guard';
+import { authGuard } from '../../presentation/guards/auth-guard/auth-guard';
+import { CompLoginPage } from '../../presentation/pages/comp-login-page/comp-login-page';
+import { CompStartPage } from '../../presentation/pages/comp-start-page/comp-start-page';
+import { CompUserStartPage } from '../../presentation/pages/comp-user-start-page/comp-user-start-page';
 import { T_ApplicationRoutes } from '../types-and-interfaces/application-route';
 
 export const APPLICATION_ROUTES: T_ApplicationRoutes = {
@@ -34,9 +34,10 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             route: {
                 path: 'user/media-event/create',
                 loadComponent: () =>
-                    import('../../_components/pages/comp-create-media-event-page/comp-create-media-event-page').then(
+                    import('../../presentation/pages/comp-create-media-event-page/comp-create-media-event-page').then(
                         (comp) => comp.CompCreateMediaEventPage,
                     ),
+                canActivate: [authGuard],
             },
             isVisible: true,
             title: 'Medienevent erstellen',
@@ -45,9 +46,10 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             route: {
                 path: 'user/media-event/all',
                 loadComponent: () =>
-                    import('../../_components/pages/media-events/comp-media-event-list-page/comp-media-event-list-page').then(
+                    import('../../presentation/pages/media-events/comp-media-event-list-page/comp-media-event-list-page').then(
                         (comp) => comp.CompMediaEventListPage,
                     ),
+                canActivate: [authGuard],
             },
             isVisible: true,
             title: 'Meine Medienevents',

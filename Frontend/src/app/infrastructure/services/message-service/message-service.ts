@@ -13,7 +13,8 @@ export class MessageService implements T_MessageRepository {
     private readonly platformID = inject(PLATFORM_ID);
 
     public showMessage = (messageType: M_MessageType, messageContent: string) => {
-        if (isPlatformBrowser(this.platformID)) {
+        if (!isPlatformBrowser(this.platformID)) {
+            return;
         }
         this.ngMessageService.create(messageType, messageContent);
     };

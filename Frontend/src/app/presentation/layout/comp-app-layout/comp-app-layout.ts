@@ -12,9 +12,10 @@ import { UC_User_GetUserFromLocalStorage } from '../../../core/use-cases/user/ge
 import { UC_User_LogoutUser } from '../../../core/use-cases/user/logout-user.use-case';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
 import { CompUserButton } from '../../components/header/comp-user-button/comp-user-button';
-import { UC_User_GetUser } from '../../../core/use-cases/user/get-user.use-case';
 import { MENU_POSITION } from '../../../shared/variables/menu-position';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
+import { IT_MESSAGE_REPOSITORY } from '../../../core/repositories/message.repository';
+import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 
 @Component({
     selector: 'app-comp-app-layout',
@@ -28,16 +29,12 @@ import { NzPlacementType } from 'ng-zorro-antd/dropdown';
     ],
     templateUrl: './comp-app-layout.html',
     styleUrl: './comp-app-layout.scss',
-    providers: [
-        UC_User_GetUserFromBackend,
-        UC_User_GetUserFromLocalStorage,
-        UC_User_LogoutUser,
-        UC_User_GetUser,
-    ],
+    providers: [UC_User_GetUserFromBackend, UC_User_GetUserFromLocalStorage, UC_User_LogoutUser],
 })
 export class CompAppLayout implements OnInit {
     // dependency injections
-    private readonly getUserUseCase = inject(UC_User_GetUser);
+    private readonly userRepository = inject(IT_USER_REPOSITORY);
+    private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
     public readonly creationMenu: T_ApplicationRoute[] = getEventCreationRoutes();
     public readonly getUserFromBackendUseCase = inject(UC_User_GetUserFromBackend);
     public readonly logoutUserUseCase = inject(UC_User_LogoutUser);
@@ -54,7 +51,7 @@ export class CompAppLayout implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this.user = this.getUserUseCase.execute();
+        this.user = this.userRepository.getUser();
 
         const user: M_User | null = this.getUserFromLocalStorageUseCase.execute();
 
