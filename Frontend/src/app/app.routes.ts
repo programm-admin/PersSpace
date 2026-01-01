@@ -6,6 +6,6 @@ export const routes: Routes = [
     APPLICATION_ROUTES.start.route,
     APPLICATION_ROUTES.user.userStart.route,
     APPLICATION_ROUTES.user.login.route,
-    APPLICATION_ROUTES.mediaEvent.createEvent.route,
-    APPLICATION_ROUTES.mediaEvent.showAllEvents.route,
+    APPLICATION_ROUTES.mediaEvent.createMediaEvent.route,
+    APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route,
 ];

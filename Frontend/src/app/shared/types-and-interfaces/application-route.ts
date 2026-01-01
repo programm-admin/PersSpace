@@ -14,8 +14,9 @@ export type T_ApplicationRoutes = {
         userStart: T_ApplicationRoute;
     };
     mediaEvent: {
-        createEvent: T_ApplicationRoute;
-        showAllEvents: T_ApplicationRoute;
+        createMediaEvent: T_ApplicationRoute;
+        showAllMediaEvents: T_ApplicationRoute;
+        showMediaEventDetails: T_ApplicationRoute;
     };
 };
 

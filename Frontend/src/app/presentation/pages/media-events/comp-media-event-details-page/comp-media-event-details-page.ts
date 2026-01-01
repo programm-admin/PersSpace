@@ -1,0 +1,54 @@
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { M_MediaEvent, M_MediaEventResponse } from '../../../../core/models/event.model';
+import { IT_MEDIA_EVENT_REPOSITORY } from '../../../../core/repositories/events/media-event.repository';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
+
+@Component({
+    selector: 'app-comp-media-event-details-page',
+    imports: [],
+    templateUrl: './comp-media-event-details-page.html',
+    styleUrl: './comp-media-event-details-page.scss',
+})
+export class CompMediaEventDetailsPage implements OnInit {
+    // dependency injections
+    private readonly activatedRoute = inject(ActivatedRoute);
+    private readonly mediaEventRepository = inject(IT_MEDIA_EVENT_REPOSITORY);
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly router = inject(Router);
+
+    public mediaEvent: M_MediaEvent | null = null;
+    public isLoading: boolean = false;
+    public isError: boolean = false;
+
+    ngOnInit(): void {
+        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+            const id: string | null = params.get('id');
+
+            if (!id) {
+                this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path!);
+                return;
+            }
+
+            this.loadMediaEvent(id);
+        });
+    }
+
+    private loadMediaEvent = (id: string) => {
+        this.isLoading = true;
+        this.mediaEventRepository
+            .getMediaEvent(id)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: (res: M_MediaEventResponse) => {
+                    this.mediaEvent = res.mediaEvent;
+                    this.isLoading = false;
+                },
+                error: () => {
+                    this.isLoading = false;
+                    this.isError = true;
+                },
+            });
+    };
+}

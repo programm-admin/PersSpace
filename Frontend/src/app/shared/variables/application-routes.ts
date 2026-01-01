@@ -32,7 +32,7 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
         },
     },
     mediaEvent: {
-        createEvent: {
+        createMediaEvent: {
             route: {
                 path: 'user/media-event/create',
                 loadComponent: () =>
@@ -43,7 +43,7 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             isVisible: true,
             title: 'Medienevent erstellen',
         },
-        showAllEvents: {
+        showAllMediaEvents: {
             route: {
                 path: 'user/media-event/all',
                 loadComponent: () =>
@@ -53,6 +53,17 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             },
             isVisible: true,
             title: 'Meine Medienevents',
+        },
+        showMediaEventDetails: {
+            route: {
+                path: 'user/media-event/:id',
+                loadComponent: () =>
+                    import('../../presentation/pages/media-events/comp-media-event-details-page/comp-media-event-details-page').then(
+                        (comp) => comp.CompMediaEventDetailsPage,
+                    ),
+            },
+            isVisible: false,
+            title: 'Medieneventdetails',
         },
     },
 };
