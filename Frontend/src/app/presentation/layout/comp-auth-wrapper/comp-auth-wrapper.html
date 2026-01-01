@@ -1,0 +1,9 @@
+@if (isHydrated()) {
+    @if (user()) {
+        <ng-content />
+    } @else {
+        <div>Zugriff verweigert</div>
+    }
+} @else {
+    <app-comp-loading-screen />
+}

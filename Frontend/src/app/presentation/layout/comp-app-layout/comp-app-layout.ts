@@ -14,7 +14,6 @@ import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes
 import { CompUserButton } from '../../components/header/comp-user-button/comp-user-button';
 import { MENU_POSITION } from '../../../shared/variables/menu-position';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
-import { IT_MESSAGE_REPOSITORY } from '../../../core/repositories/message.repository';
 import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 
 @Component({
@@ -34,7 +33,6 @@ import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 export class CompAppLayout implements OnInit {
     // dependency injections
     private readonly userRepository = inject(IT_USER_REPOSITORY);
-    private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
     public readonly creationMenu: T_ApplicationRoute[] = getEventCreationRoutes();
     public readonly getUserFromBackendUseCase = inject(UC_User_GetUserFromBackend);
     public readonly logoutUserUseCase = inject(UC_User_LogoutUser);

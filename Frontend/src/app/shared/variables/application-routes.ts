@@ -25,7 +25,7 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
         title: 'Loginseite',
     },
     userStart: {
-        route: { path: 'user/start', component: CompUserStartPage, canActivate: [authGuard] },
+        route: { path: 'user/start', component: CompUserStartPage },
         isVisible: false,
         title: 'Persönliche Startseite',
     },
@@ -37,7 +37,6 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
                     import('../../presentation/pages/comp-create-media-event-page/comp-create-media-event-page').then(
                         (comp) => comp.CompCreateMediaEventPage,
                     ),
-                canActivate: [authGuard],
             },
             isVisible: true,
             title: 'Medienevent erstellen',
@@ -49,7 +48,6 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
                     import('../../presentation/pages/media-events/comp-media-event-list-page/comp-media-event-list-page').then(
                         (comp) => comp.CompMediaEventListPage,
                     ),
-                canActivate: [authGuard],
             },
             isVisible: true,
             title: 'Meine Medienevents',

@@ -8,9 +8,11 @@ export type M_MediaEvent = {
     isDone: boolean;
     eventCreated: Date;
 };
-
 export type M_MediaEventResponse = {
     mediaEvent: M_MediaEvent;
 };
+
+export type M_MediaEventListItem = Omit<M_MediaEvent, 'userAccountID' | 'notes'>;
+export type M_MediaEventListItemResponse = { mediaEvents: M_MediaEventListItem[] };
 
 export type M_ModelCreate = Omit<M_MediaEvent, 'id' | 'userAccountID'>;

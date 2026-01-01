@@ -25,8 +25,8 @@ namespace Backend.Controllers.Event
         public class DeleteMediaEventRequest { public required Guid mediaID { get; set; } }
 
 
-        [HttpPost("all")]
-        public async Task<ActionResult<ICollection<M_MediaEventRequestDTO>>> getAllEvents([FromBody] EventRequest request)
+        [HttpGet("all")]
+        public async Task<ActionResult<ICollection<M_MediaEventRequestDTO>>> getAllEvents()
         {
             var userID = HttpContext.GetUserID();
 
@@ -40,7 +40,7 @@ namespace Backend.Controllers.Event
 
                 return Ok(new
                 {
-                    mappedEvents,
+                    mediaEvents = mappedEvents,
                     status = "ok"
                 });
             }
