@@ -3,6 +3,7 @@ import { BACKEND_ID } from './env';
 
 export const API_ROUTES: T_APIRoute = {
     login: BACKEND_ID + 'auth/login',
+    logout: BACKEND_ID + 'auth/logout',
     checkUserSession: BACKEND_ID + 'auth/check',
     mediaEvent: {
         create: BACKEND_ID + 'user/MediaEvent/create',

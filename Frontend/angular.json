@@ -70,7 +70,12 @@
                         "headers": {
                             "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
                             "Cross-Origin-Embedder-Policy": "unsafe-none"
-                        }
+                        },
+                        "ssl": true,
+                        "sslKey": "../certificates/localhost+2-key.pem",
+                        "sslCert": "../certificates/localhost+2.pem",
+                        "host": "localhost",
+                        "port": 4200
                     },
                     "configurations": {
                         "production": {

@@ -1,10 +1,8 @@
 ﻿using Backend.Data;
 using Backend.Models;
 using Backend.Services;
-using Backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Backend.Controllers.Authentication
 {
@@ -29,32 +27,10 @@ namespace Backend.Controllers.Authentication
         }
 
 
-        // private void SetAuthCookies(string accessToken, string refreshToken)
-        // {
-        //     Response.Cookies.Append(AuthConstants.KEY_ACCESS_TOKEN, accessToken, new CookieOptions
-        //     {
-        //         HttpOnly = true,
-        //         Secure = false,
-        //         SameSite = SameSiteMode.None,
-        //         Expires = DateTime.UtcNow.AddMinutes(10),
-        //         MaxAge = TimeSpan.FromMinutes(10)
-        //     });
-
-        //     Response.Cookies.Append(AuthConstants.KEY_REFRESH_TOKEN, refreshToken, new CookieOptions
-        //     {
-        //         HttpOnly = true,
-        //         Secure = false,
-        //         SameSite = SameSiteMode.None,
-        //         Expires = DateTime.UtcNow.AddMinutes(30),
-        //         MaxAge = TimeSpan.FromMinutes(10)
-        //     });
-        // }
-
-        // private void DeleteAuthCookies()
-        // {
-        //     Response.Cookies.Delete(AuthConstants.KEY_ACCESS_TOKEN);
-        //     Response.Cookies.Delete(AuthConstants.KEY_REFRESH_TOKEN);
-        // }
+        private void DeleteAuthCookies()
+        {
+            Response.Cookies.Delete(CookieSettings.AuthCookieName);
+        }
 
 
         /// <summary>
@@ -91,6 +67,15 @@ namespace Backend.Controllers.Authentication
 
             await _db.SaveChangesAsync();
 
+            Response.Cookies.Append(CookieSettings.AuthCookieName, accessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Path = "/",
+                Expires = DateTimeOffset.UtcNow.AddHours(10)
+            });
+
             return Ok(
                 new
                 {
@@ -113,7 +98,10 @@ namespace Backend.Controllers.Authentication
         {
             // getting user from user middleware
             if (HttpContext.Items["User"] is not M_User user)
+            {
+                DeleteAuthCookies(); // logout user if session is invalid/ has expired
                 return Task.FromResult<IActionResult>(Unauthorized(new { success = false }));
+            }
 
             return Task.FromResult<IActionResult>(Ok(new
             {
@@ -123,6 +111,15 @@ namespace Backend.Controllers.Authentication
                 picture = user.PictureUrl,
                 userName = user.Name
             }));
+        }
+
+        [HttpGet("logout")]
+        public Task<IActionResult> LogoutUser()
+        {
+
+            DeleteAuthCookies(); // logout user if session is invalid/ has expired
+            return Task.FromResult<IActionResult>(Ok(new { success = true }));
+
         }
     }
 }

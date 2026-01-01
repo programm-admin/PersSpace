@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Middleware;
 
+/// <summary>
+/// Middleware for authenticating user via HTTP only cookie.
+/// </summary>
 public class UserMiddleware
 {
     private readonly RequestDelegate _next;
@@ -15,17 +18,17 @@ public class UserMiddleware
 
     public async Task InvokeAsync(HttpContext context, AppDBProvider db)
     {
-        // get access token from request header
-        string? accessToken = context.Request.Headers["access_token"].FirstOrDefault();
-
-        if (string.IsNullOrWhiteSpace(accessToken))
+        // get cookie from request
+        // HttpOnly ookies are ALWAYS available at this point (if set)
+        if (!context.Request.Cookies.TryGetValue(CookieSettings.AuthCookieName, out var accessToken)
+            || string.IsNullOrWhiteSpace(accessToken))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("[ERROR] Missing access token.");
+            await context.Response.WriteAsync("[ERROR] Missing auth cookie.");
             return;
         }
 
-        // read access token and extract user account from it
+        // read JWT
         JwtSecurityToken jwt;
         try
         {
@@ -34,42 +37,38 @@ public class UserMiddleware
         catch
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("[ERROR] Invalid access token.");
+            await context.Response.WriteAsync("[ERROR] Invalid JWT token.");
             return;
         }
 
-        // check whether access token is valid or already expired
-        var expClaim = jwt.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
+        // check existence of JWT expiration date
+        var expClaim = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp)?.Value;
         if (expClaim == null || !long.TryParse(expClaim, out var expSeconds))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("[ERROR] Expiration date is missing in access token.");
+            await context.Response.WriteAsync("[ERROR] Token expiration date missing.");
             return;
         }
 
+        // check if JWT is expired
         var tokenExpiry = DateTimeOffset.FromUnixTimeSeconds(expSeconds).UtcDateTime;
         if (tokenExpiry <= DateTime.UtcNow)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("[ERROR] Access token is expired.");
+            await context.Response.WriteAsync("[ERROR] Token expired.");
             return;
         }
 
-        // get user from user account ID from access token
-        string? userIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+        // get user ID from token
+        var userIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
 
-        if (string.IsNullOrWhiteSpace(userIdClaim))
+        if (string.IsNullOrWhiteSpace(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("[ERROR] UserID is missing in token.");
+            await context.Response.WriteAsync("[ERROR] Invalid user id.");
             return;
         }
-        if (!Guid.TryParse(userIdClaim, out var userId))
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("[ERROR] UserID is invalid in token.");
-            return;
-        }
+
         // check user in DB
         var user = await db.Users.FirstOrDefaultAsync(u => u.ID == userId);
 
@@ -80,7 +79,7 @@ public class UserMiddleware
             return;
         }
 
-        // provide user for next instance, e.g. controller
+        // make found user available in controller
         context.Items["User"] = user;
         context.Items["UserID"] = userId;
 

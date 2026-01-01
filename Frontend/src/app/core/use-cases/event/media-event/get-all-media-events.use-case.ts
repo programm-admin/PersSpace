@@ -11,10 +11,6 @@ export class UC_MediaEvent_GetAllMediaEvents {
     private readonly mediaEventRepository = inject(IT_MEDIA_EVENT_REPOSITORY);
 
     public execute = (): Observable<M_MediaEventListItemResponse> => {
-        const user: M_User | null = this.userRepository.getUser()();
-
-        if (!user) return EMPTY;
-
-        return this.mediaEventRepository.getAllMediaEvents(user.accessToken);
+        return this.mediaEventRepository.getAllMediaEvents();
     };
 }
