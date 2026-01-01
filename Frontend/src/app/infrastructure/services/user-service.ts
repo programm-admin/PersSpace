@@ -8,14 +8,13 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { T_UserRepository } from '../../core/repositories/user.repository';
-import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 import { API_ROUTES } from '../../environment/api-routes';
 import { Router } from '@angular/router';
-import { APPLICATION_ROUTES } from '../../shared/variables/application-routes';
 
 @Injectable({
     providedIn: 'root',
@@ -93,7 +92,7 @@ export class UserService implements T_UserRepository {
             this.setUserToken(null);
         }
 
-        return this.http.get(API_ROUTES.logout, { withCredentials: true });
+        return this.http.get(API_ROUTES.user.logout, { withCredentials: true });
     };
 
     public getIsUserLoggedIn = (): Signal<boolean> => {

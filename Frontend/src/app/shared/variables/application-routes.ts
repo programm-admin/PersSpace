@@ -19,15 +19,17 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
         isVisible: false,
         title: 'Start',
     },
-    login: {
-        route: { path: 'login', component: CompLoginPage },
-        isVisible: true,
-        title: 'Loginseite',
-    },
-    userStart: {
-        route: { path: 'user/start', component: CompUserStartPage },
-        isVisible: false,
-        title: 'Persönliche Startseite',
+    user: {
+        login: {
+            route: { path: 'login', component: CompLoginPage },
+            isVisible: true,
+            title: 'Loginseite',
+        },
+        userStart: {
+            route: { path: 'user/start', component: CompUserStartPage },
+            isVisible: false,
+            title: 'Persönliche Startseite',
+        },
     },
     mediaEvent: {
         createEvent: {

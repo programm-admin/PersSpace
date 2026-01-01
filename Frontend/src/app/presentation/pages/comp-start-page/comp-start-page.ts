@@ -31,8 +31,8 @@ export class CompStartPage implements OnInit {
     navigateToPage = (toUserStart: boolean) => {
         this.router.navigateByUrl(
             toUserStart
-                ? APPLICATION_ROUTES.userStart.route.path!
-                : APPLICATION_ROUTES.login.route.path!,
+                ? APPLICATION_ROUTES.user.userStart.route.path!
+                : APPLICATION_ROUTES.user.login.route.path!,
         );
     };
 }

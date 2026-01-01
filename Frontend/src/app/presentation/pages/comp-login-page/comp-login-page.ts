@@ -102,7 +102,9 @@ export class CompLoginPage implements AfterViewInit {
 
                             this.setUserSubjectUseCase.execute(res);
                             this.router.navigate([
-                                this.getPathFromRouteUseCase.execute(APPLICATION_ROUTES.userStart),
+                                this.getPathFromRouteUseCase.execute(
+                                    APPLICATION_ROUTES.user.userStart,
+                                ),
                             ]);
                         },
                         error: (err: any) => {},

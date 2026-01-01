@@ -9,8 +9,10 @@ export type T_ApplicationRoute = {
 export type T_ApplicationRoutes = {
     initial: T_ApplicationRoute;
     start: T_ApplicationRoute;
-    login: T_ApplicationRoute;
-    userStart: T_ApplicationRoute;
+    user: {
+        login: T_ApplicationRoute;
+        userStart: T_ApplicationRoute;
+    };
     mediaEvent: {
         createEvent: T_ApplicationRoute;
         showAllEvents: T_ApplicationRoute;
