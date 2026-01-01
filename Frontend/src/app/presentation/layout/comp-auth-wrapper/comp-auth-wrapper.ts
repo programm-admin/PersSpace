@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 import { isPlatformBrowser } from '@angular/common';
-import { CompLoadingScreen } from "../comp-loading-screen/comp-loading-screen";
+import { CompLoadingScreen } from '../comp-loading-screen/comp-loading-screen';
 
 @Component({
     selector: 'app-comp-auth-wrapper',

@@ -6,7 +6,7 @@ import { M_MediaEvent, M_MediaEventResponse } from '../../../core/models/event.m
 import { UC_MediaEvent_CreateMediaEvent } from '../../../core/use-cases/event/media-event/create-media-event.use-case';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UC_Message_ShowMessage } from '../../../core/use-cases/message/show-message.use-case';
-import { CompAuthWrapper } from "../../layout/comp-auth-wrapper/comp-auth-wrapper";
+import { CompAuthWrapper } from '../../layout/comp-auth-wrapper/comp-auth-wrapper';
 
 @Component({
     selector: 'app-comp-create-event-page',
