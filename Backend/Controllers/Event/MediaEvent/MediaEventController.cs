@@ -22,7 +22,7 @@ namespace Backend.Controllers.Event
         }
 
         public class EventRequest { public required string UserID { get; set; } }
-        public class DeleteMediaEventRequest { public required Guid mediaID { get; set; } }
+        public class MediaEventRequest { public required string mediaID { get; set; } }
 
 
         [HttpGet("all")]
@@ -132,10 +132,12 @@ namespace Backend.Controllers.Event
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteMediaEvent([FromBody] DeleteMediaEventRequest body)
+        public async Task<IActionResult> DeleteMediaEvent([FromBody] MediaEventRequest body)
         {
+            if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+
             Guid userId = HttpContext.GetUserID();
-            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userId && ev.ID == body.mediaID);
+            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userId && ev.ID == mediaGUID);
 
             if (foundMediaEvent == null) return NotFound();
 
@@ -144,6 +146,19 @@ namespace Backend.Controllers.Event
             await _db.SaveChangesAsync();
 
             return StatusCode(204, new { status = "success", mediaEventName = foundMediaEvent.Title });
+        }
+
+        [HttpPost("get-media-event")]
+        public async Task<IActionResult> GetMediaEvent([FromBody] MediaEventRequest body)
+        {
+            if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+
+            Guid userID = HttpContext.GetUserID();
+            M_MediaEvent? foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == mediaGUID);
+
+            if (foundMediaEvent == null) return NotFound("[ERROR] No media event found.");
+
+            return StatusCode(201, new { status = "success", mediaEvent = foundMediaEvent });
         }
     }
 }
