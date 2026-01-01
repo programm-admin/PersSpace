@@ -26,10 +26,9 @@ namespace Backend.Controllers.Event
 
 
         [HttpGet("all")]
-        public async Task<ActionResult<ICollection<M_MediaEventRequestDTO>>> getAllEvents([FromBody] EventRequest request)
+        public async Task<ActionResult<ICollection<M_MediaEventRequestDTO>>> getAllEvents()
         {
             var userID = HttpContext.GetUserID();
-            Console.Write("[GET ALL] endpoint triggered");
 
             try
             {
@@ -41,7 +40,7 @@ namespace Backend.Controllers.Event
 
                 return Ok(new
                 {
-                    mappedEvents,
+                    mediaEvents = mappedEvents,
                     status = "ok"
                 });
             }

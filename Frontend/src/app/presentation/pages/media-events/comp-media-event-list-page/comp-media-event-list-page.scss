@@ -1,0 +1,22 @@
+.mediaEventCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    width: 100%;
+}
+
+.mediaEventItemCARD {
+    width: 20rem;
+    transition-duration: var(--tranisition--duration);
+    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.4);
+
+    &:hover {
+        cursor: pointer;
+        box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.8);
+        text-decoration: underline;
+    }
+}
