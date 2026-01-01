@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 export type T_ApplicationRoute = {
     route: Route;
+    relativePath: string;
     title: string;
     isVisible: boolean;
 };

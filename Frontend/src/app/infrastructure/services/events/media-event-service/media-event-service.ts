@@ -30,7 +30,7 @@ export class MediaEventService implements T_MediaEventRepository {
     public getMediaEvent = (id: string): Observable<M_MediaEventResponse> => {
         return this.http.post<M_MediaEventResponse>(
             API_ROUTES.mediaEvent.getMediaEvent,
-            { id },
+            { mediaID: id },
             { withCredentials: true },
         );
     };

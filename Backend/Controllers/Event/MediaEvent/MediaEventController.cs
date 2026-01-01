@@ -107,13 +107,12 @@ namespace Backend.Controllers.Event
         public async Task<ActionResult<M_MediaEvent>> UpdateMediaEvent([FromBody] M_MediaEvent body)
         {
             // get user ID from http context (user middleware)
-            Guid userID = HttpContext.GetUserID();
+
             var errors = ValidationHelper.ValidateObject(body);
 
-            if (errors.Any())
-            {
-                return BadRequest(new { status = "error", Errors = errors });
-            }
+            if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
+
+            Guid userID = HttpContext.GetUserID();
 
             // updating event
             var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == body.ID);
@@ -134,6 +133,10 @@ namespace Backend.Controllers.Event
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteMediaEvent([FromBody] MediaEventRequest body)
         {
+            var errors = ValidationHelper.ValidateObject(body);
+
+            if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
+
             if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
 
             Guid userId = HttpContext.GetUserID();
@@ -151,6 +154,9 @@ namespace Backend.Controllers.Event
         [HttpPost("get-media-event")]
         public async Task<IActionResult> GetMediaEvent([FromBody] MediaEventRequest body)
         {
+            var errors = ValidationHelper.ValidateObject(body);
+
+            if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
             if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
 
             Guid userID = HttpContext.GetUserID();
@@ -158,7 +164,7 @@ namespace Backend.Controllers.Event
 
             if (foundMediaEvent == null) return NotFound("[ERROR] No media event found.");
 
-            return StatusCode(201, new { status = "success", mediaEvent = foundMediaEvent });
+            return StatusCode(201, new { status = "success", mediaEvent = _mappingService.mapSingleEventToResponseDTO(foundMediaEvent) });
         }
     }
 }

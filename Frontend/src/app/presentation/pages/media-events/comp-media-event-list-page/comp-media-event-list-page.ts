@@ -15,6 +15,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { convertSortingFilterToGerman } from '../../../../shared/functions/convert-sorting-filter-to-german';
 import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
+import { Router } from '@angular/router';
+import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
 
 @Component({
     selector: 'app-comp-media-event-list-page',
@@ -32,9 +34,12 @@ import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.rep
     providers: [UC_MediaEvent_GetAllMediaEvents],
 })
 export class CompMediaEventListPage implements OnInit {
+    // dependency injections
     private readonly UC_GetAllMediaEvents = inject(UC_MediaEvent_GetAllMediaEvents);
     private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
     private readonly formBuilder = inject(NonNullableFormBuilder);
+    private readonly router = inject(Router);
+
     public readonly convertSortingFilter = convertSortingFilterToGerman;
 
     public userMediaEvents: WritableSignal<M_MediaEventListItem[] | null> = signal(null);
@@ -102,5 +107,11 @@ export class CompMediaEventListPage implements OnInit {
         this.userMediaEvents.set(currentList);
         this.messageRepository.showMessage('success', 'Medienevents erfolgreich sortiert.');
         this.isLoading = false;
+    };
+
+    public navigateToMediaEventDetailsPage = (mediaID: string) => {
+        this.router.navigateByUrl(
+            APPLICATION_ROUTES.mediaEvent.showMediaEventDetails.relativePath + mediaID,
+        );
     };
 }

@@ -23,7 +23,7 @@
     @if (userMediaEvents()) {
         <div class="mediaEventCardContainer">
             @for (mediaEvent of userMediaEvents(); track $index) {
-                <nz-card [nzCover]="cover" class="mediaEventItemCARD">
+                <nz-card [nzCover]="cover" class="mediaEventItemCARD" (click)="navigateToMediaEventDetailsPage(mediaEvent.id)">
                     <nz-card-meta [nzTitle]="mediaEvent.title" />
                 </nz-card>
                 <ng-template #cover>

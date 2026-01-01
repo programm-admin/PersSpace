@@ -8,4 +8,5 @@ export const routes: Routes = [
     APPLICATION_ROUTES.user.login.route,
     APPLICATION_ROUTES.mediaEvent.createMediaEvent.route,
     APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route,
+    APPLICATION_ROUTES.mediaEvent.showMediaEventDetails.route,
 ];
