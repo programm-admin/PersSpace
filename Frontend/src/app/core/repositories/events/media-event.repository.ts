@@ -7,11 +7,8 @@ import {
 import { InjectionToken } from '@angular/core';
 
 export type T_MediaEventRepository = {
-    createMediaEvent: (
-        accessToken: string,
-        mediaEvent: M_MediaEvent,
-    ) => Observable<M_MediaEventResponse>;
-    getAllMediaEvents: (accessToken: string) => Observable<M_MediaEventListItemResponse>;
+    createMediaEvent: (mediaEvent: M_MediaEvent) => Observable<M_MediaEventResponse>;
+    getAllMediaEvents: () => Observable<M_MediaEventListItemResponse>;
 };
 
 export const IT_MEDIA_EVENT_REPOSITORY = new InjectionToken<T_MediaEventRepository>(

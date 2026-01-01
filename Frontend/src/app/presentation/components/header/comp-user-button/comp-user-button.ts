@@ -1,5 +1,6 @@
 import {
     Component,
+    DestroyRef,
     effect,
     inject,
     input,
@@ -25,21 +26,24 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
 import { UC_Message_ShowMessage } from '../../../../core/use-cases/message/show-message.use-case';
 import { isPlatformBrowser } from '@angular/common';
+import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-comp-user-button',
     imports: [NzAvatarModule, NzDropDownModule, NzTooltipModule, NzIconModule, NzButtonModule],
     templateUrl: './comp-user-button.html',
     styleUrl: './comp-user-button.scss',
-    providers: [UC_User_LogoutUser, UC_User_GetUser, UC_Message_ShowMessage],
+    providers: [UC_User_LogoutUser, UC_User_GetUser],
 })
 export class CompUserButton implements OnInit {
     // dependency injections
     private readonly router = inject(Router);
     private readonly platformID = inject(PLATFORM_ID);
+    private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
     private readonly UC_LogoutUser = inject(UC_User_LogoutUser);
     private readonly UC_GetUser = inject(UC_User_GetUser);
-    private readonly UC_ShowMessage = inject(UC_Message_ShowMessage);
+    private readonly destroyRef = inject(DestroyRef);
 
     public readonly menuPosition: NzPlacementType = MENU_POSITION;
     public user: Signal<M_User | null> = signal(null);
@@ -72,8 +76,16 @@ export class CompUserButton implements OnInit {
     };
 
     public logoutUser = () => {
-        this.UC_LogoutUser.execute();
-        this.UC_ShowMessage.execute('success', 'Erfolgreich ausgeloggt.');
+        this.UC_LogoutUser.execute()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: () => {
+                    this.messageRepository.showMessage('success', 'Logout erfolgreich.');
+                },
+                error: () => {
+                    this.messageRepository.showMessage('error', 'Fehler beim Logout');
+                },
+            });
     };
 
     public navigateToLoginPage = () => {

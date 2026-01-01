@@ -13,8 +13,6 @@ export class UC_MediaEvent_CreateMediaEvent {
     public execute = (mediaEvent: M_MediaEvent): Observable<M_MediaEventResponse> => {
         const user: M_User | null = this.userRepository.getUser()();
 
-        if (!user) return EMPTY;
-
-        return this.mediaRepository.createMediaEvent(user.accessToken, mediaEvent);
+        return this.mediaRepository.createMediaEvent(mediaEvent);
     };
 }

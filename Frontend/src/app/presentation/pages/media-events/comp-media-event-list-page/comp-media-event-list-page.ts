@@ -71,7 +71,6 @@ export class CompMediaEventListPage implements OnInit {
                     this.isLoading = false;
                 },
                 error: (err: any) => {
-                    console.log('error', err);
                     this.isError = true;
                     this.isLoading = false;
                 },

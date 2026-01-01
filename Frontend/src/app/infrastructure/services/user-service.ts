@@ -8,7 +8,7 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { T_UserRepository } from '../../core/repositories/user.repository';
-import { EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
@@ -66,16 +66,8 @@ export class UserService implements T_UserRepository {
      * @returns Observable<M_User>
      */
     public getUserFromBackend = (): Observable<M_User> => {
-        const user: M_User | null = this.getUserFromLocalStorage();
-
-        if (!user) {
-            return EMPTY;
-        }
-
         return this.http.get<M_User>(API_ROUTES.checkUserSession, {
-            headers: {
-                access_token: user.accessToken,
-            },
+            withCredentials: true, // Cookie wird automatisch mitgesendet
         });
     };
 
@@ -95,14 +87,13 @@ export class UserService implements T_UserRepository {
         this.userSubject.set(newUser);
     };
 
-    public logoutUser = () => {
+    public logoutUser = (): Observable<any> => {
         if (isPlatformBrowser(this.platformID)) {
             localStorage.clear();
             this.setUserToken(null);
         }
 
-        // navigate back to start page
-        this.router.navigateByUrl(APPLICATION_ROUTES.start.route.path ?? '');
+        return this.http.get(API_ROUTES.logout, { withCredentials: true });
     };
 
     public getIsUserLoggedIn = (): Signal<boolean> => {
