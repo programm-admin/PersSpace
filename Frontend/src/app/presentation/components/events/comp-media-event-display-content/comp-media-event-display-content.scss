@@ -1,0 +1,30 @@
+.displayItemContainer {
+    width: 100%;
+    height: auto;
+
+    background-color: var(--header--background-color);
+    color: white;
+    box-shadow: var(--standard--card--box-shadow);
+
+    margin-bottom: 1rem;
+    padding-left: calc(0.5 * var(--standard--padding--left-right));
+    padding-right: calc(0.5 * var(--standard--padding--left-right));
+    padding-top: calc(0.5 * var(--standard--padding--top-bottom));
+    padding-bottom: calc(0.5 * var(--standard--padding--top-bottom));
+
+    p {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        max-height: 10rem;
+        overflow-y: auto;
+        text-align: justify;
+        overflow-wrap: break-word;
+    }
+
+    .titleText {
+        font-weight: bold;
+        border-bottom: 0.1rem solid rgba(255, 255, 255, 0.4);
+        margin-bottom: 0.5rem;
+    }
+}

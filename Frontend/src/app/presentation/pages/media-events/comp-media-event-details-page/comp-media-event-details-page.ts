@@ -4,10 +4,14 @@ import { M_MediaEvent, M_MediaEventResponse } from '../../../../core/models/even
 import { IT_MEDIA_EVENT_REPOSITORY } from '../../../../core/repositories/events/media-event.repository';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
+import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-loading-screen';
+import { CompMediaEventDisplayContent } from '../../../components/events/comp-media-event-display-content/comp-media-event-display-content';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
     selector: 'app-comp-media-event-details-page',
-    imports: [],
+    imports: [CompLoadingScreen, CompMediaEventDisplayContent, NzButtonModule, NzIconModule],
     templateUrl: './comp-media-event-details-page.html',
     styleUrl: './comp-media-event-details-page.scss',
 })
@@ -50,5 +54,9 @@ export class CompMediaEventDetailsPage implements OnInit {
                     this.isError = true;
                 },
             });
+    };
+
+    public navigateToEventsListPage = () => {
+        this.router.navigateByUrl(APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!);
     };
 }
