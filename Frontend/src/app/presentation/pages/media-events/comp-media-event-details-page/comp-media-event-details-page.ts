@@ -8,10 +8,18 @@ import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-load
 import { CompMediaEventDisplayContent } from '../../../components/events/comp-media-event-display-content/comp-media-event-display-content';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { T_MediaEventDetailsPage_Display_Screen } from '../../../../shared/types-and-interfaces/display-screens';
+import { CompEventForm } from '../../../components/events/comp-event-form/comp-event-form';
 
 @Component({
     selector: 'app-comp-media-event-details-page',
-    imports: [CompLoadingScreen, CompMediaEventDisplayContent, NzButtonModule, NzIconModule],
+    imports: [
+        CompLoadingScreen,
+        CompMediaEventDisplayContent,
+        NzButtonModule,
+        NzIconModule,
+        CompEventForm,
+    ],
     templateUrl: './comp-media-event-details-page.html',
     styleUrl: './comp-media-event-details-page.scss',
 })
@@ -25,6 +33,7 @@ export class CompMediaEventDetailsPage implements OnInit {
     public mediaEvent: M_MediaEvent | null = null;
     public isLoading: boolean = false;
     public isError: boolean = false;
+    public displayScreen: T_MediaEventDetailsPage_Display_Screen = 'DETAILS_PAGE';
 
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
@@ -58,5 +67,13 @@ export class CompMediaEventDetailsPage implements OnInit {
 
     public navigateToEventsListPage = () => {
         this.router.navigateByUrl(APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!);
+    };
+
+    public setDisplayScreen = (newScreen: T_MediaEventDetailsPage_Display_Screen) =>
+        (this.displayScreen = newScreen);
+
+    public submitForm = (newEvent: M_MediaEvent) => {};
+    public cancelForm = () => {
+        this.setDisplayScreen('DETAILS_PAGE');
     };
 }

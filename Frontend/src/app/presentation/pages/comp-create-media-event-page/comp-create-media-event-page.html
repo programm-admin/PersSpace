@@ -1,6 +1,7 @@
 <app-comp-auth-wrapper>
     <h1>Neues Medienevent erstellen</h1>
     <app-comp-event-form
+        [inpMediaEvent]="null"
         (outCancelForm)="cancelSubmitForm()"
         (outSubmitForm)="submitForm($event)"
     />

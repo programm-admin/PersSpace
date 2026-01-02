@@ -3,7 +3,8 @@ import { IT_USER_REPOSITORY } from '../../../repositories/user.repository';
 import { M_MediaEvent, M_MediaEventResponse } from '../../../models/event.model';
 import { IT_MEDIA_EVENT_REPOSITORY } from '../../../repositories/events/media-event.repository';
 import { M_User } from '../../../models/user.model';
-import { EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class UC_MediaEvent_CreateMediaEvent {
@@ -11,8 +12,13 @@ export class UC_MediaEvent_CreateMediaEvent {
     private readonly mediaRepository = inject(IT_MEDIA_EVENT_REPOSITORY);
 
     public execute = (mediaEvent: M_MediaEvent): Observable<M_MediaEventResponse> => {
-        const user: M_User | null = this.userRepository.getUser()();
-
-        return this.mediaRepository.createMediaEvent(mediaEvent);
+        return this.mediaRepository.createMediaEvent(mediaEvent).pipe(
+            catchError((err: HttpErrorResponse) => {
+                if (err.status === 401) {
+                    this.userRepository.logoutUser();
+                }
+                return throwError(() => err);
+            }),
+        );
     };
 }

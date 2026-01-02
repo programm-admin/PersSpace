@@ -34,4 +34,14 @@ export class MediaEventService implements T_MediaEventRepository {
             { withCredentials: true },
         );
     };
+
+    public updateMediaEvent = (
+        newEvent: M_MediaEvent,
+    ): Observable<M_MediaEventListItemResponse> => {
+        return this.http.post<M_MediaEventListItemResponse>(
+            API_ROUTES.mediaEvent.updateMediaEvent,
+            { mediaEvent: newEvent },
+            { withCredentials: true },
+        );
+    };
 }

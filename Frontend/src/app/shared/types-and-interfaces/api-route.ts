@@ -8,5 +8,6 @@ export type T_APIRoute = {
         create: string;
         getAll: string;
         getMediaEvent: string;
+        updateMediaEvent: string;
     };
 };

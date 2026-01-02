@@ -11,5 +11,6 @@ export const API_ROUTES: T_APIRoute = {
         create: BACKEND_ID + 'user/MediaEvent/create',
         getAll: BACKEND_ID + 'user/MediaEvent/all',
         getMediaEvent: BACKEND_ID + 'user/MediaEvent/get-media-event',
+        updateMediaEvent: BACKEND_ID + 'user/MediaEvent/update',
     },
 };

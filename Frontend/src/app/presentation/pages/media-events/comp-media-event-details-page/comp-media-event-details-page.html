@@ -11,25 +11,34 @@
 
     } @else {
         @if (mediaEvent) {
-            <h1>Medienevent-Details</h1>
-            <div class="detailsContainer">
-                <div class="imageContainer">
-                    <img src="Media_Picture.png" alt="Mediaevent-Bild">
+            @if (displayScreen === 'DETAILS_PAGE') {
+                <h1>Medienevent-Details</h1>
+                <div class="detailsContainer">
+                    <div class="imageContainer">
+                        <img src="Media_Picture.png" alt="Mediaevent-Bild">
+                    </div>
+                    <div class="contentContainer">
+                    <app-comp-media-event-display-content [inpMediaEvent]="mediaEvent" />
+                    </div>
                 </div>
-                <div class="contentContainer">
-                   <app-comp-media-event-display-content [inpMediaEvent]="mediaEvent" />
+                <div class="buttonBarContainer">
+                    <button 
+                        nz-button 
+                        nzType="primary" 
+                        nzSize="large"
+                        (click)="setDisplayScreen('EDIT_PAGE')"
+                        >
+                        <nz-icon nzType="edit" nzTheme="outline" />
+                        Bearbeiten
+                    </button>
+                    <button nz-button nzSize="large" class="deleteBUTTON">
+                        <nz-icon nzType="delete" nzTheme="outline" />
+                        Löschen
+                    </button>
                 </div>
-            </div>
-            <div class="buttonBarContainer">
-                <button nz-button nzType="primary" nzSize="large">
-                    <nz-icon nzType="edit" nzTheme="outline" />
-                    Bearbeiten
-                </button>
-                <button nz-button nzSize="large" class="deleteBUTTON">
-                    <nz-icon nzType="delete" nzTheme="outline" />
-                    Löschen
-                </button>
-            </div>
+            } @else {
+                <app-comp-event-form [inpMediaEvent]="mediaEvent" (outSubmitForm)="submitForm($event)" (outCancelForm)="cancelForm()" />
+            }
         }
     }
 }
