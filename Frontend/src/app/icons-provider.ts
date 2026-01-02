@@ -10,6 +10,8 @@ import {
     LoginOutline,
     UserOutline,
     ArrowLeftOutline,
+    EditOutline,
+    DeleteOutline
 } from '@ant-design/icons-angular/icons';
 
 export const icons = [
@@ -24,4 +26,6 @@ export const icons = [
     LoginOutline,
     UserOutline,
     ArrowLeftOutline,
+    EditOutline,
+    DeleteOutline
 ];
