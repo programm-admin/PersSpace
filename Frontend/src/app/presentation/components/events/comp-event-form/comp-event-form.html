@@ -79,7 +79,7 @@
                 [disabled]="!eventForm.valid"
             >
                 <nz-icon nzType="check" nzTheme="outline" />
-                Event erstellen
+                {{inpMediaEvent() ? "Event speichern" : "Event erstellen"}}
             </button>
             <button nz-button nzType="default" nzSize="large" (click)="cancelForm()" type="button">
                 <nz-icon nzType="close" nzTheme="outline" />

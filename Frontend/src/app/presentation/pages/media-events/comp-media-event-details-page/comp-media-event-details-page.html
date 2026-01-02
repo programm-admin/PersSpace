@@ -37,6 +37,7 @@
                     </button>
                 </div>
             } @else {
+                <h1>Medienevent bearbeiten</h1>
                 <app-comp-event-form [inpMediaEvent]="mediaEvent" (outSubmitForm)="submitForm($event)" (outCancelForm)="cancelForm()" />
             }
         }

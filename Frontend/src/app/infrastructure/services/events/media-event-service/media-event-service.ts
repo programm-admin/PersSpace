@@ -5,6 +5,7 @@ import {
     M_MediaEvent,
     M_MediaEventListItemResponse,
     M_MediaEventResponse,
+    M_MediaEventUpdateResponse,
 } from '../../../../core/models/event.model';
 import { HttpClient } from '@angular/common/http';
 import { API_ROUTES } from '../../../../environment/api-routes';
@@ -35,10 +36,8 @@ export class MediaEventService implements T_MediaEventRepository {
         );
     };
 
-    public updateMediaEvent = (
-        newEvent: M_MediaEvent,
-    ): Observable<M_MediaEventListItemResponse> => {
-        return this.http.post<M_MediaEventListItemResponse>(
+    public updateMediaEvent = (newEvent: M_MediaEvent): Observable<M_MediaEventUpdateResponse> => {
+        return this.http.patch<M_MediaEventUpdateResponse>(
             API_ROUTES.mediaEvent.updateMediaEvent,
             { mediaEvent: newEvent },
             { withCredentials: true },

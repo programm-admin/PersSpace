@@ -79,8 +79,7 @@ export class CompEventForm implements OnInit {
 
         const rawValues = this.eventForm.getRawValue();
         const newEvent: M_MediaEvent = {
-            id: '',
-            userAccountID: '',
+            id: this.inpMediaEvent()?.id ? this.inpMediaEvent()!.id : '',
             title: rawValues.title,
             notes: rawValues.notes,
             start: rawValues.timeRange[0],

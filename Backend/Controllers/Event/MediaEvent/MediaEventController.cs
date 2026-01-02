@@ -23,6 +23,7 @@ namespace Backend.Controllers.Event
 
         public class EventRequest { public required string UserID { get; set; } }
         public class MediaEventRequest { public required string mediaID { get; set; } }
+        public class MediaEventUpdateRequest { public required M_MediaEventUpdateRequestDTO mediaEvent { get; set; } }
 
 
         [HttpGet("all")]
@@ -104,30 +105,31 @@ namespace Backend.Controllers.Event
         }
 
         [HttpPatch("update")]
-        public async Task<ActionResult<M_MediaEvent>> UpdateMediaEvent([FromBody] M_MediaEvent body)
+        public async Task<ActionResult<M_MediaEvent>> UpdateMediaEvent([FromBody] MediaEventUpdateRequest body)
         {
             // get user ID from http context (user middleware)
 
             var errors = ValidationHelper.ValidateObject(body);
 
             if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
+            if (!Guid.TryParse(body.mediaEvent.ID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
 
             Guid userID = HttpContext.GetUserID();
 
             // updating event
-            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == body.ID);
+            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == mediaGUID);
 
             if (foundMediaEvent == null) return NotFound();
 
             // updating properties
-            foundMediaEvent.Title = body.Title;
-            foundMediaEvent.Notes = body.Notes;
-            foundMediaEvent.Start = body.Start;
-            foundMediaEvent.End = body.End;
-            foundMediaEvent.IsDone = body.IsDone;
+            foundMediaEvent.Title = body.mediaEvent.Title;
+            foundMediaEvent.Notes = body.mediaEvent.Notes;
+            foundMediaEvent.Start = body.mediaEvent.Start;
+            foundMediaEvent.End = body.mediaEvent.End;
+            foundMediaEvent.IsDone = body.mediaEvent.IsDone;
 
             await _db.SaveChangesAsync();
-            return Ok(new { mediaEvent = foundMediaEvent, status = "success" });
+            return Ok(new { mediaEvent = _mappingService.mapSingleEventToResponseDTO(foundMediaEvent), status = "success" });
         }
 
         [HttpDelete("delete")]
