@@ -15,9 +15,15 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+    HTTP_INTERCEPTORS,
+    provideHttpClient,
+    withFetch,
+    withInterceptors,
+} from '@angular/common/http';
 import { getProviders } from './app.providers';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
+import { httpInterceptor } from './presentation/interceptors/http/http-interceptor';
 
 const ngZorroConfig: NzConfig = {
     message: { nzTop: 10, nzDuration: 10000 },
@@ -36,7 +42,7 @@ export const appConfig: ApplicationConfig = {
         provideNzI18n(en_US),
         importProvidersFrom(FormsModule),
         provideAnimationsAsync(),
-        provideHttpClient(withFetch()),
+        provideHttpClient(withFetch(), withInterceptors([httpInterceptor])),
         ...getProviders(),
         provideNzConfig(ngZorroConfig),
     ],

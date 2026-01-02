@@ -8,7 +8,7 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { T_UserRepository } from '../../core/repositories/user.repository';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
@@ -63,8 +63,10 @@ export class UserService implements T_UserRepository {
      * @returns Observable<M_User>
      */
     public getUserFromBackend = (): Observable<M_User> => {
+        if (!isPlatformBrowser(this.platformID)) return EMPTY;
+
         return this.http.get<M_User>(API_ROUTES.checkUserSession, {
-            withCredentials: true, // Cookie wird automatisch mitgesendet
+            withCredentials: true, // send cookie automatically
         });
     };
 
