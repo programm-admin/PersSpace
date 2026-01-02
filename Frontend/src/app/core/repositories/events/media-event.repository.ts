@@ -12,6 +12,7 @@ export type T_MediaEventRepository = {
     getAllMediaEvents: () => Observable<M_MediaEventListItemResponse>;
     getMediaEvent: (id: string) => Observable<M_MediaEventResponse>;
     updateMediaEvent: (newEvent: M_MediaEvent) => Observable<M_MediaEventUpdateResponse>;
+    deleteMediaEvent: (mediaEventId: string) => Observable<any>;
 };
 
 export const IT_MEDIA_EVENT_REPOSITORY = new InjectionToken<T_MediaEventRepository>(

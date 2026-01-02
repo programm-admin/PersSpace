@@ -43,4 +43,11 @@ export class MediaEventService implements T_MediaEventRepository {
             { withCredentials: true },
         );
     };
+
+    public deleteMediaEvent = (mediaEventId: string) => {
+        return this.http.delete(API_ROUTES.mediaEvent.deleteMediaEvent, {
+            body: { mediaID: mediaEventId },
+            withCredentials: true,
+        });
+    };
 }

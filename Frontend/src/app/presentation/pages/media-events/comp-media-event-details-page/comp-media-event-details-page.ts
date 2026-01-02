@@ -17,6 +17,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { T_MediaEventDetailsPage_Display_Screen } from '../../../../shared/types-and-interfaces/display-screens';
 import { CompEventForm } from '../../../components/events/comp-event-form/comp-event-form';
 import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { CompDeleteDialog } from '../../../layout/comp-delete-dialog/comp-delete-dialog';
 
 @Component({
     selector: 'app-comp-media-event-details-page',
@@ -26,6 +28,7 @@ import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.rep
         NzButtonModule,
         NzIconModule,
         CompEventForm,
+        CompDeleteDialog,
     ],
     templateUrl: './comp-media-event-details-page.html',
     styleUrl: './comp-media-event-details-page.scss',
@@ -102,7 +105,29 @@ export class CompMediaEventDetailsPage implements OnInit {
                 ),
         });
     };
+
     public cancelForm = () => {
         this.setDisplayScreen('DETAILS_PAGE');
+    };
+
+    public deleteEvent = () => {
+        if (!this.mediaEvent) return;
+
+        this.mediaEventRepository.deleteMediaEvent(this.mediaEvent.id).subscribe({
+            next: () => {
+                this.messageRepository.showMessage(
+                    'success',
+                    `"${this.mediaEvent?.title}" wurde erfolgreich gelöscht.`,
+                );
+                this.router.navigateByUrl(
+                    APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!,
+                );
+            },
+            error: () =>
+                this.messageRepository.showMessage(
+                    'error',
+                    `Fehler beim Löschen von "${this.mediaEvent?.title}".`,
+                ),
+        });
     };
 }

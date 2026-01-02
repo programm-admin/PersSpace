@@ -17,18 +17,20 @@ import { convertSortingFilterToGerman } from '../../../../shared/functions/conve
 import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
 import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
+import { CompNoContent } from "../../../layout/comp-no-content/comp-no-content";
 
 @Component({
     selector: 'app-comp-media-event-list-page',
     imports: [
-        NzCardModule,
-        CompLoadingScreen,
-        NzButtonModule,
-        NzSelectModule,
-        NzRadioModule,
-        ReactiveFormsModule,
-        ReactiveFormsModule,
-    ],
+    NzCardModule,
+    CompLoadingScreen,
+    NzButtonModule,
+    NzSelectModule,
+    NzRadioModule,
+    ReactiveFormsModule,
+    ReactiveFormsModule,
+    CompNoContent
+],
     templateUrl: './comp-media-event-list-page.html',
     styleUrl: './comp-media-event-list-page.scss',
     providers: [UC_MediaEvent_GetAllMediaEvents],

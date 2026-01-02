@@ -31,10 +31,11 @@
                         <nz-icon nzType="edit" nzTheme="outline" />
                         Bearbeiten
                     </button>
-                    <button nz-button nzSize="large" class="deleteBUTTON">
-                        <nz-icon nzType="delete" nzTheme="outline" />
-                        Löschen
-                    </button>
+                    <app-comp-delete-dialog 
+                        inpTitle="Medienevent löschen" 
+                        [inpDescription]="'Willst du das Medienevent ' + mediaEvent.title + ' wirklich löschen? Dies kann nicht rückgängig gemacht werden!'" 
+                        (outDelete)="deleteEvent()"
+                    />
                 </div>
             } @else {
                 <h1>Medienevent bearbeiten</h1>
