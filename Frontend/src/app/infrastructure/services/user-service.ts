@@ -32,24 +32,22 @@ export class UserService implements T_UserRepository {
             const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
             const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);
             const userID: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_ID);
-            const accessToken: string | null = localStorage.getItem(
-                LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
-            );
+            const email: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_EMAIL);
 
             return !image ||
                 !userID ||
                 !userName ||
-                !accessToken ||
+                !email ||
                 (image && !image.trim()) ||
                 (userID && !userID.trim()) ||
                 (userName && !userName.trim()) ||
-                (accessToken && !accessToken.trim())
+                (email && !email.trim())
                 ? null
                 : {
                       userID: userID,
                       picture: image,
                       userName: userName,
-                      accessToken: accessToken,
+                      email,
                   };
         })(),
     );
@@ -111,24 +109,22 @@ export class UserService implements T_UserRepository {
         const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
         const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);
         const userID: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_ID);
-        const accessToken: string | null = localStorage.getItem(
-            LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
-        );
+        const email: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_EMAIL);
 
         return !image ||
             !userID ||
             !userName ||
-            !accessToken ||
+            !email ||
             (image && !image.trim()) ||
             (userID && !userID.trim()) ||
             (userName && !userName.trim()) ||
-            (accessToken && !accessToken.trim())
+            (email && !email.trim())
             ? null
             : {
                   userID,
                   picture: image,
                   userName,
-                  accessToken,
+                  email,
               };
     };
 }

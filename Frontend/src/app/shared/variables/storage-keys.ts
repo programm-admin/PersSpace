@@ -7,7 +7,7 @@ export const LOCAL_STORAGE_KEYS: T_LocalStorageKeys = {
     KEY_USER_NAME: 'USERNAME',
     KEY_USER_ID: 'USER_ID',
     KEY_USER_PICTURE: 'PICTURE',
-    KEY_ACCESS_TOKEN: 'ACCESS_TOKEN',
+    KEY_USER_EMAIL: 'EMAIL',
 };
 
 export type T_STORAGE_KEYS = keyof typeof LOCAL_STORAGE_KEYS;

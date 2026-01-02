@@ -51,6 +51,7 @@ export class CompUserButton implements OnInit {
 
     // input variables
     public inpButtonName: InputSignal<string> = input.required<string>();
+    public inpButtonEmail: InputSignal<string> = input.required<string>();
     public inpButtonPicture: InputSignal<string> = input.required<string>();
 
     public userMenu: T_ApplicationRoute[] = getUserSettingsRoutes();

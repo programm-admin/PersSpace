@@ -46,7 +46,7 @@ export class StorageService implements T_StorageRepository {
         if (!updateAccessToken) return true;
 
         // only update access token if new token is needed (not e.g. if checking session)
-        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN, value.accessToken);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.KEY_USER_EMAIL, value.email);
 
         return true;
     };
