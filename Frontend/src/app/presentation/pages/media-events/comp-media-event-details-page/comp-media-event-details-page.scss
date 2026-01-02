@@ -7,14 +7,11 @@
     align-items: center;
 
     .imageContainer {
-        width: 25%;
+        width: 24rem;
+        margin-right: 1rem;
 
         img {
             width: 24rem;
         }
-    }
-
-    .contentContainer {
-        width: 75%;
     }
 }
