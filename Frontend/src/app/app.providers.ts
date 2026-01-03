@@ -11,6 +11,8 @@ import { IT_MESSAGE_REPOSITORY } from './core/repositories/message.repository';
 import { MessageService } from './infrastructure/services/message-service/message-service';
 import { IT_MEDIA_EVENT_REPOSITORY } from './core/repositories/events/media-event.repository';
 import { MediaEventService } from './infrastructure/services/events/media-event-service/media-event-service';
+import { IT_LOADING_REPOSITORY } from './core/repositories/loading.repository';
+import { LoadingService } from './infrastructure/services/loading-service/loading-service';
 
 export const getProviders = (): Provider[] => {
     return [
@@ -20,5 +22,6 @@ export const getProviders = (): Provider[] => {
         { provide: IT_GOOGLE_REPOSITORY, useClass: GoogleAuthService },
         { provide: IT_MESSAGE_REPOSITORY, useClass: MessageService },
         { provide: IT_MEDIA_EVENT_REPOSITORY, useClass: MediaEventService },
+        { provide: IT_LOADING_REPOSITORY, useClass: LoadingService },
     ];
 };

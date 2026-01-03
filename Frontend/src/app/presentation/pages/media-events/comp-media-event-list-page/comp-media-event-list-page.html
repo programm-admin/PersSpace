@@ -1,35 +1,42 @@
-@if (isLoading) {
-    <app-comp-loading-screen />
+@if (isError) {
+    <p>Ein Fehler ist aufgetreten.</p>
 } @else {
-    @if (isError) {
-        <p>Ein Fehler ist aufgetreten.</p>
-    }
-
     <h1>Meine Medienevents</h1>
-    <div>
-        <form [formGroup]="sortingFilterForm">
-            <nz-radio-group nzSize="large" formControlName="currentFilter">
-                @for (filter of sortingFilterList; track $index) {
-                    <label nz-radio-button [nzValue]="filter">{{
-                        convertSortingFilter(filter)
-                    }}</label>
-                }
-            </nz-radio-group>
-        </form>
-    </div>
 
     <div class="gapDIV"></div>
 
     @if (userMediaEvents()) {
-        <div class="mediaEventCardContainer">
-            @for (mediaEvent of userMediaEvents(); track $index) {
-                <nz-card [nzCover]="cover" class="mediaEventItemCARD">
-                    <nz-card-meta [nzTitle]="mediaEvent.title" />
-                </nz-card>
-                <ng-template #cover>
-                    <img src="Media_Picture.png" [alt]="'Coverbild zu ' + mediaEvent.title" />
-                </ng-template>
-            }
-        </div>
+        @if (userMediaEvents()!.length > 0) {
+            <div>
+                <form [formGroup]="sortingFilterForm">
+                    <nz-radio-group nzSize="large" formControlName="currentFilter">
+                        @for (filter of sortingFilterList; track $index) {
+                            <label nz-radio-button [nzValue]="filter">{{
+                                convertSortingFilter(filter)
+                            }}</label>
+                        }
+                    </nz-radio-group>
+                </form>
+            </div>
+
+            <div class="gapDIV"></div>
+
+            <div class="mediaEventCardContainer">
+                @for (mediaEvent of userMediaEvents(); track $index) {
+                    <nz-card
+                        [nzCover]="cover"
+                        class="mediaEventItemCARD"
+                        (click)="navigateToMediaEventDetailsPage(mediaEvent.id)"
+                    >
+                        <nz-card-meta [nzTitle]="mediaEvent.title" />
+                    </nz-card>
+                    <ng-template #cover>
+                        <img src="Media_Picture.png" [alt]="'Coverbild zu ' + mediaEvent.title" />
+                    </ng-template>
+                }
+            </div>
+        } @else {
+            <app-comp-no-content />
+        }
     }
 }

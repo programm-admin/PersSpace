@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, OnInit, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
@@ -31,8 +31,8 @@ export class CompStartPage implements OnInit {
     navigateToPage = (toUserStart: boolean) => {
         this.router.navigateByUrl(
             toUserStart
-                ? APPLICATION_ROUTES.userStart.route.path!
-                : APPLICATION_ROUTES.login.route.path!,
+                ? APPLICATION_ROUTES.user.userStart.route.path!
+                : APPLICATION_ROUTES.user.login.route.path!,
         );
     };
 }

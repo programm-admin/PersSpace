@@ -22,7 +22,8 @@ namespace Backend.Controllers.Event
         }
 
         public class EventRequest { public required string UserID { get; set; } }
-        public class DeleteMediaEventRequest { public required Guid mediaID { get; set; } }
+        public class MediaEventRequest { public required string mediaID { get; set; } }
+        public class MediaEventUpdateRequest { public required M_MediaEventUpdateRequestDTO mediaEvent { get; set; } }
 
 
         [HttpGet("all")]
@@ -104,38 +105,44 @@ namespace Backend.Controllers.Event
         }
 
         [HttpPatch("update")]
-        public async Task<ActionResult<M_MediaEvent>> UpdateMediaEvent([FromBody] M_MediaEvent body)
+        public async Task<ActionResult<M_MediaEvent>> UpdateMediaEvent([FromBody] MediaEventUpdateRequest body)
         {
             // get user ID from http context (user middleware)
-            Guid userID = HttpContext.GetUserID();
+
             var errors = ValidationHelper.ValidateObject(body);
 
-            if (errors.Any())
-            {
-                return BadRequest(new { status = "error", Errors = errors });
-            }
+            if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
+            if (!Guid.TryParse(body.mediaEvent.ID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+
+            Guid userID = HttpContext.GetUserID();
 
             // updating event
-            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == body.ID);
+            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == mediaGUID);
 
             if (foundMediaEvent == null) return NotFound();
 
             // updating properties
-            foundMediaEvent.Title = body.Title;
-            foundMediaEvent.Notes = body.Notes;
-            foundMediaEvent.Start = body.Start;
-            foundMediaEvent.End = body.End;
-            foundMediaEvent.IsDone = body.IsDone;
+            foundMediaEvent.Title = body.mediaEvent.Title;
+            foundMediaEvent.Notes = body.mediaEvent.Notes;
+            foundMediaEvent.Start = body.mediaEvent.Start;
+            foundMediaEvent.End = body.mediaEvent.End;
+            foundMediaEvent.IsDone = body.mediaEvent.IsDone;
 
             await _db.SaveChangesAsync();
-            return Ok(new { mediaEvent = foundMediaEvent, status = "success" });
+            return Ok(new { mediaEvent = _mappingService.mapSingleEventToResponseDTO(foundMediaEvent), status = "success" });
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteMediaEvent([FromBody] DeleteMediaEventRequest body)
+        public async Task<IActionResult> DeleteMediaEvent([FromBody] MediaEventRequest body)
         {
+            var errors = ValidationHelper.ValidateObject(body);
+
+            if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
+
+            if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+
             Guid userId = HttpContext.GetUserID();
-            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userId && ev.ID == body.mediaID);
+            var foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userId && ev.ID == mediaGUID);
 
             if (foundMediaEvent == null) return NotFound();
 
@@ -144,6 +151,22 @@ namespace Backend.Controllers.Event
             await _db.SaveChangesAsync();
 
             return StatusCode(204, new { status = "success", mediaEventName = foundMediaEvent.Title });
+        }
+
+        [HttpPost("get-media-event")]
+        public async Task<IActionResult> GetMediaEvent([FromBody] MediaEventRequest body)
+        {
+            var errors = ValidationHelper.ValidateObject(body);
+
+            if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
+            if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+
+            Guid userID = HttpContext.GetUserID();
+            M_MediaEvent? foundMediaEvent = await _db.MediaEvents.FirstOrDefaultAsync(ev => ev.UserAccountID == userID && ev.ID == mediaGUID);
+
+            if (foundMediaEvent == null) return NotFound("[ERROR] No media event found.");
+
+            return StatusCode(201, new { status = "success", mediaEvent = _mappingService.mapSingleEventToResponseDTO(foundMediaEvent) });
         }
     }
 }

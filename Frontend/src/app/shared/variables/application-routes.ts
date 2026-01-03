@@ -1,4 +1,3 @@
-import { authGuard } from '../../presentation/guards/auth-guard/auth-guard';
 import { CompLoginPage } from '../../presentation/pages/comp-login-page/comp-login-page';
 import { CompStartPage } from '../../presentation/pages/comp-start-page/comp-start-page';
 import { CompUserStartPage } from '../../presentation/pages/comp-user-start-page/comp-user-start-page';
@@ -11,26 +10,32 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             redirectTo: '/start',
             pathMatch: 'full',
         },
+        relativePath: '',
         title: 'Initialseite',
         isVisible: false,
     },
     start: {
         route: { path: 'start', component: CompStartPage },
+        relativePath: '',
         isVisible: false,
         title: 'Start',
     },
-    login: {
-        route: { path: 'login', component: CompLoginPage },
-        isVisible: true,
-        title: 'Loginseite',
-    },
-    userStart: {
-        route: { path: 'user/start', component: CompUserStartPage },
-        isVisible: false,
-        title: 'Persönliche Startseite',
+    user: {
+        login: {
+            route: { path: 'login', component: CompLoginPage },
+            relativePath: '',
+            isVisible: true,
+            title: 'Loginseite',
+        },
+        userStart: {
+            route: { path: 'user/start', component: CompUserStartPage },
+            relativePath: '',
+            isVisible: false,
+            title: 'Persönliche Startseite',
+        },
     },
     mediaEvent: {
-        createEvent: {
+        createMediaEvent: {
             route: {
                 path: 'user/media-event/create',
                 loadComponent: () =>
@@ -38,10 +43,11 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
                         (comp) => comp.CompCreateMediaEventPage,
                     ),
             },
+            relativePath: '',
             isVisible: true,
             title: 'Medienevent erstellen',
         },
-        showAllEvents: {
+        showAllMediaEvents: {
             route: {
                 path: 'user/media-event/all',
                 loadComponent: () =>
@@ -49,8 +55,21 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
                         (comp) => comp.CompMediaEventListPage,
                     ),
             },
+            relativePath: '',
             isVisible: true,
             title: 'Meine Medienevents',
+        },
+        showMediaEventDetails: {
+            route: {
+                path: 'user/media-event/:id',
+                loadComponent: () =>
+                    import('../../presentation/pages/media-events/comp-media-event-details-page/comp-media-event-details-page').then(
+                        (comp) => comp.CompMediaEventDetailsPage,
+                    ),
+            },
+            relativePath: 'user/media-event/',
+            isVisible: false,
+            title: 'Medieneventdetails',
         },
     },
 };

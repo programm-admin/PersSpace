@@ -11,7 +11,7 @@ export class UC_User_LogoutUser {
 
     public execute = (): Observable<any> => {
         return this.userRepository.logoutUser().pipe(
-            tap(() => this.router.navigateByUrl(APPLICATION_ROUTES.login.route.path!)),
+            tap(() => this.router.navigateByUrl(APPLICATION_ROUTES.user.login.route.path!)),
             catchError((err) => throwError(() => err)),
         );
     };

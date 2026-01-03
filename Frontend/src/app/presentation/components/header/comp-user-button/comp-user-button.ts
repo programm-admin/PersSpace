@@ -24,7 +24,6 @@ import { UC_User_GetUser } from '../../../../core/use-cases/user/get-user.use-ca
 import { M_User } from '../../../../core/models/user.model';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
-import { UC_Message_ShowMessage } from '../../../../core/use-cases/message/show-message.use-case';
 import { isPlatformBrowser } from '@angular/common';
 import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -52,6 +51,7 @@ export class CompUserButton implements OnInit {
 
     // input variables
     public inpButtonName: InputSignal<string> = input.required<string>();
+    public inpButtonEmail: InputSignal<string> = input.required<string>();
     public inpButtonPicture: InputSignal<string> = input.required<string>();
 
     public userMenu: T_ApplicationRoute[] = getUserSettingsRoutes();
@@ -89,6 +89,6 @@ export class CompUserButton implements OnInit {
     };
 
     public navigateToLoginPage = () => {
-        this.router.navigateByUrl(APPLICATION_ROUTES.login.route.path!);
+        this.router.navigateByUrl(APPLICATION_ROUTES.user.login.route.path!);
     };
 }

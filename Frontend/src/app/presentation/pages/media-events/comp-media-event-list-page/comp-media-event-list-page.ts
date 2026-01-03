@@ -6,7 +6,6 @@ import {
     M_MediaEventListItemResponse,
 } from '../../../../core/models/event.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-loading-screen';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { LIST_SORTINGS } from '../../../../shared/variables/list-sorting';
 import { T_ListSortingItem } from '../../../../shared/types-and-interfaces/list-sorting.type';
@@ -15,31 +14,36 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { convertSortingFilterToGerman } from '../../../../shared/functions/convert-sorting-filter-to-german';
 import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
+import { Router } from '@angular/router';
+import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
+import { CompNoContent } from '../../../layout/comp-no-content/comp-no-content';
 
 @Component({
     selector: 'app-comp-media-event-list-page',
     imports: [
         NzCardModule,
-        CompLoadingScreen,
         NzButtonModule,
         NzSelectModule,
         NzRadioModule,
         ReactiveFormsModule,
         ReactiveFormsModule,
+        CompNoContent,
     ],
     templateUrl: './comp-media-event-list-page.html',
     styleUrl: './comp-media-event-list-page.scss',
     providers: [UC_MediaEvent_GetAllMediaEvents],
 })
 export class CompMediaEventListPage implements OnInit {
+    // dependency injections
     private readonly UC_GetAllMediaEvents = inject(UC_MediaEvent_GetAllMediaEvents);
     private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
     private readonly formBuilder = inject(NonNullableFormBuilder);
+    private readonly router = inject(Router);
+
     public readonly convertSortingFilter = convertSortingFilterToGerman;
 
     public userMediaEvents: WritableSignal<M_MediaEventListItem[] | null> = signal(null);
     public destroyReference = inject(DestroyRef);
-    public isLoading: boolean = false;
     public isError: boolean = false;
     public sortingFilterList: T_ListSortingItem[] = LIST_SORTINGS;
     public sortingFilter: T_ListSortingItem = this.sortingFilterList[0];
@@ -57,7 +61,6 @@ export class CompMediaEventListPage implements OnInit {
     }
 
     public getAllMediaEvents = () => {
-        this.isLoading = true;
         this.UC_GetAllMediaEvents.execute()
             .pipe(takeUntilDestroyed(this.destroyReference))
             .subscribe({
@@ -68,19 +71,15 @@ export class CompMediaEventListPage implements OnInit {
                                 a.title.localeCompare(b.title),
                         ),
                     );
-                    this.isLoading = false;
                 },
-                error: (err: any) => {
+                error: () => {
                     this.isError = true;
-                    this.isLoading = false;
                 },
             });
     };
 
     public setSortingFilter = (newFilter: T_ListSortingItem) => {
-        this.isLoading = true;
         if (!this.userMediaEvents()) {
-            this.isLoading = false;
             return;
         }
 
@@ -101,6 +100,11 @@ export class CompMediaEventListPage implements OnInit {
 
         this.userMediaEvents.set(currentList);
         this.messageRepository.showMessage('success', 'Medienevents erfolgreich sortiert.');
-        this.isLoading = false;
+    };
+
+    public navigateToMediaEventDetailsPage = (mediaID: string) => {
+        this.router.navigateByUrl(
+            APPLICATION_ROUTES.mediaEvent.showMediaEventDetails.relativePath + mediaID,
+        );
     };
 }

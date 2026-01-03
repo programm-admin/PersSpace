@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = () => {
     // logout user if not available in browser
     effect(() => {
         if (isPlatformBrowser(platformID) && userSignal() === null) {
-            router.navigate([APPLICATION_ROUTES.login.route.path!], {
+            router.navigate([APPLICATION_ROUTES.user.login.route.path!], {
                 queryParams: { error: E_RedirectUser.notAuthorized },
             });
         }

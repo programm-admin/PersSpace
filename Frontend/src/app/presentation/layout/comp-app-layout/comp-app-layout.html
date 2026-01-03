@@ -1,4 +1,4 @@
-@if (!isLoading) {
+@if (!loadingRepository.getLoading()()) {
     <div class="app">
         <nz-layout>
             <nz-header ngSkipHydration>
@@ -34,9 +34,12 @@
                 <app-comp-user-button
                     [inpButtonName]="user()?.userName ?? ''"
                     [inpButtonPicture]="user()?.picture ?? ''"
+                    [inpButtonEmail]="user()?.email ?? ''"
                 />
             </nz-header>
             <nz-content>
+                <div class="appBackgroundContainer"></div>
+
                 <div class="content paddingFull">
                     <router-outlet></router-outlet>
                 </div>

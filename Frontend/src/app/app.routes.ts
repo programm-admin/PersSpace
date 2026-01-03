@@ -4,8 +4,9 @@ import { APPLICATION_ROUTES } from './shared/variables/application-routes';
 export const routes: Routes = [
     APPLICATION_ROUTES.initial.route,
     APPLICATION_ROUTES.start.route,
-    APPLICATION_ROUTES.userStart.route,
-    APPLICATION_ROUTES.login.route,
-    APPLICATION_ROUTES.mediaEvent.createEvent.route,
-    APPLICATION_ROUTES.mediaEvent.showAllEvents.route,
+    APPLICATION_ROUTES.user.userStart.route,
+    APPLICATION_ROUTES.user.login.route,
+    APPLICATION_ROUTES.mediaEvent.createMediaEvent.route,
+    APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route,
+    APPLICATION_ROUTES.mediaEvent.showMediaEventDetails.route,
 ];

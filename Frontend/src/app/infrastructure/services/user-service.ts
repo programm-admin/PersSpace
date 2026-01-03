@@ -8,14 +8,13 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { T_UserRepository } from '../../core/repositories/user.repository';
-import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { M_User } from '../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { LOCAL_STORAGE_KEYS } from '../../shared/variables/storage-keys';
 import { isPlatformBrowser } from '@angular/common';
 import { API_ROUTES } from '../../environment/api-routes';
 import { Router } from '@angular/router';
-import { APPLICATION_ROUTES } from '../../shared/variables/application-routes';
 
 @Injectable({
     providedIn: 'root',
@@ -33,24 +32,22 @@ export class UserService implements T_UserRepository {
             const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
             const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);
             const userID: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_ID);
-            const accessToken: string | null = localStorage.getItem(
-                LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
-            );
+            const email: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_EMAIL);
 
             return !image ||
                 !userID ||
                 !userName ||
-                !accessToken ||
+                !email ||
                 (image && !image.trim()) ||
                 (userID && !userID.trim()) ||
                 (userName && !userName.trim()) ||
-                (accessToken && !accessToken.trim())
+                (email && !email.trim())
                 ? null
                 : {
                       userID: userID,
                       picture: image,
                       userName: userName,
-                      accessToken: accessToken,
+                      email,
                   };
         })(),
     );
@@ -66,8 +63,10 @@ export class UserService implements T_UserRepository {
      * @returns Observable<M_User>
      */
     public getUserFromBackend = (): Observable<M_User> => {
+        if (!isPlatformBrowser(this.platformID)) return EMPTY;
+
         return this.http.get<M_User>(API_ROUTES.checkUserSession, {
-            withCredentials: true, // Cookie wird automatisch mitgesendet
+            withCredentials: true, // send cookie automatically
         });
     };
 
@@ -93,7 +92,7 @@ export class UserService implements T_UserRepository {
             this.setUserToken(null);
         }
 
-        return this.http.get(API_ROUTES.logout, { withCredentials: true });
+        return this.http.get(API_ROUTES.user.logout, { withCredentials: true });
     };
 
     public getIsUserLoggedIn = (): Signal<boolean> => {
@@ -112,24 +111,22 @@ export class UserService implements T_UserRepository {
         const image: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_PICTURE);
         const userName: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_NAME);
         const userID: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_ID);
-        const accessToken: string | null = localStorage.getItem(
-            LOCAL_STORAGE_KEYS.KEY_ACCESS_TOKEN,
-        );
+        const email: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.KEY_USER_EMAIL);
 
         return !image ||
             !userID ||
             !userName ||
-            !accessToken ||
+            !email ||
             (image && !image.trim()) ||
             (userID && !userID.trim()) ||
             (userName && !userName.trim()) ||
-            (accessToken && !accessToken.trim())
+            (email && !email.trim())
             ? null
             : {
                   userID,
                   picture: image,
                   userName,
-                  accessToken,
+                  email,
               };
     };
 }

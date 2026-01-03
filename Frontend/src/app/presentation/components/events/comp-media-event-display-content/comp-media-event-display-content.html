@@ -1,0 +1,12 @@
+@for (eventProp of displayMediaEvent(); track $index) {
+    <div class="displayItemContainer">
+        <p class="titleText">{{ eventProp[0] }}</p>
+        <p>
+            @if (isStringEmpty(eventProp[1])) {
+                <i>nicht vorhanden</i>
+            } @else {
+                {{ eventProp[1] }}
+            }
+        </p>
+    </div>
+}

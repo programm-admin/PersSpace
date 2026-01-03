@@ -15,6 +15,7 @@ import { CompUserButton } from '../../components/header/comp-user-button/comp-us
 import { MENU_POSITION } from '../../../shared/variables/menu-position';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
+import { IT_LOADING_REPOSITORY } from '../../../core/repositories/loading.repository';
 
 @Component({
     selector: 'app-comp-app-layout',
@@ -37,9 +38,9 @@ export class CompAppLayout implements OnInit {
     public readonly getUserFromBackendUseCase = inject(UC_User_GetUserFromBackend);
     public readonly logoutUserUseCase = inject(UC_User_LogoutUser);
     public readonly getUserFromLocalStorageUseCase = inject(UC_User_GetUserFromLocalStorage);
+    public readonly loadingRepository = inject(IT_LOADING_REPOSITORY);
 
     public readonly menuPosition: NzPlacementType = MENU_POSITION;
-    public isLoading: boolean = false;
     public user: Signal<M_User | null> = signal(null);
 
     private readonly router = inject(Router);
@@ -48,22 +49,9 @@ export class CompAppLayout implements OnInit {
     menu!: NzDropdownMenuComponent;
 
     ngOnInit(): void {
-        this.isLoading = true;
+        this.loadingRepository.showLoading();
         this.user = this.userRepository.getUser();
-
-        const user: M_User | null = this.getUserFromLocalStorageUseCase.execute();
-
-        this.getUserFromBackendUseCase.execute(false).subscribe({
-            next: (user: M_User) => {
-                this.isLoading = false;
-            },
-            error: (err) => {
-                // error handling -> logout user
-                this.logoutUserUseCase.execute();
-                this.isLoading = false;
-            },
-        });
-        this.isLoading = false;
+        this.getUserFromBackendUseCase.execute(false).subscribe();
     }
 
     public navigateToItemPage = (path: string | undefined) => {

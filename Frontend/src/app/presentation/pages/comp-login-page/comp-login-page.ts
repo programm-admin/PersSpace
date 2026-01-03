@@ -4,10 +4,8 @@ import {
     AfterViewInit,
     Component,
     inject,
-    OnInit,
     PLATFORM_ID,
     signal,
-    Signal,
     WritableSignal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -102,10 +100,12 @@ export class CompLoginPage implements AfterViewInit {
 
                             this.setUserSubjectUseCase.execute(res);
                             this.router.navigate([
-                                this.getPathFromRouteUseCase.execute(APPLICATION_ROUTES.userStart),
+                                this.getPathFromRouteUseCase.execute(
+                                    APPLICATION_ROUTES.user.userStart,
+                                ),
                             ]);
                         },
-                        error: (err: any) => {},
+                        error: () => {},
                         complete: () => {
                             this.isLoadingSignal.set(false);
                         },
