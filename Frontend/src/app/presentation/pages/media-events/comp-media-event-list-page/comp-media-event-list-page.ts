@@ -6,7 +6,6 @@ import {
     M_MediaEventListItemResponse,
 } from '../../../../core/models/event.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-loading-screen';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { LIST_SORTINGS } from '../../../../shared/variables/list-sorting';
 import { T_ListSortingItem } from '../../../../shared/types-and-interfaces/list-sorting.type';
@@ -23,7 +22,6 @@ import { CompNoContent } from '../../../layout/comp-no-content/comp-no-content';
     selector: 'app-comp-media-event-list-page',
     imports: [
         NzCardModule,
-        CompLoadingScreen,
         NzButtonModule,
         NzSelectModule,
         NzRadioModule,
