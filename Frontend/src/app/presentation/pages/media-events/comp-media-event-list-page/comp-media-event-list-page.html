@@ -23,6 +23,8 @@
                 </form>
             </div>
 
+            <div class="gapDIV"></div>
+
             <div class="mediaEventCardContainer">
                 @for (mediaEvent of userMediaEvents(); track $index) {
                     <nz-card [nzCover]="cover" class="mediaEventItemCARD" (click)="navigateToMediaEventDetailsPage(mediaEvent.id)">
