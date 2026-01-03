@@ -4,10 +4,8 @@ import {
     AfterViewInit,
     Component,
     inject,
-    OnInit,
     PLATFORM_ID,
     signal,
-    Signal,
     WritableSignal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -107,7 +105,7 @@ export class CompLoginPage implements AfterViewInit {
                                 ),
                             ]);
                         },
-                        error: (err: any) => {},
+                        error: () => {},
                         complete: () => {
                             this.isLoadingSignal.set(false);
                         },

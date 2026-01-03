@@ -1,4 +1,3 @@
-import { authGuard } from '../../presentation/guards/auth-guard/auth-guard';
 import { CompLoginPage } from '../../presentation/pages/comp-login-page/comp-login-page';
 import { CompStartPage } from '../../presentation/pages/comp-start-page/comp-start-page';
 import { CompUserStartPage } from '../../presentation/pages/comp-user-start-page/comp-user-start-page';

@@ -2,7 +2,6 @@ import { Component, inject, input, InputSignal, OnInit, output } from '@angular/
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';

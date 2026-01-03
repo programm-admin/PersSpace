@@ -15,12 +15,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {
-    HTTP_INTERCEPTORS,
-    provideHttpClient,
-    withFetch,
-    withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { getProviders } from './app.providers';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { httpInterceptor } from './presentation/interceptors/http/http-interceptor';

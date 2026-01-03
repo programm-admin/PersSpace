@@ -2,8 +2,6 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
     M_MediaEvent,
-    M_MediaEventListItem,
-    M_MediaEventListItemResponse,
     M_MediaEventResponse,
     M_MediaEventUpdateResponse,
 } from '../../../../core/models/event.model';
@@ -17,7 +15,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { T_MediaEventDetailsPage_Display_Screen } from '../../../../shared/types-and-interfaces/display-screens';
 import { CompEventForm } from '../../../components/events/comp-event-form/comp-event-form';
 import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CompDeleteDialog } from '../../../layout/comp-delete-dialog/comp-delete-dialog';
 
 @Component({

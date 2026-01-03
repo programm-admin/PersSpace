@@ -46,7 +46,6 @@ export class CompMediaEventListPage implements OnInit {
 
     public userMediaEvents: WritableSignal<M_MediaEventListItem[] | null> = signal(null);
     public destroyReference = inject(DestroyRef);
-    public isLoading: boolean = false;
     public isError: boolean = false;
     public sortingFilterList: T_ListSortingItem[] = LIST_SORTINGS;
     public sortingFilter: T_ListSortingItem = this.sortingFilterList[0];
@@ -64,7 +63,6 @@ export class CompMediaEventListPage implements OnInit {
     }
 
     public getAllMediaEvents = () => {
-        this.isLoading = true;
         this.UC_GetAllMediaEvents.execute()
             .pipe(takeUntilDestroyed(this.destroyReference))
             .subscribe({
@@ -75,19 +73,15 @@ export class CompMediaEventListPage implements OnInit {
                                 a.title.localeCompare(b.title),
                         ),
                     );
-                    this.isLoading = false;
                 },
-                error: (err: any) => {
+                error: () => {
                     this.isError = true;
-                    this.isLoading = false;
                 },
             });
     };
 
     public setSortingFilter = (newFilter: T_ListSortingItem) => {
-        this.isLoading = true;
         if (!this.userMediaEvents()) {
-            this.isLoading = false;
             return;
         }
 
@@ -108,7 +102,6 @@ export class CompMediaEventListPage implements OnInit {
 
         this.userMediaEvents.set(currentList);
         this.messageRepository.showMessage('success', 'Medienevents erfolgreich sortiert.');
-        this.isLoading = false;
     };
 
     public navigateToMediaEventDetailsPage = (mediaID: string) => {

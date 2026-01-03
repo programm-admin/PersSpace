@@ -1,4 +1,4 @@
-import { Inject, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IT_USER_REPOSITORY } from '../../repositories/user.repository';
 
 @Injectable({ providedIn: 'root' })

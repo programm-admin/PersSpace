@@ -2,8 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { IT_USER_REPOSITORY } from '../../../repositories/user.repository';
 import { M_MediaEvent, M_MediaEventResponse } from '../../../models/event.model';
 import { IT_MEDIA_EVENT_REPOSITORY } from '../../../repositories/events/media-event.repository';
-import { M_User } from '../../../models/user.model';
-import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
