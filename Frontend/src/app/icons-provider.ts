@@ -11,7 +11,7 @@ import {
     UserOutline,
     ArrowLeftOutline,
     EditOutline,
-    DeleteOutline
+    DeleteOutline,
 } from '@ant-design/icons-angular/icons';
 
 export const icons = [
@@ -27,5 +27,5 @@ export const icons = [
     UserOutline,
     ArrowLeftOutline,
     EditOutline,
-    DeleteOutline
+    DeleteOutline,
 ];

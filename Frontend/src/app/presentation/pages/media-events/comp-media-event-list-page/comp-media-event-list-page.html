@@ -6,7 +6,7 @@
     }
 
     <h1>Meine Medienevents</h1>
-    
+
     <div class="gapDIV"></div>
 
     @if (userMediaEvents()) {
@@ -27,7 +27,11 @@
 
             <div class="mediaEventCardContainer">
                 @for (mediaEvent of userMediaEvents(); track $index) {
-                    <nz-card [nzCover]="cover" class="mediaEventItemCARD" (click)="navigateToMediaEventDetailsPage(mediaEvent.id)">
+                    <nz-card
+                        [nzCover]="cover"
+                        class="mediaEventItemCARD"
+                        (click)="navigateToMediaEventDetailsPage(mediaEvent.id)"
+                    >
                         <nz-card-meta [nzTitle]="mediaEvent.title" />
                     </nz-card>
                     <ng-template #cover>
