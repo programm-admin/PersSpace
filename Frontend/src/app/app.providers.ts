@@ -13,6 +13,8 @@ import { IT_MEDIA_EVENT_REPOSITORY } from './core/repositories/events/media-even
 import { MediaEventService } from './infrastructure/services/events/media-event-service/media-event-service';
 import { IT_LOADING_REPOSITORY } from './core/repositories/loading.repository';
 import { LoadingService } from './infrastructure/services/loading-service/loading-service';
+import { IT_A_MEDIA_EVENT_REPOSITORY } from './core/repositories/queries/event/media-event.query.repository';
+import { Adapter_MediaEvents } from './presentation/query-adapters/media-event.query-adapter';
 
 export const getProviders = (): Provider[] => {
     return [
@@ -23,5 +25,6 @@ export const getProviders = (): Provider[] => {
         { provide: IT_MESSAGE_REPOSITORY, useClass: MessageService },
         { provide: IT_MEDIA_EVENT_REPOSITORY, useClass: MediaEventService },
         { provide: IT_LOADING_REPOSITORY, useClass: LoadingService },
+        { provide: IT_A_MEDIA_EVENT_REPOSITORY, useClass: Adapter_MediaEvents },
     ];
 };

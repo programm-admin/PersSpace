@@ -1,12 +1,12 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CompEventForm } from '../../components/events/comp-event-form/comp-event-form';
 import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes';
-import { M_MediaEvent, M_MediaEventResponse } from '../../../core/models/event.model';
+import { M_MediaEvent } from '../../../core/models/event.model';
 import { UC_MediaEvent_CreateMediaEvent } from '../../../core/use-cases/event/media-event/create-media-event.use-case';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UC_Message_ShowMessage } from '../../../core/use-cases/message/show-message.use-case';
 import { CompAuthWrapper } from '../../layout/comp-auth-wrapper/comp-auth-wrapper';
+import { IT_A_MEDIA_EVENT_REPOSITORY } from '../../../core/repositories/queries/event/media-event.query.repository';
 
 @Component({
     selector: 'app-comp-create-event-page',
@@ -18,9 +18,7 @@ import { CompAuthWrapper } from '../../layout/comp-auth-wrapper/comp-auth-wrappe
 export class CompCreateMediaEventPage {
     // dependency injections
     public router = inject(Router);
-    private readonly UC_CreateMediaEvent = inject(UC_MediaEvent_CreateMediaEvent);
-    private readonly UC_ShowMessage = inject(UC_Message_ShowMessage);
-    private readonly destroyReference = inject(DestroyRef);
+    private readonly mediaEventAdapterRepository = inject(IT_A_MEDIA_EVENT_REPOSITORY);
 
     public cancelSubmitForm = () => {
         // navigate to start page
@@ -28,24 +26,6 @@ export class CompCreateMediaEventPage {
     };
 
     public submitForm = (object: M_MediaEvent) => {
-        this.UC_CreateMediaEvent.execute(object)
-            .pipe(takeUntilDestroyed(this.destroyReference))
-            .subscribe({
-                next: (val: M_MediaEventResponse) => {
-                    this.UC_ShowMessage.execute(
-                        'success',
-                        `Medienevent '${val.mediaEvent.title}' erfolgreich angelegt.`,
-                    );
-                    this.router.navigateByUrl(
-                        APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!,
-                    );
-                },
-                error: () => {
-                    this.UC_ShowMessage.execute(
-                        'error',
-                        `Beim Anlegen von '${object.title}' ist ein Fehler aufgetreten.`,
-                    );
-                },
-            });
+        this.mediaEventAdapterRepository.Q_createMediaEvent.mutate(object);
     };
 }

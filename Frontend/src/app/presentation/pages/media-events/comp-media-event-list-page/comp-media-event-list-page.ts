@@ -1,11 +1,7 @@
-import { Component, DestroyRef, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, Signal } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { UC_MediaEvent_GetAllMediaEvents } from '../../../../core/use-cases/event/media-event/get-all-media-events.use-case';
-import {
-    M_MediaEventListItem,
-    M_MediaEventListItemResponse,
-} from '../../../../core/models/event.model';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { M_MediaEventListItem } from '../../../../core/models/event.model';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { LIST_SORTINGS } from '../../../../shared/variables/list-sorting';
 import { T_ListSortingItem } from '../../../../shared/types-and-interfaces/list-sorting.type';
@@ -17,6 +13,7 @@ import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.rep
 import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
 import { CompNoContent } from '../../../layout/comp-no-content/comp-no-content';
+import { IT_A_MEDIA_EVENT_REPOSITORY } from '../../../../core/repositories/queries/event/media-event.query.repository';
 
 @Component({
     selector: 'app-comp-media-event-list-page',
@@ -35,14 +32,16 @@ import { CompNoContent } from '../../../layout/comp-no-content/comp-no-content';
 })
 export class CompMediaEventListPage implements OnInit {
     // dependency injections
-    private readonly UC_GetAllMediaEvents = inject(UC_MediaEvent_GetAllMediaEvents);
     private readonly messageRepository = inject(IT_MESSAGE_REPOSITORY);
+    private readonly mediaEventAdapter = inject(IT_A_MEDIA_EVENT_REPOSITORY);
     private readonly formBuilder = inject(NonNullableFormBuilder);
     private readonly router = inject(Router);
 
     public readonly convertSortingFilter = convertSortingFilterToGerman;
 
-    public userMediaEvents: WritableSignal<M_MediaEventListItem[] | null> = signal(null);
+    public userMediaEvents: Signal<M_MediaEventListItem[] | null> = computed(
+        () => this.mediaEventAdapter.Q_getMediaEvents.data()?.mediaEvents ?? null,
+    );
     public destroyReference = inject(DestroyRef);
     public isError: boolean = false;
     public sortingFilterList: T_ListSortingItem[] = LIST_SORTINGS;
@@ -61,21 +60,10 @@ export class CompMediaEventListPage implements OnInit {
     }
 
     public getAllMediaEvents = () => {
-        this.UC_GetAllMediaEvents.execute()
-            .pipe(takeUntilDestroyed(this.destroyReference))
-            .subscribe({
-                next: (resMediaEvents: M_MediaEventListItemResponse) => {
-                    this.userMediaEvents.set(
-                        resMediaEvents.mediaEvents.sort(
-                            (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
-                                a.title.localeCompare(b.title),
-                        ),
-                    );
-                },
-                error: () => {
-                    this.isError = true;
-                },
-            });
+        console.log('[comp] result', this.mediaEventAdapter.Q_getMediaEvents.data());
+        // this.userMediaEvents.set(
+        //     this.mediaEventAdapter.Q_getMediaEvents.data()?.mediaEvents ?? null,
+        // );
     };
 
     public setSortingFilter = (newFilter: T_ListSortingItem) => {
@@ -98,7 +86,7 @@ export class CompMediaEventListPage implements OnInit {
                             new Date(a.eventCreated).getTime() - new Date(b.eventCreated).getTime(),
                     );
 
-        this.userMediaEvents.set(currentList);
+        // this.userMediaEvents.set(currentList);
         this.messageRepository.showMessage('success', 'Medienevents erfolgreich sortiert.');
     };
 
