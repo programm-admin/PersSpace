@@ -46,7 +46,6 @@ export class Adapter_MediaEvents implements AT_MediaRepository {
     public readonly Q_getMediaEvents = injectQuery(() => ({
         queryKey: QKEYS_MediaEvents.list(),
         queryFn: () => {
-            console.log('[adapter] function triggered ...');
             return firstValueFrom(this.mediaEventRepository.getAllMediaEvents());
         },
     }));

@@ -39,8 +39,11 @@ export class CompMediaEventListPage implements OnInit {
 
     public readonly convertSortingFilter = convertSortingFilterToGerman;
 
-    public userMediaEvents: Signal<M_MediaEventListItem[] | null> = computed(
-        () => this.mediaEventAdapter.Q_getMediaEvents.data()?.mediaEvents ?? null,
+    public userMediaEvents: Signal<M_MediaEventListItem[] | null> = computed(() =>
+        this.filterItemList(
+            'ALPHABET',
+            this.mediaEventAdapter.Q_getMediaEvents.data()?.mediaEvents,
+        ),
     );
     public destroyReference = inject(DestroyRef);
     public isError: boolean = false;
@@ -53,38 +56,28 @@ export class CompMediaEventListPage implements OnInit {
     });
 
     ngOnInit(): void {
-        this.getAllMediaEvents();
         this.sortingFilterForm.controls.currentFilter.valueChanges.subscribe(
             (value: T_ListSortingItem) => this.setSortingFilter(value),
         );
     }
-
-    public getAllMediaEvents = () => {
-        console.log('[comp] result', this.mediaEventAdapter.Q_getMediaEvents.data());
-        // this.userMediaEvents.set(
-        //     this.mediaEventAdapter.Q_getMediaEvents.data()?.mediaEvents ?? null,
-        // );
-    };
 
     public setSortingFilter = (newFilter: T_ListSortingItem) => {
         if (!this.userMediaEvents()) {
             return;
         }
 
-        const currentList: M_MediaEventListItem[] =
-            newFilter === 'ALPHABET'
-                ? this.userMediaEvents()!.sort((a: M_MediaEventListItem, b: M_MediaEventListItem) =>
-                      a.title.localeCompare(b.title),
-                  )
-                : newFilter === 'ALPHABET_INVERTED'
-                  ? this.userMediaEvents()!.sort(
-                        (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
-                            b.title.localeCompare(a.title),
-                    )
-                  : this.userMediaEvents()!.sort(
-                        (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
-                            new Date(a.eventCreated).getTime() - new Date(b.eventCreated).getTime(),
-                    );
+        newFilter === 'ALPHABET'
+            ? this.userMediaEvents()!.sort((a: M_MediaEventListItem, b: M_MediaEventListItem) =>
+                  a.title.localeCompare(b.title),
+              )
+            : newFilter === 'ALPHABET_INVERTED'
+              ? this.userMediaEvents()!.sort((a: M_MediaEventListItem, b: M_MediaEventListItem) =>
+                    b.title.localeCompare(a.title),
+                )
+              : this.userMediaEvents()!.sort(
+                    (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
+                        new Date(a.eventCreated).getTime() - new Date(b.eventCreated).getTime(),
+                );
 
         // this.userMediaEvents.set(currentList);
         this.messageRepository.showMessage('success', 'Medienevents erfolgreich sortiert.');
@@ -94,5 +87,30 @@ export class CompMediaEventListPage implements OnInit {
         this.router.navigateByUrl(
             APPLICATION_ROUTES.mediaEvent.showMediaEventDetails.relativePath + mediaID,
         );
+    };
+
+    private filterItemList = (
+        filter: T_ListSortingItem,
+        items: M_MediaEventListItem[] | undefined,
+    ): M_MediaEventListItem[] | null => {
+        if (!items) {
+            return null;
+        }
+
+        switch (filter) {
+            case 'ALPHABET':
+                return items.sort((a: M_MediaEventListItem, b: M_MediaEventListItem) =>
+                    a.title.localeCompare(b.title),
+                );
+            case 'ALPHABET_INVERTED':
+                return items.sort((a: M_MediaEventListItem, b: M_MediaEventListItem) =>
+                    b.title.localeCompare(a.title),
+                );
+            case 'CREATION_DATE':
+                return items.sort(
+                    (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
+                        new Date(a.eventCreated).getTime() - new Date(b.eventCreated).getTime(),
+                );
+        }
     };
 }
