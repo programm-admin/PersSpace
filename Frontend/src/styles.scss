@@ -70,20 +70,25 @@ span {
 }
 
 .buttonBarContainer {
-    width: 24rem;
-    height: 4rem;
+    width: 100%;
+    height: 6rem;
 
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 1rem;
 
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.8);
     box-shadow: var(--standard--container--box-shadow);
     border-radius: var(--standard--border--radius);
-    border: 0.1rem solid var(--header--background-color);
+    // border: 0.1rem solid var(--header--background-color);
 
     padding-left: var(--standard--padding--left-right);
     padding-right: var(--standard--padding--left-right);
+
+    button {
+        height: 4rem !important;
+    }
 }
 
 .menuUL {

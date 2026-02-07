@@ -1,8 +1,9 @@
 @if (isLoading()) {
     <app-comp-loading-screen />
 } @else {
+    <h1>Medienevent-Details</h1>
     <button nz-button nzSize="large" (click)="navigateToEventsListPage()">
-        <nz-icon nzType="arrow-left" nzTheme="outline" /> Zurück zum meinen Medienevents
+        <nz-icon nzType="arrow-left" nzTheme="outline" /> Zurück zu meinen Medienevents
     </button>
 
     @if (isError()) {
@@ -10,7 +11,6 @@
     } @else {
         @if (mediaEvent()) {
             @if (displayScreen === 'DETAILS_PAGE') {
-                <h1>Medienevent-Details</h1>
                 <div class="detailsContainer">
                     <div class="imageContainer">
                         <img src="Media_Picture.png" alt="Mediaevent-Bild" />
