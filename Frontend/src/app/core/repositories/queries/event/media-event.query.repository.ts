@@ -4,12 +4,17 @@ import {
     M_MediaEvent,
     M_MediaEventListItemResponse,
     M_MediaEventResponse,
+    M_MediaEventUpdateResponse,
 } from '../../../models/event.model';
 
 // AT = Adapter Type; Q = query
 export type AT_MediaRepository = {
+    setMediaEventId: (id: string | null) => void;
+
     Q_createMediaEvent: CreateMutationResult<M_MediaEventResponse, unknown, M_MediaEvent>;
+    Q_updateMediaEvent: CreateMutationResult<M_MediaEventUpdateResponse, unknown, M_MediaEvent>;
     Q_getMediaEvents: CreateQueryResult<M_MediaEventListItemResponse>;
+    Q_getSingleMediaEvent: CreateQueryResult<M_MediaEventResponse>;
 };
 
 export const IT_A_MEDIA_EVENT_REPOSITORY = new InjectionToken<AT_MediaRepository>(
