@@ -63,13 +63,14 @@ export class Adapter_MediaEvents implements AT_MediaRepository {
             tanStackQueryClient.invalidateQueries({
                 queryKey: QKEYS_MediaEvents.list(),
             });
+            tanStackQueryClient.invalidateQueries({
+                queryKey: QKEYS_MediaEvents.singleEvent(data.mediaEvent.id),
+            });
 
             this.messageRepository.showMessage(
                 'success',
                 `Medienevent '${data.mediaEvent.title}' erfolgreich angepasst.`,
             );
-
-            this.router.navigateByUrl(APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!);
         },
 
         onError: (_, newEvent) =>

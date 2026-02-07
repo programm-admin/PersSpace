@@ -75,6 +75,7 @@ export class CompMediaEventDetailsPage {
         if (!this.eventId()) return;
 
         this.mediaEventAdapterRepository.Q_updateMediaEvent.mutate(newEvent);
+        this.setDisplayScreen('DETAILS_PAGE');
     };
 
     public cancelForm = () => {
