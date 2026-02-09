@@ -1,10 +1,6 @@
 import { computed, inject, signal, WritableSignal } from '@angular/core';
 import { IT_MEDIA_EVENT_REPOSITORY } from '../../core/repositories/events/media-event.repository';
-import {
-    CreateMutationResult,
-    injectMutation,
-    injectQuery,
-} from '@tanstack/angular-query-experimental';
+import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
 import { QKEYS_MediaEvents } from './media-event.query-keys';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -98,7 +94,7 @@ export class Adapter_MediaEvents implements AT_MediaRepository {
     public Q_deleteMediaEvent = injectMutation<any, unknown, string>(() => ({
         mutationFn: (mediaEventId: string) =>
             firstValueFrom(this.mediaEventRepository.deleteMediaEvent(mediaEventId)),
-        onSuccess: (data: any) => {
+        onSuccess: () => {
             tanStackQueryClient.invalidateQueries({ queryKey: QKEYS_MediaEvents.all });
             tanStackQueryClient.removeQueries({
                 queryKey: QKEYS_MediaEvents.singleEvent(this.mediaEventId()!),

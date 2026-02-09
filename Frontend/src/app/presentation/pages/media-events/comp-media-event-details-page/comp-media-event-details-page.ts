@@ -1,12 +1,7 @@
-import { Component, computed, DestroyRef, effect, inject, OnInit, Signal } from '@angular/core';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import {
-    M_MediaEvent,
-    M_MediaEventResponse,
-    M_MediaEventUpdateResponse,
-} from '../../../../core/models/event.model';
-import { IT_MEDIA_EVENT_REPOSITORY } from '../../../../core/repositories/events/media-event.repository';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { M_MediaEvent } from '../../../../core/models/event.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
 import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-loading-screen';
 import { CompMediaEventDisplayContent } from '../../../components/events/comp-media-event-display-content/comp-media-event-display-content';
@@ -14,7 +9,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { T_MediaEventDetailsPage_Display_Screen } from '../../../../shared/types-and-interfaces/display-screens';
 import { CompEventForm } from '../../../components/events/comp-event-form/comp-event-form';
-import { IT_MESSAGE_REPOSITORY } from '../../../../core/repositories/message.repository';
 import { CompDeleteDialog } from '../../../layout/comp-delete-dialog/comp-delete-dialog';
 import { IT_A_MEDIA_EVENT_REPOSITORY } from '../../../../core/repositories/queries/event/media-event.query.repository';
 import { map } from 'rxjs';
