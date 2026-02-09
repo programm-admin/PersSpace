@@ -1,6 +1,10 @@
-import { computed, Inject, inject, signal, Signal, WritableSignal } from '@angular/core';
+import { computed, inject, signal, WritableSignal } from '@angular/core';
 import { IT_MEDIA_EVENT_REPOSITORY } from '../../core/repositories/events/media-event.repository';
-import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
+import {
+    CreateMutationResult,
+    injectMutation,
+    injectQuery,
+} from '@tanstack/angular-query-experimental';
 import { QKEYS_MediaEvents } from './media-event.query-keys';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -13,7 +17,6 @@ import { IT_MESSAGE_REPOSITORY } from '../../core/repositories/message.repositor
 import { Router } from '@angular/router';
 import { AT_MediaRepository } from '../../core/repositories/queries/event/media-event.query.repository';
 import { APPLICATION_ROUTES } from '../../shared/variables/application-routes';
-import { MEDIA_EVENT_ID } from '../../core/repositories/other/media-id.token';
 
 export class Adapter_MediaEvents implements AT_MediaRepository {
     private readonly mediaEventRepository = inject(IT_MEDIA_EVENT_REPOSITORY);
@@ -90,5 +93,21 @@ export class Adapter_MediaEvents implements AT_MediaRepository {
         queryFn: () =>
             firstValueFrom(this.mediaEventRepository.getMediaEvent(this.mediaEventId()!)),
         enabled: computed(() => !!this.mediaEventId()),
+    }));
+
+    public Q_deleteMediaEvent = injectMutation<any, unknown, string>(() => ({
+        mutationFn: (mediaEventId: string) =>
+            firstValueFrom(this.mediaEventRepository.deleteMediaEvent(mediaEventId)),
+        onSuccess: (data: any) => {
+            tanStackQueryClient.invalidateQueries({ queryKey: QKEYS_MediaEvents.all });
+            tanStackQueryClient.removeQueries({
+                queryKey: QKEYS_MediaEvents.singleEvent(this.mediaEventId()!),
+            });
+
+            this.messageRepository.showMessage('success', 'Medienevent erfolgreich gelöscht.');
+            this.router.navigateByUrl(APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!);
+        },
+        onError: () =>
+            this.messageRepository.showMessage('error', 'Fehler beim Löschen des Medienevenets.'),
     }));
 }

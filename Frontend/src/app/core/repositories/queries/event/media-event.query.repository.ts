@@ -13,6 +13,7 @@ export type AT_MediaRepository = {
 
     Q_createMediaEvent: CreateMutationResult<M_MediaEventResponse, unknown, M_MediaEvent>;
     Q_updateMediaEvent: CreateMutationResult<M_MediaEventUpdateResponse, unknown, M_MediaEvent>;
+    Q_deleteMediaEvent: CreateMutationResult<any, unknown, string>;
     Q_getMediaEvents: CreateQueryResult<M_MediaEventListItemResponse>;
     Q_getSingleMediaEvent: CreateQueryResult<M_MediaEventResponse>;
 };

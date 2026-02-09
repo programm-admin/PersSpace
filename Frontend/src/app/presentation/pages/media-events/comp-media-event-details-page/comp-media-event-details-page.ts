@@ -83,22 +83,8 @@ export class CompMediaEventDetailsPage {
     };
 
     public deleteEvent = () => {
-        // if (!this.mediaEvent) return;
-        // this.mediaEventRepository.deleteMediaEvent(this.mediaEvent.id).subscribe({
-        //     next: () => {
-        //         this.messageRepository.showMessage(
-        //             'success',
-        //             `"${this.mediaEvent?.title}" wurde erfolgreich gelöscht.`,
-        //         );
-        //         this.router.navigateByUrl(
-        //             APPLICATION_ROUTES.mediaEvent.showAllMediaEvents.route.path!,
-        //         );
-        //     },
-        //     error: () =>
-        //         this.messageRepository.showMessage(
-        //             'error',
-        //             `Fehler beim Löschen von "${this.mediaEvent?.title}".`,
-        //         ),
-        // });
+        if (!this.mediaEvent()) return;
+
+        this.mediaEventAdapterRepository.Q_deleteMediaEvent.mutate(this.eventId()!);
     };
 }
