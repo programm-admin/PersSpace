@@ -1,22 +1,22 @@
-@if (isLoading) {
+@if (isLoading()) {
     <app-comp-loading-screen />
 } @else {
+    <h1>Medienevent-Details</h1>
     <button nz-button nzSize="large" (click)="navigateToEventsListPage()">
-        <nz-icon nzType="arrow-left" nzTheme="outline" /> Zurück zum meinen Medienevents
+        <nz-icon nzType="arrow-left" nzTheme="outline" /> Zurück zu meinen Medienevents
     </button>
 
-    @if (isError) {
+    @if (isError()) {
         <div>Es ist ein Fehler aufgetreten.</div>
     } @else {
-        @if (mediaEvent) {
+        @if (mediaEvent()) {
             @if (displayScreen === 'DETAILS_PAGE') {
-                <h1>Medienevent-Details</h1>
                 <div class="detailsContainer">
                     <div class="imageContainer">
                         <img src="Media_Picture.png" alt="Mediaevent-Bild" />
                     </div>
                     <div class="contentContainer">
-                        <app-comp-media-event-display-content [inpMediaEvent]="mediaEvent" />
+                        <app-comp-media-event-display-content [inpMediaEvent]="mediaEvent()!" />
                     </div>
                 </div>
                 <div class="buttonBarContainer">
@@ -33,7 +33,7 @@
                         inpTitle="Medienevent löschen"
                         [inpDescription]="
                             'Willst du das Medienevent ' +
-                            mediaEvent.title +
+                            mediaEvent()!.title +
                             ' wirklich löschen? Dies kann nicht rückgängig gemacht werden!'
                         "
                         (outDelete)="deleteEvent()"
@@ -42,7 +42,7 @@
             } @else {
                 <h1>Medienevent bearbeiten</h1>
                 <app-comp-event-form
-                    [inpMediaEvent]="mediaEvent"
+                    [inpMediaEvent]="mediaEvent()"
                     (outSubmitForm)="submitForm($event)"
                     (outCancelForm)="cancelForm()"
                 />

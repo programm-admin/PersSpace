@@ -39,6 +39,7 @@
         "@angular/platform-server": "^20.3.0",
         "@angular/router": "^20.3.0",
         "@angular/ssr": "^20.3.0",
+        "@tanstack/angular-query-experimental": "^5.90.20",
         "express": "^5.1.0",
         "less": "^4.4.1",
         "ng-zorro-antd": "^20.2.1",

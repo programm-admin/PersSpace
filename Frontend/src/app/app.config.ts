@@ -19,6 +19,8 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { getProviders } from './app.providers';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { httpInterceptor } from './presentation/interceptors/http/http-interceptor';
+import { provideAngularQuery } from '@tanstack/angular-query-experimental';
+import { tanStackQueryClient } from './query-client';
 
 const ngZorroConfig: NzConfig = {
     message: { nzTop: 10, nzDuration: 10000 },
@@ -40,5 +42,6 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withFetch(), withInterceptors([httpInterceptor])),
         ...getProviders(),
         provideNzConfig(ngZorroConfig),
+        provideAngularQuery(tanStackQueryClient),
     ],
 };
