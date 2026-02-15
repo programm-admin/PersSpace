@@ -1,4 +1,4 @@
-namespace Domain.Events.MediaEvent;
+namespace Domain.MediaEvents;
 
 public class MediaEvent
 {

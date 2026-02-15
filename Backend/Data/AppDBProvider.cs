@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Backend.Models;
+﻿using Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data
 {
@@ -9,25 +9,17 @@ namespace Backend.Data
         {
         }
 
-        public DbSet<M_User> Users { get; set; }
-        public DbSet<M_MediaEvent> MediaEvents { get; set; }
-        public DbSet<M_LoginHistory> LoginHistories { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<MediaEventEntity> MediaEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<M_MediaEvent>()
-            //     .HasOne(e => e.User)
-            //     .WithMany(e => e.Events)
-            //     .HasForeignKey(e => e.UserAccountID);
-
-            modelBuilder.Entity<M_MediaEvent>(entity =>
+            modelBuilder.Entity<UserEntity>(user =>
             {
-                entity.HasKey(e => e.ID);
-                entity.HasOne(e => e.User)
-                    .WithMany(u => u.MediaEvents)
-                    .HasForeignKey(e => e.UserAccountID)
-                    .OnDelete(DeleteBehavior.Cascade);
+                user.HasKey(u => u.ID);
+                user.HasMany(u => u.MediaEvents).WithOne(e => e.User).HasForeignKey(e => e.UserAccountId).OnDelete(DeleteBehavior.Cascade);
             });
+            modelBuilder.Entity<MediaEventEntity>(mediaEvent => { mediaEvent.HasKey(e => e.Id); });
 
             base.OnModelCreating(modelBuilder);
         }
