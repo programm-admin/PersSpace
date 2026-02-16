@@ -1,6 +1,7 @@
 using Domain.MediaEvents;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Entities;
 
 public class MediaEventRepository : IMediaEventRepository
 {

@@ -3,13 +3,8 @@ using Domain.MediaEvents;
 
 namespace Application.MediaEvents.Create;
 
-public class CreateMediaEventHandler : IUseCaseHandler<CreateMediaEventCommand, MediaEventResult>
+public class CreateMediaEventHandler(IMediaEventRepository repository) : IUseCaseHandler<CreateMediaEventCommand, MediaEventResult>
 {
-    private readonly IMediaEventRepository _repository;
-
-    public CreateMediaEventHandler(IMediaEventRepository repository) { _repository = repository; }
-
-
     public async Task<MediaEventResult> HandleAsync(CreateMediaEventCommand request)
     {
         var mediaEvent = new MediaEvent(
@@ -23,7 +18,7 @@ public class CreateMediaEventHandler : IUseCaseHandler<CreateMediaEventCommand, 
            DateTime.UtcNow
        );
 
-        await _repository.AddMediaEvent(mediaEvent);
+        await repository.AddMediaEvent(mediaEvent);
 
         return new MediaEventResult(
             mediaEvent.ID,

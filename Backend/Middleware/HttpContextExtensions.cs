@@ -1,10 +1,11 @@
-using Backend.Models;
+
+using Domain;
 
 public static class HttpContextExtensions
 {
-    public static M_User GetUser(this HttpContext context)
+    public static User GetUser(this HttpContext context)
     {
-        if (!context.Items.TryGetValue("User", out var userObj) || userObj is not M_User user)
+        if (!context.Items.TryGetValue("User", out var userObj) || userObj is not User user)
         {
             throw new UnauthorizedAccessException("[ERROR - HttpContextExtensions.GetUser()] User is not available in context.");
         }

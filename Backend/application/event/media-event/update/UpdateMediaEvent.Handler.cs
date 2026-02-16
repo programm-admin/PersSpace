@@ -3,18 +3,13 @@ using Domain.MediaEvents;
 
 namespace Application.MediaEvents.Update;
 
-public class UpdateMediaEventHandler : IUseCaseHandler<UpdateMediaEventCommand, MediaEventResult>
+public class UpdateMediaEventHandler(IMediaEventRepository repository) : IUseCaseHandler<UpdateMediaEventCommand, MediaEventResult>
 {
-    private readonly IMediaEventRepository _repository;
-
-    public UpdateMediaEventHandler(IMediaEventRepository repository) { _repository = repository; }
-
-
     public async Task<MediaEventResult?> HandleAsync(
         UpdateMediaEventCommand command)
     {
         MediaEvent? mediaEvent =
-            await _repository.GetMediaEventById(command.EventId, command.UserAccountId);
+            await repository.GetMediaEventById(command.EventId, command.UserAccountId);
 
         if (mediaEvent is null) return null;
 
@@ -26,7 +21,7 @@ public class UpdateMediaEventHandler : IUseCaseHandler<UpdateMediaEventCommand, 
             command.IsDone
         );
 
-        await _repository.UpdateMediaEvent(mediaEvent);
+        await repository.UpdateMediaEvent(mediaEvent);
 
         return new MediaEventResult(
             mediaEvent.ID,

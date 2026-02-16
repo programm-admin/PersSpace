@@ -3,15 +3,11 @@ using Domain.MediaEvents;
 
 namespace Application.MediaEvents.Delete;
 
-public class DeleteMediaEventHandler : IUseCaseHandler<DeleteMediaEventCommand, MediaEventResult?>
+public class DeleteMediaEventHandler(IMediaEventRepository repository) : IUseCaseHandler<DeleteMediaEventCommand, MediaEventResult?>
 {
-    private readonly IMediaEventRepository _repository;
-
-    public DeleteMediaEventHandler(IMediaEventRepository repository) { _repository = repository; }
-
     public async Task<MediaEventResult?> HandleAsync(DeleteMediaEventCommand request)
     {
-        MediaEvent? mediaEvent = await _repository.GetMediaEventById(request.UserAccountId, request.EventId);
+        MediaEvent? mediaEvent = await repository.GetMediaEventById(request.UserAccountId, request.EventId);
 
         if (mediaEvent is null) return null;
 

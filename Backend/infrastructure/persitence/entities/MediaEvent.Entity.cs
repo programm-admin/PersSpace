@@ -16,5 +16,5 @@ public class MediaEventEntity
     public required DateTime CreatedAt { get; set; }
 
     [ForeignKey(nameof(UserAccountId))]
-    public required UserEntity User { get; set; } = null!;
+    public UserEntity? User { get; set; }
 }

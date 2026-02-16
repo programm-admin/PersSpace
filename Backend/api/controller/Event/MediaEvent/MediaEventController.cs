@@ -12,22 +12,35 @@ namespace Api.Controllers.MediaEvents;
 
 [ApiController]
 [Route("user/[controller]")]
-public class MediaEventController : ControllerBase
+public class MediaEventController(
+    GetAllMediaEventHandler getAllHandler,
+    GetMediaEventHandler getHandler,
+    CreateMediaEventHandler createHandler,
+    UpdateMediaEventHandler updateHandler,
+    DeleteMediaEventHandler deleteHandler
+) : ControllerBase
 {
-    private readonly GetAllMediaEventHandler _getAllHandler;
-    private readonly GetMediaEventHandler _getHandler;
-    private readonly CreateMediaEventHandler _createHandler;
-    private readonly UpdateMediaEventHandler _updateHandler;
-    private readonly DeleteMediaEventHandler _deleteHandler;
-
-
     public class MediaEventRequest { public required string mediaID { get; set; } }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetMediaEventById(Guid mediaEventId)
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAllMediaEventsForUser()
     {
         Guid userId = HttpContext.GetUserID();
-        IReadOnlyList<MediaEventResult> result = await _getAllHandler.HandleAsync(new GetAllMediaEventsCommand(userId));
+        IReadOnlyList<MediaEventResult> mediaEvents = await getAllHandler.HandleAsync(new GetAllMediaEventsCommand(userId));
+
+        if (mediaEvents is null) return NotFound("[ERROR] Keine Medienevents gefunden.");
+
+        return StatusCode(200, new { status = "success", mediaEvents = mediaEvents });
+    }
+
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetMediaEventById(string mediaEventId)
+    {
+        if (!Guid.TryParse(mediaEventId, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+
+        Guid userId = HttpContext.GetUserID();
+        MediaEventResult? result = await getHandler.HandleAsync(new GetMediaEventCommand(userId, mediaGUID));
 
         if (result is null) return NotFound("[ERROR] Kein Medienevent gefunden.");
 
@@ -39,13 +52,12 @@ public class MediaEventController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateNewMediaEvent([FromBody] CreateMediaEventRequest request)
     {
-        Guid userId = HttpContext.GetUserID();
         var errors = ValidationHelper.ValidateObject(request);
 
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
 
-
-        MediaEventResult? result = await _createHandler.HandleAsync(new CreateMediaEventCommand(
+        Guid userId = HttpContext.GetUserID();
+        MediaEventResult? result = await createHandler.HandleAsync(new CreateMediaEventCommand(
             userId,
             request.Title,
             request.Notes,
@@ -70,7 +82,7 @@ public class MediaEventController : ControllerBase
 
         Guid userId = HttpContext.GetUserID();
 
-        var result = await _updateHandler.HandleAsync(new UpdateMediaEventCommand(
+        var result = await updateHandler.HandleAsync(new UpdateMediaEventCommand(
             mediaGUID,
             userId,
             body.Title,
@@ -92,7 +104,7 @@ public class MediaEventController : ControllerBase
 
         Guid userId = HttpContext.GetUserID();
 
-        MediaEventResult? mediaEvent = await _deleteHandler.HandleAsync(new DeleteMediaEventCommand(mediaGUID, userId));
+        MediaEventResult? mediaEvent = await deleteHandler.HandleAsync(new DeleteMediaEventCommand(mediaGUID, userId));
 
         return mediaEvent is null ? NoContent() : Ok(new { status = "success", message = $"Event '{mediaEvent.Title}' erfolgreich gelöscht" });
     }
