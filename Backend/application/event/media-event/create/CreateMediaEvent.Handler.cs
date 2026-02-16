@@ -1,6 +1,8 @@
 using Application.Common;
 using Domain.MediaEvents;
 
+namespace Application.MediaEvents.Create;
+
 public class CreateMediaEventHandler : IUseCaseHandler<CreateMediaEventCommand, MediaEventResult>
 {
     private readonly IMediaEventRepository _repository;
@@ -23,6 +25,13 @@ public class CreateMediaEventHandler : IUseCaseHandler<CreateMediaEventCommand, 
 
         await _repository.AddMediaEvent(mediaEvent);
 
-        return new MediaEventResult(mediaEvent.ID, mediaEvent.Title, mediaEvent.Start, mediaEvent.End, mediaEvent.IsDone);
+        return new MediaEventResult(
+            mediaEvent.ID,
+            mediaEvent.Title,
+            mediaEvent.Notes,
+            mediaEvent.Start,
+            mediaEvent.End,
+            mediaEvent.IsDone
+        );
     }
 }

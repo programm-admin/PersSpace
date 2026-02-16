@@ -1,6 +1,7 @@
-namespace Application.MediaEvents.Create;
+namespace Application.MediaEvents.Update;
 
-public sealed record CreateMediaEventCommand(
+public sealed record UpdateMediaEventCommand(
+    Guid EventId,
     Guid UserAccountId,
     string Title,
     string Notes,

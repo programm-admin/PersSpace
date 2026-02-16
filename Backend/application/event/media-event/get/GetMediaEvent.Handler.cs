@@ -1,6 +1,8 @@
 using Application.Common;
 using Domain.MediaEvents;
 
+namespace Application.MediaEvents.GetSingle;
+
 public class GetMediaEventHandler : IUseCaseHandler<GetMediaEventCommand, MediaEventResult>
 {
     private readonly IMediaEventRepository _repository;
@@ -13,6 +15,13 @@ public class GetMediaEventHandler : IUseCaseHandler<GetMediaEventCommand, MediaE
 
         if (mediaEvent is null) return null;
 
-        return new MediaEventResult(mediaEvent.ID, mediaEvent.Title, mediaEvent.Start, mediaEvent.End, mediaEvent.IsDone);
+        return new MediaEventResult(
+            mediaEvent.ID,
+            mediaEvent.Title,
+            mediaEvent.Notes,
+            mediaEvent.Start,
+            mediaEvent.End,
+            mediaEvent.IsDone
+        );
     }
 }
