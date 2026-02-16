@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Application.MediaEvents.GetSingle;
+using Application.MediaEvents.GetAll;
+using Application.MediaEvents.Create;
+using Application.MediaEvents.Update;
+using Application.MediaEvents.Delete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +27,19 @@ var googleClientID = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
     ?? throw new Exception("Google client id is not provided.");
 
 
-// Add services to the container.
 
+
+// Add services to the container. --------------------------------------------------------
 builder.Services.AddDbContext<AppDBProvider>(options => options.UseNpgsql(connectionString));
+
+// Repository Binding
+builder.Services.AddScoped<IMediaEventRepository, MediaEventRepository>();
+builder.Services.AddScoped<GetMediaEventHandler>();
+builder.Services.AddScoped<GetAllMediaEventHandler>();
+builder.Services.AddScoped<CreateMediaEventHandler>();
+builder.Services.AddScoped<UpdateMediaEventHandler>();
+builder.Services.AddScoped<DeleteMediaEventHandler>();
+
 builder.Services.AddScoped<MappingService>();
 builder.Services.AddScoped<TokenService>(sp => new TokenService(jwtSecret, jwtIssuer, jwtAudience));
 builder.Services.AddScoped<GoogleAuthService>(sp => new GoogleAuthService(googleClientID));
