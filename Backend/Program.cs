@@ -1,28 +1,34 @@
 using Backend.Data;
-using Backend.Services;
 using Backend.Middleware;
 using DotNetEnv;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Application.MediaEvents.GetSingle;
 using Application.MediaEvents.GetAll;
 using Application.MediaEvents.Create;
 using Application.MediaEvents.Update;
 using Application.MediaEvents.Delete;
+using Infrastructure.Authentication.Token;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
+
+var JwtSettings = new JwtSettings
+{
+    JwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
+    ?? throw new Exception("JWT secret is not provided."),
+    JwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
+    ?? throw new Exception("JWT issuer is not provided"),
+    JwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
+    ?? throw new Exception("JWT audience is not provided.")
+};
+
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION")
     ?? throw new Exception("DB connection string is not provided.");
-var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
-    ?? throw new Exception("JWT secret is not provided.");
-var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
-    ?? throw new Exception("JWT issuer is not provided");
-var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
-    ?? throw new Exception("JWT audience is not provided.");
 var googleClientID = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
     ?? throw new Exception("Google client id is not provided.");
 
@@ -40,18 +46,38 @@ builder.Services.AddScoped<CreateMediaEventHandler>();
 builder.Services.AddScoped<UpdateMediaEventHandler>();
 builder.Services.AddScoped<DeleteMediaEventHandler>();
 
-builder.Services.AddScoped<MappingService>();
-builder.Services.AddScoped<TokenService>(sp => new TokenService(jwtSecret, jwtIssuer, jwtAudience));
-builder.Services.AddScoped<GoogleAuthService>(sp => new GoogleAuthService(googleClientID));
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters()
+// ------------------ AUTHENTICATION ------------------
+builder.Services.AddSingleton(JwtSettings);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
-    };
-});
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.TryGetValue(CookieSettings.AuthCookieName, out var token))
+                {
+                    context.Token = token;
+                }
+                return Task.CompletedTask;
+            }
+        };
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = JwtSettings.JwtIssuer,
+            ValidAudience = JwtSettings.JwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.JwtSecret)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+// ------------------ AUTHORIZATION ------------------
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {

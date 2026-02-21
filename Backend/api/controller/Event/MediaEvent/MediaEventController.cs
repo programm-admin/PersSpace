@@ -1,11 +1,10 @@
-﻿using Api.Request.MediaEvents;
+﻿using Api.Validation;
 using Application.MediaEvents.Create;
 using Application.MediaEvents.Delete;
 using Application.MediaEvents.GetAll;
 using Application.MediaEvents.GetSingle;
 using Application.MediaEvents.Update;
-using Backend.DataTransferObjects;
-using Backend.Services;
+using Domain.MediaEvents;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.MediaEvents;
@@ -21,6 +20,15 @@ public class MediaEventController(
 ) : ControllerBase
 {
     public class MediaEventRequest { public required string mediaID { get; set; } }
+    public class MediaEventUpdateRequest : MediaEventBase { public required string Id { get; set; } }
+    public class CreateMediaEventRequest
+    {
+        public string Title { get; set; } = null!;
+        public string Notes { get; set; } = null!;
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public bool IsDone { get; set; } = false;
+    }
 
     [HttpGet("all")]
     public async Task<IActionResult> GetAllMediaEventsForUser()
@@ -74,11 +82,11 @@ public class MediaEventController(
 
 
     [HttpPatch("update")]
-    public async Task<ActionResult<MediaEventResult>> UpdateMediaEvent([FromBody] M_MediaEventUpdateRequestDTO body)
+    public async Task<ActionResult<MediaEventResult>> UpdateMediaEvent([FromBody] MediaEventUpdateRequest body)
     {
         var errors = ValidationHelper.ValidateObject(body);
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
-        if (!Guid.TryParse(body.ID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
+        if (!Guid.TryParse(body.Id, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
 
         Guid userId = HttpContext.GetUserID();
 

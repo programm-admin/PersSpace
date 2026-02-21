@@ -1,15 +1,9 @@
 namespace Domain.MediaEvents;
 
-public class MediaEvent
+public class MediaEvent : MediaEventBase
 {
     public Guid ID { get; set; }
     public Guid UserAccountID { get; set; }
-    public string Title { get; set; }
-    public string? Notes { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
-    public bool IsDone { get; set; }
-    public DateTime MediaEventCreated { get; set; }
 
 
     public MediaEvent(

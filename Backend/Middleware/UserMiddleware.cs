@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using Api.Settings;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 

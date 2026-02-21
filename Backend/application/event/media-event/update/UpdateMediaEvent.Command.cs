@@ -4,7 +4,7 @@ public sealed record UpdateMediaEventCommand(
     Guid EventId,
     Guid UserAccountId,
     string Title,
-    string Notes,
+    string? Notes,
     DateTime Start,
     DateTime End,
     bool IsDone
