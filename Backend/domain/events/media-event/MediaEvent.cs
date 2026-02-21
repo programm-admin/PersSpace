@@ -5,7 +5,7 @@ public class MediaEvent
     public Guid ID { get; set; }
     public Guid UserAccountID { get; set; }
     public string Title { get; set; }
-    public string Notes { get; set; }
+    public string? Notes { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
     public bool IsDone { get; set; }
@@ -16,13 +16,14 @@ public class MediaEvent
         Guid id,
         Guid userAccountId,
         string title,
-        string notes,
+        string? notes,
         DateTime start,
         DateTime end,
         bool isDone,
         DateTime mediaEventCreated
     )
     {
+        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("[ERROR - MediaEventConstructor] Title must be set!");
         if (end < start) throw new ArgumentException("[ERROR - MediaEventConstructor] End must be greater or equal to start!");
 
         ID = id;
@@ -38,7 +39,7 @@ public class MediaEvent
 
     public void UpdateMediaEvent(
         string title,
-        string notes,
+        string? notes,
         DateTime start,
         DateTime end,
         bool isDone

@@ -2,12 +2,10 @@ using Domain.MediaEvents;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Entities;
+using Infrastructure.Mappers;
 
-public class MediaEventRepository : IMediaEventRepository
+public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
 {
-    private readonly AppDBProvider _db;
-
-    public MediaEventRepository(AppDBProvider db) { _db = db; }
 
     public async Task AddMediaEvent(MediaEvent mediaEvent)
     {
@@ -20,34 +18,51 @@ public class MediaEventRepository : IMediaEventRepository
             Start = mediaEvent.Start,
             End = mediaEvent.End,
             IsDone = mediaEvent.IsDone,
-            CreatedAt = mediaEvent.MediaEventCreated
+            MediaEventCreated = mediaEvent.MediaEventCreated
         };
 
-        _db.MediaEvents.Add(mediaEventEntity);
-        await _db.SaveChangesAsync();
+        db.MediaEvents.Add(mediaEventEntity);
+        await db.SaveChangesAsync();
     }
 
-    public Task DeleteMediaEvent(Guid userId, Guid eventId)
+    public async Task DeleteMediaEvent(Guid userId, Guid eventId)
     {
-        throw new NotImplementedException();
+        MediaEventEntity? entity = await db.MediaEvents.FirstOrDefaultAsync(ev => ev.Id == eventId && ev.UserAccountId == userId);
+
+        if (entity is null) return;
+
+        db.MediaEvents.Remove(entity);
+        await db.SaveChangesAsync();
     }
 
-    public Task<IReadOnlyList<MediaEvent>> GetAllMediaEventsForUser(Guid userAccountId)
+    public async Task<IReadOnlyList<MediaEvent>> GetAllMediaEventsForUser(Guid userAccountId)
     {
-        throw new NotImplementedException();
+        List<MediaEventEntity> entities = await db.MediaEvents.AsNoTracking().Where(ev => ev.UserAccountId == userAccountId).OrderBy(ev => ev.Title).ToListAsync();
+
+        return [.. entities.Select(MediaEventMapper.ToDomain)];
     }
 
     public async Task<MediaEvent?> GetMediaEventById(Guid userAccountId, Guid eventId)
     {
-        MediaEventEntity? entity = await _db.MediaEvents.AsNoTracking().FirstOrDefaultAsync(e => e.UserAccountId == userAccountId && e.Id == eventId);
+        MediaEventEntity? entity = await db.MediaEvents.AsNoTracking().FirstOrDefaultAsync(e => e.UserAccountId == userAccountId && e.Id == eventId);
 
         if (entity is null) return null;
 
-        return new MediaEvent(entity.Id, entity.UserAccountId, entity.Title, entity.Notes, entity.Start, entity.End, entity.IsDone, entity.CreatedAt);
+        return new MediaEvent(entity.Id, entity.UserAccountId, entity.Title, entity.Notes, entity.Start, entity.End, entity.IsDone, entity.MediaEventCreated);
     }
 
-    public Task UpdateMediaEvent(MediaEvent mediaEvent)
+    public async Task UpdateMediaEvent(MediaEvent mediaEvent)
     {
-        throw new NotImplementedException();
+        MediaEventEntity? entity = await db.MediaEvents.FirstOrDefaultAsync(ev => ev.Id == mediaEvent.ID & ev.UserAccountId == mediaEvent.UserAccountID);
+
+        if (entity is null) throw new InvalidOperationException("[ERROR - MediaEventRepository: UpdateMediaEvent()] No media event found for given event id and user account id.");
+
+        entity.Title = mediaEvent.Title;
+        entity.Notes = mediaEvent.Notes;
+        entity.Start = mediaEvent.Start;
+        entity.End = mediaEvent.End;
+        entity.IsDone = mediaEvent.IsDone;
+
+        await db.SaveChangesAsync();
     }
 }

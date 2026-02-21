@@ -13,8 +13,8 @@ public class MediaEventEntity
     public required DateTime Start { get; set; }
     public required DateTime End { get; set; }
     public required bool IsDone { get; set; } = false;
-    public required DateTime CreatedAt { get; set; }
+    public required DateTime MediaEventCreated { get; set; }
 
-    [ForeignKey(nameof(UserAccountId))]
+    // foreign key
     public UserEntity? User { get; set; }
 }
