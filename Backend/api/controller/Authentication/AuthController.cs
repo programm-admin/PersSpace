@@ -1,9 +1,9 @@
 ﻿using Api.Settings;
+using Application.Users;
 using Backend.Data;
 using Domain;
 using Infrastructure.Authentication.Google;
 using Infrastructure.Authentication.Token;
-using Infrastructure.Authentication.Users;
 using Infrastructure.Entities;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +14,7 @@ namespace Backend.Controllers.Authentication;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(AppDBProvider db, AccessTokenGenerator tokenService, GoogleTokenValidator googleAuthService, CurrentUserService currentUserService) : ControllerBase
+public class AuthController(AppDBProvider db, IAccessTokenGenerator tokenService, IGoogleTokenValidator googleAuthService, ICurrentUserService currentUserService) : ControllerBase
 {
     public class Req_Login
     {
@@ -67,7 +67,7 @@ public class AuthController(AppDBProvider db, AccessTokenGenerator tokenService,
         {
             HttpOnly = true,
             Secure = true,
-            SameSite = SameSiteMode.Lax,
+            SameSite = SameSiteMode.None,
             Path = "/",
             Expires = DateTimeOffset.UtcNow.AddHours(10)
         });
@@ -93,7 +93,7 @@ public class AuthController(AppDBProvider db, AccessTokenGenerator tokenService,
     [Authorize]
     public async Task<IActionResult> CheckAuthStatus()
     {
-        User user = currentUserService.GetCurrentUserAsync().Result;
+        User user = await currentUserService.GetCurrentUserAsync();
 
         return Ok(new
         {

@@ -14,6 +14,7 @@ using Api.Settings;
 using Application.Users;
 using Infrastructure.Authentication.Users;
 using Microsoft.AspNetCore.Diagnostics;
+using Infrastructure.Authentication.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,8 +36,6 @@ var googleClientID = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
     ?? throw new Exception("Google client id is not provided.");
 
 
-
-
 // Add services to the container. --------------------------------------------------------
 builder.Services.AddDbContext<AppDBProvider>(options => options.UseNpgsql(connectionString));
 
@@ -50,13 +49,16 @@ builder.Services.AddScoped<DeleteMediaEventHandler>();
 
 // ------------------ AUTHENTICATION ------------------
 builder.Services.AddSingleton(JwtSettings);
+builder.Services.AddScoped<IAccessTokenGenerator, AccessTokenGenerator>();
+builder.Services.AddScoped<IGoogleTokenValidator>(sp => new GoogleTokenValidator(googleClientID));
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
-            {
+            {   
                 if (context.Request.Cookies.TryGetValue(CookieSettings.AuthCookieName, out var token))
                 {
                     context.Token = token;

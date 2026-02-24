@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { T_MediaEventRepository } from '../../../../core/repositories/events/media-event.repository';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable, take } from 'rxjs';
 import {
     M_MediaEvent,
     M_MediaEventListItemResponse,
@@ -9,12 +9,14 @@ import {
 } from '../../../../core/models/event.model';
 import { HttpClient } from '@angular/common/http';
 import { API_ROUTES } from '../../../../environment/api-routes';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
     providedIn: 'root',
 })
 export class MediaEventService implements T_MediaEventRepository {
     private readonly http = inject(HttpClient);
+    private readonly platformId = inject(PLATFORM_ID);
 
     public createMediaEvent = (mediaEvent: M_MediaEvent): Observable<M_MediaEventResponse> => {
         return this.http.post<M_MediaEventResponse>(API_ROUTES.mediaEvent.create, mediaEvent, {
@@ -29,17 +31,18 @@ export class MediaEventService implements T_MediaEventRepository {
     };
 
     public getMediaEvent = (id: string): Observable<M_MediaEventResponse> => {
-        return this.http.post<M_MediaEventResponse>(
-            API_ROUTES.mediaEvent.getMediaEvent,
-            { mediaID: id },
-            { withCredentials: true },
-        );
+        if (!isPlatformBrowser(this.platformId)) return EMPTY;
+        return this.http
+            .get<M_MediaEventResponse>(API_ROUTES.mediaEvent.getMediaEvent + id, {
+                withCredentials: true,
+            })
+            .pipe(take(1));
     };
 
     public updateMediaEvent = (newEvent: M_MediaEvent): Observable<M_MediaEventUpdateResponse> => {
         return this.http.patch<M_MediaEventUpdateResponse>(
             API_ROUTES.mediaEvent.updateMediaEvent,
-            { mediaEvent: newEvent },
+            { ...newEvent },
             { withCredentials: true },
         );
     };

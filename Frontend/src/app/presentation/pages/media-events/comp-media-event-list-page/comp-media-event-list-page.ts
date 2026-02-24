@@ -76,7 +76,8 @@ export class CompMediaEventListPage implements OnInit {
                 )
               : this.userMediaEvents()!.sort(
                     (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
-                        new Date(a.eventCreated).getTime() - new Date(b.eventCreated).getTime(),
+                        new Date(a.mediaEventCreated).getTime() -
+                        new Date(b.mediaEventCreated).getTime(),
                 );
 
         // this.userMediaEvents.set(currentList);
@@ -109,7 +110,8 @@ export class CompMediaEventListPage implements OnInit {
             case 'CREATION_DATE':
                 return items.sort(
                     (a: M_MediaEventListItem, b: M_MediaEventListItem) =>
-                        new Date(a.eventCreated).getTime() - new Date(b.eventCreated).getTime(),
+                        new Date(a.mediaEventCreated).getTime() -
+                        new Date(b.mediaEventCreated).getTime(),
                 );
         }
     };

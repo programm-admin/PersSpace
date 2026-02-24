@@ -21,13 +21,15 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
         }
     }
 
-    public async Task<MediaEvent?> GetMediaEventById(Guid userAccountId, Guid eventId)
+    public async Task<MediaEvent> GetMediaEventById(Guid userAccountId, Guid eventId)
     {
+        Console.Write("------------------------------ useraccountid: " + userAccountId + ", ID: " + eventId);
         try
         {
+
             MediaEventEntity? entity = await db.MediaEvents.AsNoTracking().FirstOrDefaultAsync(e => e.UserAccountId == userAccountId && e.Id == eventId);
 
-            if (entity is null) return null;
+            if (entity is null) throw new NotFoundException("[ERROR - MediaEventRepository: GetMediaEventById()]");
 
             return new MediaEvent(
                 entity.Id,

@@ -57,9 +57,9 @@ public class MediaEventController(
 
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetMediaEventById(string mediaEventId)
+    public async Task<IActionResult> GetMediaEventById(string id)
     {
-        if (!Guid.TryParse(mediaEventId, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+        if (!Guid.TryParse(id, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
         MediaEventResult? result = await getHandler.HandleAsync(new GetMediaEventCommand(currentUser.ID, mediaGUID));
@@ -104,6 +104,8 @@ public class MediaEventController(
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
+
+        Console.Write("--------------- [UPDATE] user " + currentUser.ID + ", eventid:" + body.Id + ", GUID eventid " + mediaGUID);
         var result = await updateHandler.HandleAsync(new UpdateMediaEventCommand(
             mediaGUID,
             currentUser.ID,

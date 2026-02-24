@@ -1,7 +1,7 @@
 public sealed record MediaEventResult(
     Guid Id,
     string Title,
-    string notes,
+    string? notes,
     DateTime Start,
     DateTime End,
     bool isDone

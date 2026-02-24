@@ -5,7 +5,7 @@ export type M_MediaEvent = {
     start: Date;
     end: Date;
     isDone: boolean;
-    eventCreated: Date;
+    mediaEventCreated: Date;
 };
 export type M_MediaEventResponse = {
     mediaEvent: M_MediaEvent;

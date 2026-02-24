@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Exceptions;
 using Domain.MediaEvents;
 
 namespace Application.MediaEvents.GetSingle;
@@ -9,7 +10,7 @@ public class GetMediaEventHandler(IMediaEventRepository repository) : IUseCaseHa
     {
         MediaEvent? mediaEvent = await repository.GetMediaEventById(request.UserAccountID, request.MediaEventID);
 
-        if (mediaEvent is null) return null;
+        if (mediaEvent is null) throw new NotFoundException("[ERROR - GetMediaEventHandler: HandleAsync()] Error when trying to get media");
 
         return new MediaEventResult(
             mediaEvent.ID,

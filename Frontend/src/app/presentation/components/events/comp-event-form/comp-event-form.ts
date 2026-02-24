@@ -84,7 +84,7 @@ export class CompEventForm implements OnInit {
             start: rawValues.timeRange[0],
             end: rawValues.timeRange[1],
             isDone: rawValues.isDone,
-            eventCreated: new Date(),
+            mediaEventCreated: new Date(),
         };
 
         this.outSubmitForm.emit(newEvent);
