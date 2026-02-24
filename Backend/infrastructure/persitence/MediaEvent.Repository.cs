@@ -29,7 +29,16 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
 
             if (entity is null) return null;
 
-            return new MediaEvent(entity.Id, entity.UserAccountId, entity.Title, entity.Notes, entity.Start, entity.End, entity.IsDone, entity.MediaEventCreated);
+            return new MediaEvent(
+                entity.Id,
+                entity.UserAccountId,
+                entity.Title,
+                entity.Notes,
+                entity.Start,
+                entity.End,
+                entity.IsDone,
+                entity.MediaEventCreated
+            );
         }
         catch (Exception ex)
         {

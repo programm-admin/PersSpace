@@ -15,19 +15,12 @@ public class MediaEvent : MediaEventBase
         DateTime end,
         bool isDone,
         DateTime mediaEventCreated
-    )
+    ) : base(title, notes, start, end, isDone, mediaEventCreated)
     {
-        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("[ERROR - MediaEventConstructor] Title must be set!");
         if (end < start) throw new ArgumentException("[ERROR - MediaEventConstructor] End must be greater or equal to start!");
 
         ID = id;
         UserAccountID = userAccountId;
-        Title = title;
-        Notes = notes;
-        Start = start;
-        End = end;
-        IsDone = isDone;
-        MediaEventCreated = mediaEventCreated;
     }
 
 

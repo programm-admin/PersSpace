@@ -1,5 +1,4 @@
 using Backend.Data;
-using Backend.Middleware;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Application.MediaEvents.GetSingle;
@@ -12,6 +11,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Api.Settings;
+using Application.Users;
+using Infrastructure.Authentication.Users;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +78,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 // ------------------ AUTHORIZATION ------------------
 builder.Services.AddAuthorization();
 
@@ -101,14 +106,30 @@ var app = builder.Build();
 // exception handling
 app.UseExceptionHandler(errorApp =>
 {
-    errorApp.Run(async context =>
     {
-        context.Response.StatusCode = 500;
-        await context.Response.WriteAsJsonAsync(new
+        errorApp.Run(async context =>
         {
-            error = "Unexpected server error"
+            var exception =
+                context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+            if (exception is UnauthorizedAccessException)
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    status = "error",
+                    message = exception.Message
+                });
+                return;
+            }
+
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                error = "Unexpected server error"
+            });
         });
-    });
+    }
 });
 
 
@@ -132,14 +153,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseWhen(
-    context =>
-        !context.Request.Path.StartsWithSegments("/auth/login") && !context.Request.Path.StartsWithSegments("/auth/logout"),
-    appBuilder =>
-    {
-        appBuilder.UseMiddleware<UserMiddleware>();
-    }
-);
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups";

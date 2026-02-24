@@ -4,23 +4,37 @@ using Application.MediaEvents.Delete;
 using Application.MediaEvents.GetAll;
 using Application.MediaEvents.GetSingle;
 using Application.MediaEvents.Update;
+using Application.Users;
+using Domain;
 using Domain.MediaEvents;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.MediaEvents;
 
 [ApiController]
+[Authorize]
 [Route("user/[controller]")]
 public class MediaEventController(
     GetAllMediaEventHandler getAllHandler,
     GetMediaEventHandler getHandler,
     CreateMediaEventHandler createHandler,
     UpdateMediaEventHandler updateHandler,
-    DeleteMediaEventHandler deleteHandler
+    DeleteMediaEventHandler deleteHandler,
+    ICurrentUserService currentUserService
 ) : ControllerBase
 {
     public class MediaEventRequest { public required string mediaID { get; set; } }
-    public class MediaEventUpdateRequest : MediaEventBase { public required string Id { get; set; } }
+    public class MediaEventUpdateRequest
+    {
+        public required string Id { get; set; }
+        public required string Title { get; set; }
+        public string? Notes { get; set; }
+        public required DateTime Start { get; set; }
+        public required DateTime End { get; set; }
+        public required bool IsDone { get; set; }
+        public required DateTime MediaEventCreated { get; set; }
+    }
     public class CreateMediaEventRequest
     {
         public string Title { get; set; } = null!;
@@ -33,8 +47,8 @@ public class MediaEventController(
     [HttpGet("all")]
     public async Task<IActionResult> GetAllMediaEventsForUser()
     {
-        Guid userId = HttpContext.GetUserID();
-        IReadOnlyList<MediaEventResult> mediaEvents = await getAllHandler.HandleAsync(new GetAllMediaEventsCommand(userId));
+        User currentUser = currentUserService.GetCurrentUserAsync().Result;
+        IReadOnlyList<MediaEventResult> mediaEvents = await getAllHandler.HandleAsync(new GetAllMediaEventsCommand(currentUser.ID));
 
         if (mediaEvents is null) return NotFound("[ERROR] Keine Medienevents gefunden.");
 
@@ -47,8 +61,8 @@ public class MediaEventController(
     {
         if (!Guid.TryParse(mediaEventId, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
 
-        Guid userId = HttpContext.GetUserID();
-        MediaEventResult? result = await getHandler.HandleAsync(new GetMediaEventCommand(userId, mediaGUID));
+        User currentUser = currentUserService.GetCurrentUserAsync().Result;
+        MediaEventResult? result = await getHandler.HandleAsync(new GetMediaEventCommand(currentUser.ID, mediaGUID));
 
         if (result is null) return NotFound("[ERROR] Kein Medienevent gefunden.");
 
@@ -64,9 +78,9 @@ public class MediaEventController(
 
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
 
-        Guid userId = HttpContext.GetUserID();
+        User currentUser = currentUserService.GetCurrentUserAsync().Result;
         MediaEventResult? result = await createHandler.HandleAsync(new CreateMediaEventCommand(
-            userId,
+            currentUser.ID,
             request.Title,
             request.Notes,
             request.Start,
@@ -88,11 +102,11 @@ public class MediaEventController(
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
         if (!Guid.TryParse(body.Id, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
 
-        Guid userId = HttpContext.GetUserID();
+        User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
         var result = await updateHandler.HandleAsync(new UpdateMediaEventCommand(
             mediaGUID,
-            userId,
+            currentUser.ID,
             body.Title,
             body.Notes,
             body.Start,
@@ -110,9 +124,9 @@ public class MediaEventController(
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
         if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
 
-        Guid userId = HttpContext.GetUserID();
+        User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
-        MediaEventResult? mediaEvent = await deleteHandler.HandleAsync(new DeleteMediaEventCommand(mediaGUID, userId));
+        MediaEventResult? mediaEvent = await deleteHandler.HandleAsync(new DeleteMediaEventCommand(mediaGUID, currentUser.ID));
 
         return mediaEvent is null ? NoContent() : Ok(new { status = "success", message = $"Event '{mediaEvent.Title}' erfolgreich gelöscht" });
     }

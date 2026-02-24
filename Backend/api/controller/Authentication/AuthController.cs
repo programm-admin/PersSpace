@@ -3,7 +3,10 @@ using Backend.Data;
 using Domain;
 using Infrastructure.Authentication.Google;
 using Infrastructure.Authentication.Token;
+using Infrastructure.Authentication.Users;
 using Infrastructure.Entities;
+using Infrastructure.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,22 +14,11 @@ namespace Backend.Controllers.Authentication;
 
 [ApiController]
 [Route("auth")]
-public class AuthController : ControllerBase
+public class AuthController(AppDBProvider db, AccessTokenGenerator tokenService, GoogleTokenValidator googleAuthService, CurrentUserService currentUserService) : ControllerBase
 {
-    private readonly AppDBProvider _db;
-    private readonly AccessTokenGenerator _tokenService;
-    private readonly GoogleTokenValidator _googleAuthService;
-
     public class Req_Login
     {
         public string token { get; set; } = string.Empty;
-    }
-
-    public AuthController(AppDBProvider db, AccessTokenGenerator tokenService, GoogleTokenValidator googleAuthService)
-    {
-        _db = db;
-        _tokenService = tokenService;
-        _googleAuthService = googleAuthService;
     }
 
 
@@ -45,30 +37,31 @@ public class AuthController : ControllerBase
     {
         if (string.IsNullOrEmpty(idToken.token)) { return BadRequest("[ERROR] id token is required."); }
 
-        var payload = await _googleAuthService.ValidateAsync(idToken.token);
+        var payload = await googleAuthService.ValidateAsync(idToken.token);
 
         if (payload == null) { return Unauthorized("[ERROR] id token is invalid"); }
 
-        UserEntity? user = await _db.Users.FirstOrDefaultAsync(u => u.GoogleID == payload.Subject);
+        UserEntity? user = await db.Users.FirstOrDefaultAsync(u => u.GoogleID == payload.Subject);
 
         if (user is null)
         {
             // create user if not already existing
-            user = new User
-            (
-                Guid.NewGuid(),
-                payload.Name,
-                payload.Email,
-                payload.Picture,
-                payload.Subject
-            );
+            user = new UserEntity
+            {
+                ID = Guid.NewGuid(),
+                Name = payload.Name,
+                Email = payload.Email,
+                PictureUrl = payload.Picture,
+                GoogleID = payload.Subject
+            };
 
-            _db.Users.Add(user);
+            db.Users.Add(user);
         }
 
-        string accessToken = _tokenService.CreateAccessToken(user);
 
-        await _db.SaveChangesAsync();
+        string accessToken = tokenService.CreateAccessToken(UserMapper.ToDomain(user));
+
+        await db.SaveChangesAsync();
 
         Response.Cookies.Append(CookieSettings.AuthCookieName, accessToken, new CookieOptions
         {
@@ -97,23 +90,19 @@ public class AuthController : ControllerBase
     /// Endpoint for checking whether session of user login is still active.
     /// </summary>
     [HttpGet("check")]
-    public Task<IActionResult> CheckAuthStatus()
+    [Authorize]
+    public async Task<IActionResult> CheckAuthStatus()
     {
-        // getting user from user middleware
-        if (HttpContext.Items["User"] is not User user)
-        {
-            DeleteAuthCookies(); // logout user if session is invalid/ has expired
-            return Task.FromResult<IActionResult>(Unauthorized(new { success = false }));
-        }
+        User user = currentUserService.GetCurrentUserAsync().Result;
 
-        return Task.FromResult<IActionResult>(Ok(new
+        return Ok(new
         {
             success = true,
             userID = user.ID,
             email = user.Email,
             picture = user.PictureUrl,
             userName = user.Name
-        }));
+        });
     }
 
     [HttpGet("logout")]
