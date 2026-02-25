@@ -42,7 +42,7 @@ export class CompMediaEventListPage implements OnInit {
     public userMediaEvents: Signal<M_MediaEventListItem[] | null> = computed(() =>
         this.filterItemList(
             'ALPHABET',
-            this.mediaEventAdapter.Q_getMediaEvents.data()?.mediaEvents,
+            this.mediaEventAdapter.Q_getMediaEvents?.data()?.mediaEvents,
         ),
     );
     public destroyReference = inject(DestroyRef);

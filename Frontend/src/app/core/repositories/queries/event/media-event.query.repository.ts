@@ -11,11 +11,15 @@ import {
 export type AT_MediaRepository = {
     setMediaEventId: (id: string | null) => void;
 
-    Q_createMediaEvent: CreateMutationResult<M_MediaEventResponse, unknown, M_MediaEvent>;
-    Q_updateMediaEvent: CreateMutationResult<M_MediaEventUpdateResponse, unknown, M_MediaEvent>;
-    Q_deleteMediaEvent: CreateMutationResult<any, unknown, string>;
-    Q_getMediaEvents: CreateQueryResult<M_MediaEventListItemResponse>;
-    Q_getSingleMediaEvent: CreateQueryResult<M_MediaEventResponse>;
+    Q_createMediaEvent:
+        | CreateMutationResult<M_MediaEventResponse, unknown, M_MediaEvent>
+        | undefined;
+    Q_updateMediaEvent:
+        | CreateMutationResult<M_MediaEventUpdateResponse, unknown, M_MediaEvent>
+        | undefined;
+    Q_deleteMediaEvent: CreateMutationResult<any, unknown, string> | undefined;
+    Q_getMediaEvents: CreateQueryResult<M_MediaEventListItemResponse> | undefined;
+    Q_getSingleMediaEvent: CreateQueryResult<M_MediaEventResponse> | undefined;
 };
 
 export const IT_A_MEDIA_EVENT_REPOSITORY = new InjectionToken<AT_MediaRepository>(

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, Signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal, Signal, ViewChild } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -16,7 +16,6 @@ import { MENU_POSITION } from '../../../shared/variables/menu-position';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 import { IT_LOADING_REPOSITORY } from '../../../core/repositories/loading.repository';
-
 @Component({
     selector: 'app-comp-app-layout',
     imports: [
@@ -39,7 +38,6 @@ export class CompAppLayout implements OnInit {
     public readonly logoutUserUseCase = inject(UC_User_LogoutUser);
     public readonly getUserFromLocalStorageUseCase = inject(UC_User_GetUserFromLocalStorage);
     public readonly loadingRepository = inject(IT_LOADING_REPOSITORY);
-
     public readonly menuPosition: NzPlacementType = MENU_POSITION;
     public user: Signal<M_User | null> = signal(null);
 
@@ -51,7 +49,7 @@ export class CompAppLayout implements OnInit {
     ngOnInit(): void {
         this.loadingRepository.showLoading();
         this.user = this.userRepository.getUser();
-        this.getUserFromBackendUseCase.execute(false).subscribe();
+        this.getUserFromBackendUseCase.execute(false).pipe().subscribe();
     }
 
     public navigateToItemPage = (path: string | undefined) => {

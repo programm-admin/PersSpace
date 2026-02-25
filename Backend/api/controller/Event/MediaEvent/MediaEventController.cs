@@ -65,7 +65,6 @@ public class MediaEventController(
         MediaEventResult? result = await getHandler.HandleAsync(new GetMediaEventCommand(currentUser.ID, mediaGUID));
 
         if (result is null) return NotFound("[ERROR] Kein Medienevent gefunden.");
-
         return StatusCode(200, new { status = "success", mediaEvent = result });
     }
 
@@ -104,17 +103,15 @@ public class MediaEventController(
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
-
-        Console.Write("--------------- [UPDATE] user " + currentUser.ID + ", eventid:" + body.Id + ", GUID eventid " + mediaGUID);
         var result = await updateHandler.HandleAsync(new UpdateMediaEventCommand(
-            mediaGUID,
-            currentUser.ID,
-            body.Title,
-            body.Notes,
-            body.Start,
-            body.End,
-            body.IsDone
-        ));
+                    mediaGUID,
+                    currentUser.ID,
+                    body.Title,
+                    body.Notes,
+                    body.Start,
+                    body.End,
+                    body.IsDone
+                ));
 
         return result is null ? NotFound() : Ok(new { status = "success", message = $"Event '{result.Title}' erfolgreich editiert." });
     }

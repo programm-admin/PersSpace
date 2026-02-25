@@ -23,7 +23,6 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
 
     public async Task<MediaEvent> GetMediaEventById(Guid userAccountId, Guid eventId)
     {
-        Console.Write("------------------------------ useraccountid: " + userAccountId + ", ID: " + eventId);
         try
         {
 
