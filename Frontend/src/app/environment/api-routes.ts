@@ -10,7 +10,7 @@ export const API_ROUTES: T_APIRoute = {
     mediaEvent: {
         create: BACKEND_ID + 'user/MediaEvent/create',
         getAll: BACKEND_ID + 'user/MediaEvent/all',
-        getMediaEvent: BACKEND_ID + 'user/MediaEvent/get-media-event',
+        getMediaEvent: BACKEND_ID + 'user/MediaEvent/', // + id
         updateMediaEvent: BACKEND_ID + 'user/MediaEvent/update',
         deleteMediaEvent: BACKEND_ID + 'user/MediaEvent/delete',
     },

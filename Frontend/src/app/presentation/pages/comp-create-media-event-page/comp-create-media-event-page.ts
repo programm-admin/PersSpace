@@ -26,6 +26,6 @@ export class CompCreateMediaEventPage {
     };
 
     public submitForm = (object: M_MediaEvent) => {
-        this.mediaEventAdapterRepository.Q_createMediaEvent.mutate(object);
+        this.mediaEventAdapterRepository.Q_createMediaEvent?.mutate(object);
     };
 }

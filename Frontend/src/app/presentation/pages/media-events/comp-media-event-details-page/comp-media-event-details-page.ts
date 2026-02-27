@@ -68,7 +68,7 @@ export class CompMediaEventDetailsPage {
     public submitForm = (newEvent: M_MediaEvent) => {
         if (!this.eventId()) return;
 
-        this.mediaEventAdapterRepository.Q_updateMediaEvent.mutate(newEvent);
+        this.mediaEventAdapterRepository.Q_updateMediaEvent?.mutate(newEvent);
         this.setDisplayScreen('DETAILS_PAGE');
     };
 
@@ -79,6 +79,6 @@ export class CompMediaEventDetailsPage {
     public deleteEvent = () => {
         if (!this.mediaEvent()) return;
 
-        this.mediaEventAdapterRepository.Q_deleteMediaEvent.mutate(this.eventId()!);
+        this.mediaEventAdapterRepository.Q_deleteMediaEvent?.mutate(this.eventId()!);
     };
 }

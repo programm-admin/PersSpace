@@ -27,18 +27,8 @@
                         "polyfills": ["zone.js"],
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            {
-                                "glob": "**/*",
-                                "input": "public"
-                            }
-                        ],
-                        "styles": ["src/theme.less", "src/styles.scss"],
-                        "server": "src/main.server.ts",
-                        "outputMode": "server",
-                        "ssr": {
-                            "entry": "src/server.ts"
-                        }
+                        "assets": [{ "glob": "**/*", "input": "public" }],
+                        "styles": ["src/theme.less", "src/styles.scss"]
                     },
                     "configurations": {
                         "production": {
@@ -64,6 +54,46 @@
                     },
                     "defaultConfiguration": "production"
                 },
+                "server": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "outputMode": "server",
+                        "tsConfig": "tsconfig.server.json",
+                        "polyfills": ["zone.js"],
+                        "assets": [{ "glob": "**/*", "input": "public" }],
+                        "styles": ["src/theme.less", "src/styles.scss"]
+                    },
+                    "configurations": {
+                        "production": {
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "optimization": false,
+                            "sourceMap": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "prerender": {
+                    "builder": "@angular/build:prerender",
+                    "options": {
+                        "browserTarget": "Frontend:build:production",
+                        "serverTarget": "Frontend:server:production",
+                        "routes": ["/"],
+                        "allowedHosts": ["localhost"]
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "Frontend:build:production",
+                            "serverTarget": "Frontend:server:production"
+                        },
+                        "development": {
+                            "browserTarget": "Frontend:build:development",
+                            "serverTarget": "Frontend:server:development"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
                 "serve": {
                     "builder": "@angular/build:dev-server",
                     "options": {
@@ -72,18 +102,14 @@
                             "Cross-Origin-Embedder-Policy": "unsafe-none"
                         },
                         "ssl": true,
-                        "sslKey": "../certificates/localhost+2-key.pem",
-                        "sslCert": "../certificates/localhost+2.pem",
-                        "host": "localhost",
+                        "sslKey": "...",
+                        "sslCert": "...",
+                        "allowedHosts": ["localhost"],
                         "port": 4200
                     },
                     "configurations": {
-                        "production": {
-                            "buildTarget": "Frontend:build:production"
-                        },
-                        "development": {
-                            "buildTarget": "Frontend:build:development"
-                        }
+                        "production": { "buildTarget": "Frontend:build:production" },
+                        "development": { "buildTarget": "Frontend:build:development" }
                     },
                     "defaultConfiguration": "development"
                 },
@@ -96,12 +122,7 @@
                         "polyfills": ["zone.js", "zone.js/testing"],
                         "tsConfig": "tsconfig.spec.json",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            {
-                                "glob": "**/*",
-                                "input": "public"
-                            }
-                        ],
+                        "assets": [{ "glob": "**/*", "input": "public" }],
                         "styles": ["src/styles.scss"]
                     }
                 }

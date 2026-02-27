@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { IT_USER_REPOSITORY } from '../../repositories/user.repository';
 import { IT_STORAGE_REPOSITORY } from '../../repositories/storage.repository';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, take, tap, throwError } from 'rxjs';
 import { M_User } from '../../models/user.model';
 
 /**
@@ -14,6 +14,7 @@ export class UC_User_GetUserFromBackend {
 
     public execute = (updateAccessToken: boolean) => {
         return this.userRepository.getUserFromBackend().pipe(
+            take(1),
             tap((response: M_User) => {
                 // user is logged in -> session is valid
                 this.storageRepository.setUserToStorage(response, updateAccessToken);

@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
-import { NzDropdownMenuComponent, NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzDropdownMenuComponent, NzDropdownModule } from 'ng-zorro-antd/dropdown';
 import { getEventCreationRoutes } from '../../../shared/functions/get-visible-app-routes';
 import { T_ApplicationRoute } from '../../../shared/types-and-interfaces/application-route';
 import { UC_User_GetUserFromBackend } from '../../../core/use-cases/user/get-user-from-backend.use-case';
@@ -24,7 +24,7 @@ import { IT_LOADING_REPOSITORY } from '../../../core/repositories/loading.reposi
         NzLayoutModule,
         NzIconModule,
         NzTooltipModule,
-        NzDropDownModule,
+        NzDropdownModule,
         CompUserButton,
     ],
     templateUrl: './comp-app-layout.html',
@@ -39,7 +39,6 @@ export class CompAppLayout implements OnInit {
     public readonly logoutUserUseCase = inject(UC_User_LogoutUser);
     public readonly getUserFromLocalStorageUseCase = inject(UC_User_GetUserFromLocalStorage);
     public readonly loadingRepository = inject(IT_LOADING_REPOSITORY);
-
     public readonly menuPosition: NzPlacementType = MENU_POSITION;
     public user: Signal<M_User | null> = signal(null);
 
@@ -51,7 +50,7 @@ export class CompAppLayout implements OnInit {
     ngOnInit(): void {
         this.loadingRepository.showLoading();
         this.user = this.userRepository.getUser();
-        this.getUserFromBackendUseCase.execute(false).subscribe();
+        this.getUserFromBackendUseCase.execute(false).pipe().subscribe();
     }
 
     public navigateToItemPage = (path: string | undefined) => {

@@ -22,31 +22,9 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.Models.M_LoginHistory", b =>
+            modelBuilder.Entity("Infrastructure.Entities.MediaEventEntity", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Login")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("M_UserID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("UserAccountID")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("M_UserID");
-
-                    b.ToTable("LoginHistories");
-                });
-
-            modelBuilder.Entity("Backend.Models.M_MediaEvent", b =>
-                {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -60,7 +38,6 @@ namespace Backend.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Start")
@@ -70,17 +47,17 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserAccountID")
+                    b.Property<Guid>("UserAccountId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserAccountID");
+                    b.HasIndex("UserAccountId");
 
                     b.ToTable("MediaEvents");
                 });
 
-            modelBuilder.Entity("Backend.Models.M_User", b =>
+            modelBuilder.Entity("Infrastructure.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -107,28 +84,19 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Backend.Models.M_LoginHistory", b =>
+            modelBuilder.Entity("Infrastructure.Entities.MediaEventEntity", b =>
                 {
-                    b.HasOne("Backend.Models.M_User", null)
-                        .WithMany("LoginHistories")
-                        .HasForeignKey("M_UserID");
-                });
-
-            modelBuilder.Entity("Backend.Models.M_MediaEvent", b =>
-                {
-                    b.HasOne("Backend.Models.M_User", "User")
+                    b.HasOne("Infrastructure.Entities.UserEntity", "User")
                         .WithMany("MediaEvents")
-                        .HasForeignKey("UserAccountID")
+                        .HasForeignKey("UserAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Backend.Models.M_User", b =>
+            modelBuilder.Entity("Infrastructure.Entities.UserEntity", b =>
                 {
-                    b.Navigation("LoginHistories");
-
                     b.Navigation("MediaEvents");
                 });
 #pragma warning restore 612, 618

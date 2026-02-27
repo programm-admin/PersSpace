@@ -7,6 +7,6 @@ export const convertMediaEventToDisplay = (mediaEvent: M_MediaEvent): [string, s
         Startdatum: new Date(mediaEvent.start).toLocaleDateString(),
         Enddatum: new Date(mediaEvent.end).toLocaleDateString(),
         'abgeschlossen?': mediaEvent.isDone ? 'ja' : 'nein',
-        'erstellt am': new Date(mediaEvent.eventCreated).toLocaleDateString(),
+        'erstellt am': new Date(mediaEvent.mediaEventCreated).toLocaleDateString(),
     });
 };
