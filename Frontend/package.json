@@ -11,7 +11,11 @@
         "lint": "ng lint",
         "lint:fix": "ng lint --fix && prettier --write .",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "build:browser": "ng build --configuration production",
+        "build:server": "ng run Frontend:server:production",
+        "build:ssr": "npm run build:browser && npm run build:server",
+        "serve:ssr": "node dist/Frontend/server/main.mjs"
     },
     "prettier": {
         "printWidth": 100,
