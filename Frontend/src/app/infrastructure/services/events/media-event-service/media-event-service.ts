@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { T_MediaEventRepository } from '../../../../core/repositories/events/media-event.repository';
-import { Observable, take, tap } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import {
     M_MediaEvent,
     M_MediaEventListItemResponse,

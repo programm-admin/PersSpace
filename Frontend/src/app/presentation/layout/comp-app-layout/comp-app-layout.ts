@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal, Signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, Signal, ViewChild } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
-import { NzDropdownMenuComponent, NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzDropdownMenuComponent, NzDropdownModule } from 'ng-zorro-antd/dropdown';
 import { getEventCreationRoutes } from '../../../shared/functions/get-visible-app-routes';
 import { T_ApplicationRoute } from '../../../shared/types-and-interfaces/application-route';
 import { UC_User_GetUserFromBackend } from '../../../core/use-cases/user/get-user-from-backend.use-case';
@@ -16,6 +16,7 @@ import { MENU_POSITION } from '../../../shared/variables/menu-position';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { IT_USER_REPOSITORY } from '../../../core/repositories/user.repository';
 import { IT_LOADING_REPOSITORY } from '../../../core/repositories/loading.repository';
+
 @Component({
     selector: 'app-comp-app-layout',
     imports: [
@@ -23,7 +24,7 @@ import { IT_LOADING_REPOSITORY } from '../../../core/repositories/loading.reposi
         NzLayoutModule,
         NzIconModule,
         NzTooltipModule,
-        NzDropDownModule,
+        NzDropdownModule,
         CompUserButton,
     ],
     templateUrl: './comp-app-layout.html',
