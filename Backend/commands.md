@@ -6,3 +6,5 @@ Backend commands:
 -   drop DB: `dotnet ef database drop`
 -   start backend over HTTPS: `dotnet run --launch-profile https`
 -   start backend over HTTPS with automatic reload: `dotnet watch run`
+
+- list NuGet packages that are outdated: `dotnet list package --outdated`

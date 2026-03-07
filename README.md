@@ -2,6 +2,9 @@
 
 PersSpace (Personal Space) ist ein persönlicher Hub, um sich selbst zu organisieren. Dabei sollen die Nutzer in der Lage sein, eigene Ereignisse (Events) anzulegen und sich diese anzeigen zu lassen. Hierbei bietet die Applikation verschiedene Arten von Events an.
 
+## Disclaimer
+Alle hier verwendeten Bilder wurden mit Hilfe von KI (ChatGPT) generiert!
+
 ## Funktionen (teils noch nicht implementiert)
 
 -   Nutzerlogin und -registrierung via Google Login (Social Login)
