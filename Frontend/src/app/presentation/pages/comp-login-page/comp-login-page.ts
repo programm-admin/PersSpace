@@ -14,13 +14,14 @@ import { APPLICATION_ROUTES } from '../../../shared/variables/application-routes
 import { UC_String_GetPathFromRoute } from '../../../core/use-cases/string/get-path-from-route.use-case';
 import { UC_Google_LoadScript } from '../../../core/use-cases/google/load-script.use-case';
 import { UC_User_SetUserSubject } from '../../../core/use-cases/user/set-user-subject.use-case';
-import { CLIENT_ID } from '../../../environment/env';
+
 import { UC_Storage_SetUserToStorage } from '../../../core/use-cases/storage/set-user-to-storage.use-case';
 import { UC_Storage_ClearStorage } from '../../../core/use-cases/storage/clear-storage.use-case';
 import { M_User } from '../../../core/models/user.model';
 import { IT_GOOGLE_REPOSITORY } from '../../../core/repositories/google.repository';
 import { E_RedirectUser } from '../../../shared/variables/redirect-user-state';
 import { IT_MESSAGE_REPOSITORY } from '../../../core/repositories/message.repository';
+import { CLIENT_ID } from '../../../environment/env';
 
 @Component({
     selector: 'app-comp-login-page',
