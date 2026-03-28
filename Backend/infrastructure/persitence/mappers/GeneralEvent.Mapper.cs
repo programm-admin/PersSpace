@@ -1,13 +1,14 @@
-using Domain.MediaEvents;
+
+using Domain.GeneralEvents;
 using Infrastructure.Entities;
 
 namespace Infrastructure.Mappers;
 
-public static class MediaEventMapper
+public static class GeneralEventMapper
 {
-    public static MediaEventEntity ToEntity(MediaEvent domainEvent)
+    public static GeneralEventEntity ToEntity(GeneralEvent domainEvent)
     {
-        return new MediaEventEntity
+        return new GeneralEventEntity
         {
             Id = domainEvent.ID,
             UserAccountId = domainEvent.UserAccountID,
@@ -16,22 +17,23 @@ public static class MediaEventMapper
             Start = domainEvent.Start,
             End = domainEvent.End,
             IsDone = domainEvent.IsDone,
-            MediaEventCreated = domainEvent.MediaEventCreated
+            GeneralEventCreated = domainEvent.GeneralEventCreated
         };
     }
 
-    public static MediaEvent ToDomain(MediaEventEntity entityEvent)
+    public static GeneralEvent ToDomain(GeneralEventEntity entityEvent)
     {
-        return new MediaEvent
+        return new GeneralEvent
         (
             entityEvent.Id,
             entityEvent.UserAccountId,
             entityEvent.Title,
             entityEvent.Notes,
+            entityEvent.MeetingPlace,
             entityEvent.Start,
             entityEvent.End,
             entityEvent.IsDone,
-            entityEvent.MediaEventCreated
+            entityEvent.GeneralEventCreated
         );
     }
 }

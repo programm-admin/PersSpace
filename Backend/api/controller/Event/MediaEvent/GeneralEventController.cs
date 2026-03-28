@@ -1,12 +1,11 @@
 ﻿using Api.Validation;
-using Application.MediaEvents.Create;
-using Application.MediaEvents.Delete;
-using Application.MediaEvents.GetAll;
-using Application.MediaEvents.GetSingle;
-using Application.MediaEvents.Update;
+using Application.GeneralEvents.Create;
+using Application.GeneralEvents.Delete;
+using Application.GeneralEvents.GetAll;
+using Application.GeneralEvents.GetSingle;
+using Application.GeneralEvents.Update;
 using Application.Users;
 using Domain;
-using Domain.MediaEvents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,71 +16,74 @@ namespace Api.Controllers.MediaEvents;
 [Route("user/[controller]")]
 public class MediaEventController(
     GetAllMediaEventHandler getAllHandler,
-    GetMediaEventHandler getHandler,
+    GetGeneralEventHandler getHandler,
     CreateMediaEventHandler createHandler,
-    UpdateMediaEventHandler updateHandler,
-    DeleteMediaEventHandler deleteHandler,
+    UpdateGeneralEventHandler updateHandler,
+    DeleteGeneralEventHandler deleteHandler,
     ICurrentUserService currentUserService
 ) : ControllerBase
 {
-    public class MediaEventRequest { public required string mediaID { get; set; } }
-    public class MediaEventUpdateRequest
+    public class GeneralEventRequest { public required string mediaID { get; set; } }
+    public class GeneralEventUpdateRequest
     {
         public required string Id { get; set; }
         public required string Title { get; set; }
         public string? Notes { get; set; }
+        public string? MeetingPlace {get; set;}
         public required DateTime Start { get; set; }
         public required DateTime End { get; set; }
         public required bool IsDone { get; set; }
-        public required DateTime MediaEventCreated { get; set; }
+        public required DateTime GeneralEventCreated { get; set; }
     }
-    public class CreateMediaEventRequest
+    public class CreateGeneralEventRequest
     {
         public string Title { get; set; } = null!;
         public string Notes { get; set; } = null!;
+        public string MeetingPlace {get; set;} = null!;
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public bool IsDone { get; set; } = false;
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllMediaEventsForUser()
+    public async Task<IActionResult> GetAllGeneralEventsForUser()
     {
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
-        IReadOnlyList<MediaEventResult> mediaEvents = await getAllHandler.HandleAsync(new GetAllMediaEventsCommand(currentUser.ID));
+        IReadOnlyList<GeneralEventResult> generalEvents = await getAllHandler.HandleAsync(new GetAllGeneralEventsCommand(currentUser.ID));
 
-        if (mediaEvents is null) return NotFound("[ERROR] Keine Medienevents gefunden.");
+        if (generalEvents is null) return NotFound("[ERROR] Keine Events gefunden.");
 
-        return StatusCode(200, new { status = "success", mediaEvents = mediaEvents });
+        return StatusCode(200, new { status = "success", generalEvents });
     }
 
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetMediaEventById(string id)
+    public async Task<IActionResult> GetGeneralEventById(string id)
     {
-        if (!Guid.TryParse(id, out var mediaGUID)) return BadRequest("[ERROR] Invalid media id.");
+        if (!Guid.TryParse(id, out var eventGUID)) return BadRequest("[ERROR] Invalid event id.");
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
-        MediaEventResult? result = await getHandler.HandleAsync(new GetMediaEventCommand(currentUser.ID, mediaGUID));
+        GeneralEventResult? result = await getHandler.HandleAsync(new GetGeneralEventCommand(currentUser.ID, eventGUID));
 
-        if (result is null) return NotFound("[ERROR] Kein Medienevent gefunden.");
-        return StatusCode(200, new { status = "success", mediaEvent = result });
+        if (result is null) return NotFound("[ERROR] Kein Event gefunden.");
+        return StatusCode(200, new { status = "success", generalEvent = result });
     }
 
 
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateNewMediaEvent([FromBody] CreateMediaEventRequest request)
+    public async Task<IActionResult> CreateNewGeneralEvent([FromBody] CreateGeneralEventRequest request)
     {
         var errors = ValidationHelper.ValidateObject(request);
 
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
-        MediaEventResult? result = await createHandler.HandleAsync(new CreateMediaEventCommand(
+        GeneralEventResult? result = await createHandler.HandleAsync(new CreateGeneralEventCommand(
             currentUser.ID,
             request.Title,
             request.Notes,
+            request.MeetingPlace,
             request.Start,
             request.End,
             request.IsDone
@@ -95,7 +97,7 @@ public class MediaEventController(
 
 
     [HttpPatch("update")]
-    public async Task<ActionResult<MediaEventResult>> UpdateMediaEvent([FromBody] MediaEventUpdateRequest body)
+    public async Task<ActionResult<GeneralEventResult>> UpdateMediaEvent([FromBody] GeneralEventUpdateRequest body)
     {
         var errors = ValidationHelper.ValidateObject(body);
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
@@ -103,11 +105,12 @@ public class MediaEventController(
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
-        var result = await updateHandler.HandleAsync(new UpdateMediaEventCommand(
+        var result = await updateHandler.HandleAsync(new UpdateGeneralEventCommand(
                     mediaGUID,
                     currentUser.ID,
                     body.Title,
                     body.Notes,
+                    body.MeetingPlace,
                     body.Start,
                     body.End,
                     body.IsDone
@@ -117,7 +120,7 @@ public class MediaEventController(
     }
 
     [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteMediaEvent([FromBody] MediaEventRequest body)
+    public async Task<IActionResult> DeleteMediaEvent([FromBody] GeneralEventRequest body)
     {
         var errors = ValidationHelper.ValidateObject(body);
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
@@ -125,9 +128,8 @@ public class MediaEventController(
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
-        MediaEventResult? mediaEvent = await deleteHandler.HandleAsync(new DeleteMediaEventCommand(mediaGUID, currentUser.ID));
+        GeneralEventResult? mediaEvent = await deleteHandler.HandleAsync(new DeleteGeneralEventCommand(mediaGUID, currentUser.ID));
 
         return mediaEvent is null ? NoContent() : Ok(new { status = "success", message = $"Event '{mediaEvent.Title}' erfolgreich gelöscht" });
     }
-
 }

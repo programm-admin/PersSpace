@@ -1,7 +1,8 @@
-public sealed record MediaEventResult(
+public sealed record GeneralEventResult(
     Guid Id,
     string Title,
-    string? notes,
+    string? Notes,
+    string? MeetingPlace,
     DateTime Start,
     DateTime End,
     bool isDone

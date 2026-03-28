@@ -1,19 +1,19 @@
-using Domain.MediaEvents;
+using Domain.GeneralEvents;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Entities;
 using Infrastructure.Mappers;
 using Application.Exceptions;
 
-public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
+public class GeneralEventRepository(AppDBProvider db) : IGeneralEventRepository
 {
-    public async Task<IReadOnlyList<MediaEvent>> GetAllMediaEventsForUser(Guid userAccountId)
+    public async Task<IReadOnlyList<GeneralEvent>> GetAllMediaEventsForUser(Guid userAccountId)
     {
         try
         {
-            List<MediaEventEntity> entities = await db.MediaEvents.AsNoTracking().Where(ev => ev.UserAccountId == userAccountId).OrderBy(ev => ev.Title).ToListAsync();
+            List<GeneralEventEntity> entities = await db.GeneralEvents.AsNoTracking().Where(ev => ev.UserAccountId == userAccountId).OrderBy(ev => ev.Title).ToListAsync();
 
-            return [.. entities.Select(MediaEventMapper.ToDomain)];
+            return [.. entities.Select(GeneralEventMapper.ToDomain)];
         }
         catch (Exception ex)
         {
@@ -21,24 +21,25 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
         }
     }
 
-    public async Task<MediaEvent> GetMediaEventById(Guid userAccountId, Guid eventId)
+    public async Task<GeneralEvent> GetGeneralEventById(Guid userAccountId, Guid eventId)
     {
         try
         {
 
-            MediaEventEntity? entity = await db.MediaEvents.AsNoTracking().FirstOrDefaultAsync(e => e.UserAccountId == userAccountId && e.Id == eventId);
+            GeneralEventEntity? entity = await db.GeneralEvents.AsNoTracking().FirstOrDefaultAsync(e => e.UserAccountId == userAccountId && e.Id == eventId);
 
             if (entity is null) throw new NotFoundException("[ERROR - MediaEventRepository: GetMediaEventById()]");
 
-            return new MediaEvent(
+            return new GeneralEvent(
                 entity.Id,
                 entity.UserAccountId,
                 entity.Title,
                 entity.Notes,
+                entity.MeetingPlace,
                 entity.Start,
                 entity.End,
                 entity.IsDone,
-                entity.MediaEventCreated
+                entity.GeneralEventCreated
             );
         }
         catch (Exception ex)
@@ -46,13 +47,13 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
             throw new PersistanceExeption("[ERROR - MediaEventRepository: GetMediaEventById()] Failed to get media event for given event id and user account id from DB:", ex);
         }
     }
-    public async Task AddMediaEvent(MediaEvent mediaEvent)
+    public async Task AddGeneralEvent(GeneralEvent mediaEvent)
     {
         try
         {
-            MediaEventEntity mediaEventEntity = MediaEventMapper.ToEntity(mediaEvent);
+            GeneralEventEntity generalEventEntity = GeneralEventMapper.ToEntity(mediaEvent);
 
-            db.MediaEvents.Add(mediaEventEntity);
+            db.GeneralEvents.Add(generalEventEntity);
             await db.SaveChangesAsync();
         }
         catch (DbUpdateException ex)
@@ -61,11 +62,11 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
         }
     }
 
-    public async Task UpdateMediaEvent(MediaEvent mediaEvent)
+    public async Task UpdateGeneralEvent(GeneralEvent mediaEvent)
     {
         try
         {
-            int rowsAffectedByUpdate = await db.MediaEvents.Where(ev => ev.Id == mediaEvent.ID && ev.UserAccountId == mediaEvent.UserAccountID).ExecuteUpdateAsync(
+            int rowsAffectedByUpdate = await db.GeneralEvents.Where(ev => ev.Id == mediaEvent.ID && ev.UserAccountId == mediaEvent.UserAccountID).ExecuteUpdateAsync(
                 setters => setters
                     .SetProperty(ev => ev.Title, mediaEvent.Title)
                     .SetProperty(ev => ev.Notes, mediaEvent.Notes)
@@ -84,15 +85,15 @@ public class MediaEventRepository(AppDBProvider db) : IMediaEventRepository
         }
     }
 
-    public async Task DeleteMediaEvent(Guid userId, Guid eventId)
+    public async Task DeleteGeneralEvent(Guid userId, Guid eventId)
     {
         try
         {
-            MediaEventEntity? entity = await db.MediaEvents.FirstOrDefaultAsync(ev => ev.Id == eventId && ev.UserAccountId == userId);
+            GeneralEventEntity? entity = await db.GeneralEvents.FirstOrDefaultAsync(ev => ev.Id == eventId && ev.UserAccountId == userId);
 
             if (entity is null) return;
 
-            db.MediaEvents.Remove(entity);
+            db.GeneralEvents.Remove(entity);
             await db.SaveChangesAsync();
         }
         catch (DbUpdateException ex)
