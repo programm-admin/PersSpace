@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
     styles: [
         `
             .noContentContainer {
-                background-color: white;
+                background-color: rgba(255, 255, 255, 0.6);
                 color: black;
                 width: 100%;
                 height: 10vh;

@@ -1,11 +1,12 @@
 @if (isError) {
     <p>Ein Fehler ist aufgetreten.</p>
 } @else {
-    <h1>Meine Medienevents</h1>
+    <h1>Meine Events</h1>
 
     <div class="gapDIV"></div>
 
     @if (userMediaEvents()) {
+        
         @if (userMediaEvents()!.length > 0) {
             <div>
                 <form [formGroup]="sortingFilterForm">
