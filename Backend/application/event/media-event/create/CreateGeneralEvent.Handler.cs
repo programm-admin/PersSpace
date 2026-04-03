@@ -3,7 +3,7 @@ using Domain.GeneralEvents;
 
 namespace Application.GeneralEvents.Create;
 
-public class CreateMediaEventHandler(IGeneralEventRepository repository) : IUseCaseHandler<CreateGeneralEventCommand, GeneralEventResult>
+public class CreateGeneralEventHandler(IGeneralEventRepository repository) : IUseCaseHandler<CreateGeneralEventCommand, GeneralEventResult>
 {
     public async Task<GeneralEventResult> HandleAsync(CreateGeneralEventCommand request)
     {

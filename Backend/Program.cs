@@ -42,8 +42,8 @@ builder.Services.AddDbContext<AppDBProvider>(options => options.UseNpgsql(connec
 // Repository Binding
 builder.Services.AddScoped<IGeneralEventRepository, GeneralEventRepository>();
 builder.Services.AddScoped<GetGeneralEventHandler>();
-builder.Services.AddScoped<GetAllMediaEventHandler>();
-builder.Services.AddScoped<CreateMediaEventHandler>();
+builder.Services.AddScoped<GetAllGeneralEventHandler>();
+builder.Services.AddScoped<CreateGeneralEventHandler>();
 builder.Services.AddScoped<UpdateGeneralEventHandler>();
 builder.Services.AddScoped<DeleteGeneralEventHandler>();
 

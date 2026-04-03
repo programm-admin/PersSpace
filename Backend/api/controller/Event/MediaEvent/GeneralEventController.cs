@@ -14,16 +14,16 @@ namespace Api.Controllers.MediaEvents;
 [ApiController]
 [Authorize]
 [Route("user/[controller]")]
-public class MediaEventController(
-    GetAllMediaEventHandler getAllHandler,
+public class GeneralEventController(
+    GetAllGeneralEventHandler getAllHandler,
     GetGeneralEventHandler getHandler,
-    CreateMediaEventHandler createHandler,
+    CreateGeneralEventHandler createHandler,
     UpdateGeneralEventHandler updateHandler,
     DeleteGeneralEventHandler deleteHandler,
     ICurrentUserService currentUserService
 ) : ControllerBase
 {
-    public class GeneralEventRequest { public required string mediaID { get; set; } }
+    public class GeneralEventRequest { public required string eventID { get; set; } }
     public class GeneralEventUpdateRequest
     {
         public required string Id { get; set; }
@@ -124,7 +124,7 @@ public class MediaEventController(
     {
         var errors = ValidationHelper.ValidateObject(body);
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
-        if (!Guid.TryParse(body.mediaID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
+        if (!Guid.TryParse(body.eventID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 

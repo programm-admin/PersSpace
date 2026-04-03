@@ -3,7 +3,7 @@ using Domain.GeneralEvents;
 
 namespace Application.GeneralEvents.GetAll;
 
-public class GetAllMediaEventHandler(IGeneralEventRepository repository) : IUseCaseHandler<GetAllGeneralEventsCommand, IReadOnlyList<GeneralEventResult>>
+public class GetAllGeneralEventHandler(IGeneralEventRepository repository) : IUseCaseHandler<GetAllGeneralEventsCommand, IReadOnlyList<GeneralEventResult>>
 {
     public async Task<IReadOnlyList<GeneralEventResult>> HandleAsync(GetAllGeneralEventsCommand request)
     {
