@@ -34,37 +34,37 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             title: 'Persönliche Startseite',
         },
     },
-    mediaEvent: {
-        createMediaEvent: {
+    generalEvent: {
+        createGeneralEvent: {
             route: {
                 path: 'user/media-event/create',
                 loadComponent: () =>
-                    import('../../presentation/pages/comp-create-media-event-page/comp-create-media-event-page').then(
-                        (comp) => comp.CompCreateMediaEventPage,
+                    import('../../presentation/pages/comp-create-general-event-page/comp-create-general-event-page').then(
+                        (comp) => comp.CompCreateGeneralEventPage,
                     ),
             },
             relativePath: '',
             isVisible: true,
             title: 'Medienevent erstellen',
         },
-        showAllMediaEvents: {
+        showAllGeneralEvents: {
             route: {
                 path: 'user/media-event/all',
                 loadComponent: () =>
-                    import('../../presentation/pages/media-events/comp-media-event-list-page/comp-media-event-list-page').then(
-                        (comp) => comp.CompMediaEventListPage,
+                    import('../../presentation/pages/general-events/comp-general-event-list-page/comp-general-event-list-page').then(
+                        (comp) => comp.CompGenerlEventListPage,
                     ),
             },
             relativePath: '',
             isVisible: true,
             title: 'Meine Medienevents',
         },
-        showMediaEventDetails: {
+        showGeneralEventDetails: {
             route: {
                 path: 'user/media-event/:id',
                 loadComponent: () =>
-                    import('../../presentation/pages/media-events/comp-media-event-details-page/comp-media-event-details-page').then(
-                        (comp) => comp.CompMediaEventDetailsPage,
+                    import('../../presentation/pages/general-events/comp-general-event-details-page/comp-general-event-details-page').then(
+                        (comp) => comp.CompGeneralEventDetailsPage,
                     ),
             },
             relativePath: 'user/media-event/',

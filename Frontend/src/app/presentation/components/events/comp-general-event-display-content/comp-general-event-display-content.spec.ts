@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompMediaEventDisplayContent } from './comp-media-event-display-content';
+import { CompGeneralEventDisplayContent } from './comp-general-event-display-content';
 
 describe('CompMediaEventDisplayContent', () => {
-    let component: CompMediaEventDisplayContent;
-    let fixture: ComponentFixture<CompMediaEventDisplayContent>;
+    let component: CompGeneralEventDisplayContent;
+    let fixture: ComponentFixture<CompGeneralEventDisplayContent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CompMediaEventDisplayContent],
+            imports: [CompGeneralEventDisplayContent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(CompMediaEventDisplayContent);
+        fixture = TestBed.createComponent(CompGeneralEventDisplayContent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompMediaEventDetailsPage } from './comp-media-event-details-page';
+import { CompGeneralEventDetailsPage } from './comp-general-event-details-page';
 
 describe('CompMediaEventDetailsPage', () => {
-    let component: CompMediaEventDetailsPage;
-    let fixture: ComponentFixture<CompMediaEventDetailsPage>;
+    let component: CompGeneralEventDetailsPage;
+    let fixture: ComponentFixture<CompGeneralEventDetailsPage>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CompMediaEventDetailsPage],
+            imports: [CompGeneralEventDetailsPage],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(CompMediaEventDetailsPage);
+        fixture = TestBed.createComponent(CompGeneralEventDetailsPage);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

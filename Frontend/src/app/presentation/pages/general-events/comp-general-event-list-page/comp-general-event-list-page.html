@@ -5,9 +5,9 @@
 
     <div class="gapDIV"></div>
 
-    @if (userMediaEvents()) {
+    @if (userGeneralEvents()) {
         
-        @if (userMediaEvents()!.length > 0) {
+        @if (userGeneralEvents()!.length > 0) {
             <div>
                 <form [formGroup]="sortingFilterForm">
                     <nz-radio-group nzSize="large" formControlName="currentFilter">
@@ -23,11 +23,11 @@
             <div class="gapDIV"></div>
 
             <div class="mediaEventCardContainer">
-                @for (mediaEvent of userMediaEvents(); track $index) {
+                @for (mediaEvent of userGeneralEvents(); track $index) {
                     <nz-card
                         [nzCover]="cover"
                         class="mediaEventItemCARD"
-                        (click)="navigateToMediaEventDetailsPage(mediaEvent.id)"
+                        (click)="navigateToGeneralEventDetailsPage(mediaEvent.id)"
                     >
                         <nz-card-meta [nzTitle]="mediaEvent.title" />
                     </nz-card>

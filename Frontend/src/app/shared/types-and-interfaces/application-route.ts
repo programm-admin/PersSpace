@@ -14,10 +14,10 @@ export type T_ApplicationRoutes = {
         login: T_ApplicationRoute;
         userStart: T_ApplicationRoute;
     };
-    mediaEvent: {
-        createMediaEvent: T_ApplicationRoute;
-        showAllMediaEvents: T_ApplicationRoute;
-        showMediaEventDetails: T_ApplicationRoute;
+    generalEvent: {
+        createGeneralEvent: T_ApplicationRoute;
+        showAllGeneralEvents: T_ApplicationRoute;
+        showGeneralEventDetails: T_ApplicationRoute;
     };
 };
 

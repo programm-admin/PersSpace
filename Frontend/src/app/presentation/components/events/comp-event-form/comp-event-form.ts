@@ -7,7 +7,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { M_MediaEvent } from '../../../../core/models/event.model';
+import { M_GeneralEvent } from '../../../../core/models/event.model';
 
 @Component({
     selector: 'app-comp-event-form',
@@ -29,10 +29,10 @@ export class CompEventForm implements OnInit {
 
     // input variables
     // if inpMediaEvent === null: create new event -> otherwise: update existing event
-    public inpMediaEvent: InputSignal<M_MediaEvent | null> = input.required<M_MediaEvent | null>();
+    public inpMediaEvent: InputSignal<M_GeneralEvent | null> = input.required<M_GeneralEvent | null>();
 
     // output variables
-    public outSubmitForm = output<M_MediaEvent>();
+    public outSubmitForm = output<M_GeneralEvent>();
     public outCancelForm = output<void>();
 
     public eventForm = this.formBuilder.group({
@@ -77,14 +77,14 @@ export class CompEventForm implements OnInit {
         }
 
         const rawValues = this.eventForm.getRawValue();
-        const newEvent: M_MediaEvent = {
+        const newEvent: M_GeneralEvent = {
             id: this.inpMediaEvent()?.id ? this.inpMediaEvent()!.id : '',
             title: rawValues.title,
             notes: rawValues.notes,
             start: rawValues.timeRange[0],
             end: rawValues.timeRange[1],
             isDone: rawValues.isDone,
-            mediaEventCreated: new Date(),
+            generalEventCreated: new Date(),
         };
 
         this.outSubmitForm.emit(newEvent);

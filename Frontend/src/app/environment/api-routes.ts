@@ -8,11 +8,11 @@ export const API_ROUTES: T_APIRoute = {
         logout: BACKEND_ID + 'auth/logout',
     },
     checkUserSession: BACKEND_ID + 'auth/check',
-    mediaEvent: {
+    generalEvent: {
         create: BACKEND_ID + 'user/GeneralEvent/create',
         getAll: BACKEND_ID + 'user/GeneralEvent/all',
-        getMediaEvent: BACKEND_ID + 'user/GeneralEvent/', // + id
-        updateMediaEvent: BACKEND_ID + 'user/GeneralEvent/update',
-        deleteMediaEvent: BACKEND_ID + 'user/GeneralEvent/delete',
+        getGeneralEvent: BACKEND_ID + 'user/GeneralEvent/', // + id
+        updateGeneralEvent: BACKEND_ID + 'user/GeneralEvent/update',
+        deleteGeneralEvent: BACKEND_ID + 'user/GeneralEvent/delete',
     },
 };
