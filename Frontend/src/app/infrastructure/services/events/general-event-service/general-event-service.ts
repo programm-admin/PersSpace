@@ -46,7 +46,7 @@ export class GeneralEventService implements T_GeneralEventRepository {
 
     public deleteGeneralEvent = (mediaEventId: string) => {
         return this.http.delete(API_ROUTES.generalEvent.deleteGeneralEvent, {
-            body: { mediaID: mediaEventId },
+            body: { eventID: mediaEventId },
             withCredentials: true,
         });
     };

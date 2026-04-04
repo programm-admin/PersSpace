@@ -14,6 +14,7 @@ public static class GeneralEventMapper
             UserAccountId = domainEvent.UserAccountID,
             Title = domainEvent.Title,
             Notes = domainEvent.Notes,
+            MeetingPlace = domainEvent.MeetingPlace,
             Start = domainEvent.Start,
             End = domainEvent.End,
             IsDone = domainEvent.IsDone,

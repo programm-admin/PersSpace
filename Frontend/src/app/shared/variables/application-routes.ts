@@ -37,7 +37,7 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
     generalEvent: {
         createGeneralEvent: {
             route: {
-                path: 'user/media-event/create',
+                path: 'user/general-event/create',
                 loadComponent: () =>
                     import('../../presentation/pages/comp-create-general-event-page/comp-create-general-event-page').then(
                         (comp) => comp.CompCreateGeneralEventPage,
@@ -45,11 +45,11 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             },
             relativePath: '',
             isVisible: true,
-            title: 'Medienevent erstellen',
+            title: 'Event erstellen',
         },
         showAllGeneralEvents: {
             route: {
-                path: 'user/media-event/all',
+                path: 'user/general-event/all',
                 loadComponent: () =>
                     import('../../presentation/pages/general-events/comp-general-event-list-page/comp-general-event-list-page').then(
                         (comp) => comp.CompGenerlEventListPage,
@@ -57,19 +57,19 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
             },
             relativePath: '',
             isVisible: true,
-            title: 'Meine Medienevents',
+            title: 'Meine Events',
         },
         showGeneralEventDetails: {
             route: {
-                path: 'user/media-event/:id',
+                path: 'user/general-event/:id',
                 loadComponent: () =>
                     import('../../presentation/pages/general-events/comp-general-event-details-page/comp-general-event-details-page').then(
                         (comp) => comp.CompGeneralEventDetailsPage,
                     ),
             },
-            relativePath: 'user/media-event/',
+            relativePath: 'user/general-event/',
             isVisible: false,
-            title: 'Medieneventdetails',
+            title: 'Eventdetails',
         },
     },
 };

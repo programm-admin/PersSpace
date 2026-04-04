@@ -80,8 +80,7 @@ export class CompGenerlEventListPage implements OnInit {
                         new Date(b.generalEventCreated).getTime(),
                 );
 
-        // this.userMediaEvents.set(currentList);
-        this.messageRepository.showMessage('success', 'Medienevents erfolgreich sortiert.');
+        this.messageRepository.showMessage('success', 'Events erfolgreich sortiert.');
     };
 
     public navigateToGeneralEventDetailsPage = (mediaID: string) => {

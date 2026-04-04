@@ -2,6 +2,7 @@ export type M_GeneralEvent = {
     id: string;
     title: string;
     notes: string;
+    meetingPlace: string;
     start: Date;
     end: Date;
     isDone: boolean;
@@ -9,6 +10,7 @@ export type M_GeneralEvent = {
 };
 export type M_GeneralEventResponse = {
     generalEvent: M_GeneralEvent;
+    status: string
 };
 
 export type M_GeneralEventListItem = Omit<M_GeneralEvent, 'userAccountID' | 'notes'>;

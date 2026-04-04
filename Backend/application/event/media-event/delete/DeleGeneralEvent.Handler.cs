@@ -1,6 +1,5 @@
 using Application.Common;
-using Application.Exceptions;
-using Domain.GeneralEvents;
+using Infrastructure.Entities;
 
 namespace Application.GeneralEvents.Delete;
 
@@ -8,18 +7,17 @@ public class DeleteGeneralEventHandler(IGeneralEventRepository repository) : IUs
 {
     public async Task<GeneralEventResult> HandleAsync(DeleteGeneralEventCommand request)
     {
-        GeneralEvent? mediaEvent = await repository.GetGeneralEventById(request.UserAccountId, request.EventId);
-
-        if (mediaEvent is null) throw new NotFoundException("[ERROR - DeleteMediaEventHandler: HandleAsync()] Error when trying to get media for deleting");
+        GeneralEventEntity deletedEntity = await repository.DeleteGeneralEvent(request.UserAccountId, request.EventId);
 
         return new GeneralEventResult(
-            mediaEvent.ID,
-            mediaEvent.Title,
-            mediaEvent.Notes,
-            mediaEvent.MeetingPlace,
-            mediaEvent.Start,
-            mediaEvent.End,
-            mediaEvent.IsDone
+            deletedEntity.Id,
+            deletedEntity.Title,
+            deletedEntity.Notes,
+            deletedEntity.MeetingPlace,
+            deletedEntity.Start,
+            deletedEntity.End,
+            deletedEntity.IsDone,
+            deletedEntity.GeneralEventCreated
         );
     }
 }

@@ -14,7 +14,7 @@ import { IT_A_GENERAL_EVENT_REPOSITORY } from '../../../../core/repositories/que
 import { map } from 'rxjs';
 
 @Component({
-    selector: 'app-comp-media-event-details-page',
+    selector: 'app-comp-general-event-details-page',
     imports: [
         CompLoadingScreen,
         CompGeneralEventDisplayContent,
@@ -43,7 +43,7 @@ export class CompGeneralEventDetailsPage {
         return this.generalEventAdapterRepository.Q_getSingleGeneralEvent;
     });
 
-    public mediaEvent: Signal<M_GeneralEvent | null> = computed(
+    public generalEvent: Signal<M_GeneralEvent | null> = computed(
         () => this.generalEventQuery()?.data()?.generalEvent ?? null,
     );
     public isLoading: Signal<boolean> = computed(
@@ -77,7 +77,7 @@ export class CompGeneralEventDetailsPage {
     };
 
     public deleteEvent = () => {
-        if (!this.mediaEvent()) return;
+        if (!this.generalEvent()) return;
 
         this.generalEventAdapterRepository.Q_deleteGeneralEvent?.mutate(this.eventId()!);
     };

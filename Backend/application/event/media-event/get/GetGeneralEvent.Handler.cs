@@ -8,9 +8,7 @@ public class GetGeneralEventHandler(IGeneralEventRepository repository) : IUseCa
 {
     public async Task<GeneralEventResult> HandleAsync(GetGeneralEventCommand request)
     {
-        GeneralEvent? generalEvent = await repository.GetGeneralEventById(request.UserAccountID, request.MediaEventID);
-
-        if (generalEvent is null) throw new NotFoundException("[ERROR - GetMediaEventHandler: HandleAsync()] Error when trying to get media");
+        GeneralEvent generalEvent = await repository.GetGeneralEventById(request.UserAccountID, request.MediaEventID);
 
         return new GeneralEventResult(
             generalEvent.ID,
@@ -19,7 +17,8 @@ public class GetGeneralEventHandler(IGeneralEventRepository repository) : IUseCa
             generalEvent.MeetingPlace,
             generalEvent.Start,
             generalEvent.End,
-            generalEvent.IsDone
+            generalEvent.IsDone,
+            generalEvent.GeneralEventCreated
         );
     }
 }

@@ -5,5 +5,6 @@ public sealed record GeneralEventResult(
     string? MeetingPlace,
     DateTime Start,
     DateTime End,
-    bool isDone
+    bool isDone,
+    DateTime GeneralEventCreated
 );

@@ -89,9 +89,9 @@ public class GeneralEventController(
             request.IsDone
         ));
 
-        if (result is null) return StatusCode(500, new { status = "error", message = "[ERROR] Fehler beim Anlegen des Medienevents." });
+        if (result is null) return StatusCode(500, new { status = "error", message = "[ERROR] Fehler beim Anlegen des Events." });
 
-        return StatusCode(201, new { mediaEvent = result });
+        return StatusCode(201, new { generalEvent = result });
 
     }
 
@@ -101,12 +101,12 @@ public class GeneralEventController(
     {
         var errors = ValidationHelper.ValidateObject(body);
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
-        if (!Guid.TryParse(body.Id, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
+        if (!Guid.TryParse(body.Id, out var eventGUID)) return BadRequest("[ERROR] Invalid event Id.");
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
         var result = await updateHandler.HandleAsync(new UpdateGeneralEventCommand(
-                    mediaGUID,
+                    eventGUID,
                     currentUser.ID,
                     body.Title,
                     body.Notes,
@@ -116,7 +116,7 @@ public class GeneralEventController(
                     body.IsDone
                 ));
 
-        return result is null ? NotFound() : Ok(new { status = "success", message = $"Event '{result.Title}' erfolgreich editiert." });
+        return result is null ? NotFound() : Ok(new { status = "success", message = $"Event '{result.Title}' erfolgreich editiert.", generalEvent = result });
     }
 
     [HttpDelete("delete")]
@@ -124,12 +124,12 @@ public class GeneralEventController(
     {
         var errors = ValidationHelper.ValidateObject(body);
         if (errors.Any()) return BadRequest(new { status = "error", Errors = errors });
-        if (!Guid.TryParse(body.eventID, out var mediaGUID)) return BadRequest("[ERROR] Invalid media Id.");
+        if (!Guid.TryParse(body.eventID, out var eventGUID)) return BadRequest("[ERROR] Invalid media Id.");
 
         User currentUser = currentUserService.GetCurrentUserAsync().Result;
 
-        GeneralEventResult? mediaEvent = await deleteHandler.HandleAsync(new DeleteGeneralEventCommand(mediaGUID, currentUser.ID));
+        GeneralEventResult? generalEvent = await deleteHandler.HandleAsync(new DeleteGeneralEventCommand(eventGUID, currentUser.ID));
 
-        return mediaEvent is null ? NoContent() : Ok(new { status = "success", message = $"Event '{mediaEvent.Title}' erfolgreich gelöscht" });
+        return generalEvent is null ? NoContent() : Ok(new { status = "success", message = $"Event '{generalEvent.Title}' erfolgreich gelöscht" });
     }
 }

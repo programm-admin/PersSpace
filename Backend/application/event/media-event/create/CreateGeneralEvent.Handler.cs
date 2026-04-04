@@ -7,7 +7,7 @@ public class CreateGeneralEventHandler(IGeneralEventRepository repository) : IUs
 {
     public async Task<GeneralEventResult> HandleAsync(CreateGeneralEventCommand request)
     {
-        var mediaEvent = new GeneralEvent(
+        var generalEvent = new GeneralEvent(
            Guid.NewGuid(),
            request.UserAccountId,
            request.Title,
@@ -19,16 +19,17 @@ public class CreateGeneralEventHandler(IGeneralEventRepository repository) : IUs
            DateTime.UtcNow
        );
 
-        await repository.AddGeneralEvent(mediaEvent);
+        await repository.AddGeneralEvent(generalEvent);
 
         return new GeneralEventResult(
-            mediaEvent.ID,
-            mediaEvent.Title,
-            mediaEvent.Notes,
-            mediaEvent.MeetingPlace,
-            mediaEvent.Start,
-            mediaEvent.End,
-            mediaEvent.IsDone
+            generalEvent.ID,
+            generalEvent.Title,
+            generalEvent.Notes,
+            generalEvent.MeetingPlace,
+            generalEvent.Start,
+            generalEvent.End,
+            generalEvent.IsDone,
+            generalEvent.GeneralEventCreated
         );
     }
 }

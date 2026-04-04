@@ -38,6 +38,7 @@ export class CompEventForm implements OnInit {
     public eventForm = this.formBuilder.group({
         title: this.formBuilder.control<string>('', [Validators.required, Validators.minLength(2)]),
         notes: this.formBuilder.control<string>('', []),
+        meetingPlace: this.formBuilder.control<string>("", []),
         timeRange: this.formBuilder.control<[Date, Date]>(
             [new Date(), new Date()],
             [Validators.required],
@@ -54,6 +55,7 @@ export class CompEventForm implements OnInit {
                 Validators.minLength(2),
             ]),
             notes: this.formBuilder.control<string>(this.inpMediaEvent()!.notes, []),
+            meetingPlace: this.formBuilder.control<string>(this.inpMediaEvent()!.meetingPlace, []),
             timeRange: this.formBuilder.control<[Date, Date]>(
                 [new Date(this.inpMediaEvent()!.start), new Date(this.inpMediaEvent()!.end)],
                 [Validators.required],
@@ -81,6 +83,7 @@ export class CompEventForm implements OnInit {
             id: this.inpMediaEvent()?.id ? this.inpMediaEvent()!.id : '',
             title: rawValues.title,
             notes: rawValues.notes,
+            meetingPlace: rawValues.meetingPlace,
             start: rawValues.timeRange[0],
             end: rawValues.timeRange[1],
             isDone: rawValues.isDone,

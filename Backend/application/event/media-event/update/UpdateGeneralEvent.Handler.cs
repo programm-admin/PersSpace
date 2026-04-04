@@ -9,29 +9,27 @@ public class UpdateGeneralEventHandler(IGeneralEventRepository repository) : IUs
     public async Task<GeneralEventResult> HandleAsync(
         UpdateGeneralEventCommand command)
     {
-        GeneralEvent? generalEvent =
-            await repository.GetGeneralEventById(command.UserAccountId, command.EventId);
-
-        if (generalEvent is null) throw new NotFoundException("[ERROR - UpdateMediaEventHandler: HandleAsync()] Error when trying to get media for update");
-
-        generalEvent.UpdateMediaEvent(
+        GeneralEvent updatedEvent = await repository.UpdateGeneralEvent(new GeneralEvent(
+            command.EventId,
+            command.UserAccountId,
             command.Title,
             command.Notes,
+            command.MeetingPlace,
             command.Start,
             command.End,
-            command.IsDone
-        );
-
-        await repository.UpdateGeneralEvent(generalEvent);
+            command.IsDone,
+            DateTime.Now
+        ));
 
         return new GeneralEventResult(
-            generalEvent.ID,
-            generalEvent.Title,
-            generalEvent.Notes,
-            generalEvent.MeetingPlace,
-            generalEvent.Start,
-            generalEvent.End,
-            generalEvent.IsDone
+            updatedEvent.ID,
+            updatedEvent.Title,
+            updatedEvent.Notes,
+            updatedEvent.MeetingPlace,
+            updatedEvent.Start,
+            updatedEvent.End,
+            updatedEvent.IsDone,
+            updatedEvent.GeneralEventCreated
         );
     }
 }

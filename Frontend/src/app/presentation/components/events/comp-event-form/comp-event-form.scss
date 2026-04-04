@@ -27,3 +27,12 @@ textarea {
     justify-content: center;
     align-items: center;
 }
+
+.label {
+    width: 15rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.label label {font-size: var(--standard--font--size);}

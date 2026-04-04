@@ -1,12 +1,13 @@
 import { M_GeneralEvent } from '../../core/models/event.model';
 
-export const convertMediaEventToDisplay = (mediaEvent: M_GeneralEvent): [string, string][] => {
+export const convertMediaEventToDisplay = (generalEvent: M_GeneralEvent): [string, string][] => {
     return Object.entries({
-        Titel: mediaEvent.title,
-        Notizen: mediaEvent.notes,
-        Startdatum: new Date(mediaEvent.start).toLocaleDateString(),
-        Enddatum: new Date(mediaEvent.end).toLocaleDateString(),
-        'abgeschlossen?': mediaEvent.isDone ? 'ja' : 'nein',
-        'erstellt am': new Date(mediaEvent.generalEventCreated).toLocaleDateString(),
+        Titel: generalEvent.title,
+        Notizen: generalEvent.notes,
+        Ort: generalEvent.meetingPlace,
+        Startdatum: new Date(generalEvent.start).toLocaleDateString(),
+        Enddatum: new Date(generalEvent.end).toLocaleDateString(),
+        'abgeschlossen?': generalEvent.isDone ? 'ja' : 'nein',
+        'erstellt am': new Date(generalEvent.generalEventCreated).toLocaleDateString(),
     });
 };

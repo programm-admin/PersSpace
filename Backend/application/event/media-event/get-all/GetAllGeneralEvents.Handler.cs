@@ -8,6 +8,6 @@ public class GetAllGeneralEventHandler(IGeneralEventRepository repository) : IUs
     public async Task<IReadOnlyList<GeneralEventResult>> HandleAsync(GetAllGeneralEventsCommand request)
     {
         IReadOnlyList<GeneralEvent> events = await repository.GetAllMediaEventsForUser(request.UserAccountId);
-        return [.. events.Select(e => new GeneralEventResult(e.ID, e.Title, e.Notes, e.MeetingPlace, e.Start, e.End, e.IsDone))];
+        return [.. events.Select(e => new GeneralEventResult(e.ID, e.Title, e.Notes, e.MeetingPlace, e.Start, e.End, e.IsDone, e.GeneralEventCreated))];
     }
 }

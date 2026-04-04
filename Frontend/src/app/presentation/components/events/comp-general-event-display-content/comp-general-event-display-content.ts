@@ -4,7 +4,7 @@ import { convertMediaEventToDisplay } from '../../../../shared/functions/convert
 import { isContentEmpty } from '../../../../shared/functions/display-content';
 
 @Component({
-    selector: 'app-comp-media-event-display-content',
+    selector: 'app-comp-general-event-display-content',
     imports: [],
     templateUrl: './comp-general-event-display-content.html',
     styleUrl: './comp-general-event-display-content.scss',
