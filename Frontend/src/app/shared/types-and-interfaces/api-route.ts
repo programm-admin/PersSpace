@@ -4,11 +4,11 @@ export type T_APIRoute = {
         logout: string;
     };
     checkUserSession: string;
-    mediaEvent: {
+    generalEvent: {
         create: string;
         getAll: string;
-        getMediaEvent: string;
-        updateMediaEvent: string;
-        deleteMediaEvent: string;
+        getGeneralEvent: string;
+        updateGeneralEvent: string;
+        deleteGeneralEvent: string;
     };
 };

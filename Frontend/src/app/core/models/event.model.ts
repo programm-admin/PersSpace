@@ -1,18 +1,20 @@
-export type M_MediaEvent = {
+export type M_GeneralEvent = {
     id: string;
     title: string;
     notes: string;
+    meetingPlace: string;
     start: Date;
     end: Date;
     isDone: boolean;
-    mediaEventCreated: Date;
+    generalEventCreated: Date;
 };
-export type M_MediaEventResponse = {
-    mediaEvent: M_MediaEvent;
+export type M_GeneralEventResponse = {
+    generalEvent: M_GeneralEvent;
+    status: string;
 };
 
-export type M_MediaEventListItem = Omit<M_MediaEvent, 'userAccountID' | 'notes'>;
-export type M_MediaEventListItemResponse = { mediaEvents: M_MediaEventListItem[] };
-export type M_MediaEventUpdateResponse = { mediaEvent: M_MediaEventListItem };
+export type M_GeneralEventListItem = Omit<M_GeneralEvent, 'userAccountID' | 'notes'>;
+export type M_GeneralEventListItemResponse = { generalEvents: M_GeneralEventListItem[] };
+export type M_GeneralEventUpdateResponse = { generalEvent: M_GeneralEventListItem };
 
-export type M_ModelCreate = Omit<M_MediaEvent, 'id' | 'userAccountID'>;
+export type M_ModelCreate = Omit<M_GeneralEvent, 'id' | 'userAccountID'>;

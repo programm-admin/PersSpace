@@ -1,6 +1,7 @@
-#userAvatar:hover {
+#userAvatar {
     cursor: pointer;
     background-color: rgba(194, 24, 91, 1);
+    transition-duration: var(--tranisition--duration);
 }
 
 .dividerLI {

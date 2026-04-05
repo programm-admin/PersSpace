@@ -1,11 +1,11 @@
 using Backend.Data;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
-using Application.MediaEvents.GetSingle;
-using Application.MediaEvents.GetAll;
-using Application.MediaEvents.Create;
-using Application.MediaEvents.Update;
-using Application.MediaEvents.Delete;
+using Application.GeneralEvents.GetSingle;
+using Application.GeneralEvents.GetAll;
+using Application.GeneralEvents.Create;
+using Application.GeneralEvents.Update;
+using Application.GeneralEvents.Delete;
 using Infrastructure.Authentication.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -40,12 +40,12 @@ var googleClientID = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
 builder.Services.AddDbContext<AppDBProvider>(options => options.UseNpgsql(connectionString));
 
 // Repository Binding
-builder.Services.AddScoped<IMediaEventRepository, MediaEventRepository>();
-builder.Services.AddScoped<GetMediaEventHandler>();
-builder.Services.AddScoped<GetAllMediaEventHandler>();
-builder.Services.AddScoped<CreateMediaEventHandler>();
-builder.Services.AddScoped<UpdateMediaEventHandler>();
-builder.Services.AddScoped<DeleteMediaEventHandler>();
+builder.Services.AddScoped<IGeneralEventRepository, GeneralEventRepository>();
+builder.Services.AddScoped<GetGeneralEventHandler>();
+builder.Services.AddScoped<GetAllGeneralEventHandler>();
+builder.Services.AddScoped<CreateGeneralEventHandler>();
+builder.Services.AddScoped<UpdateGeneralEventHandler>();
+builder.Services.AddScoped<DeleteGeneralEventHandler>();
 
 // ------------------ AUTHENTICATION ------------------
 builder.Services.AddSingleton(JwtSettings);

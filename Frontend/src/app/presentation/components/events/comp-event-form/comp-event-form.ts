@@ -7,7 +7,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { M_MediaEvent } from '../../../../core/models/event.model';
+import { M_GeneralEvent } from '../../../../core/models/event.model';
 
 @Component({
     selector: 'app-comp-event-form',
@@ -29,15 +29,17 @@ export class CompEventForm implements OnInit {
 
     // input variables
     // if inpMediaEvent === null: create new event -> otherwise: update existing event
-    public inpMediaEvent: InputSignal<M_MediaEvent | null> = input.required<M_MediaEvent | null>();
+    public inpMediaEvent: InputSignal<M_GeneralEvent | null> =
+        input.required<M_GeneralEvent | null>();
 
     // output variables
-    public outSubmitForm = output<M_MediaEvent>();
+    public outSubmitForm = output<M_GeneralEvent>();
     public outCancelForm = output<void>();
 
     public eventForm = this.formBuilder.group({
         title: this.formBuilder.control<string>('', [Validators.required, Validators.minLength(2)]),
         notes: this.formBuilder.control<string>('', []),
+        meetingPlace: this.formBuilder.control<string>('', []),
         timeRange: this.formBuilder.control<[Date, Date]>(
             [new Date(), new Date()],
             [Validators.required],
@@ -54,6 +56,7 @@ export class CompEventForm implements OnInit {
                 Validators.minLength(2),
             ]),
             notes: this.formBuilder.control<string>(this.inpMediaEvent()!.notes, []),
+            meetingPlace: this.formBuilder.control<string>(this.inpMediaEvent()!.meetingPlace, []),
             timeRange: this.formBuilder.control<[Date, Date]>(
                 [new Date(this.inpMediaEvent()!.start), new Date(this.inpMediaEvent()!.end)],
                 [Validators.required],
@@ -77,14 +80,15 @@ export class CompEventForm implements OnInit {
         }
 
         const rawValues = this.eventForm.getRawValue();
-        const newEvent: M_MediaEvent = {
+        const newEvent: M_GeneralEvent = {
             id: this.inpMediaEvent()?.id ? this.inpMediaEvent()!.id : '',
             title: rawValues.title,
             notes: rawValues.notes,
+            meetingPlace: rawValues.meetingPlace,
             start: rawValues.timeRange[0],
             end: rawValues.timeRange[1],
             isDone: rawValues.isDone,
-            mediaEventCreated: new Date(),
+            generalEventCreated: new Date(),
         };
 
         this.outSubmitForm.emit(newEvent);

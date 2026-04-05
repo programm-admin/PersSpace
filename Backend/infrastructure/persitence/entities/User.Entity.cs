@@ -11,5 +11,5 @@ public class UserEntity
     public required string PictureUrl { get; set; }
     public required string GoogleID { get; set; }
 
-    public ICollection<MediaEventEntity> MediaEvents { get; set; } = new List<MediaEventEntity>();
+    public ICollection<GeneralEventEntity> GeneralEvents { get; set; } = new List<GeneralEventEntity>();
 }

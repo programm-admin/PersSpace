@@ -97,7 +97,7 @@
                         "tsConfig": "tsconfig.spec.json",
                         "inlineStyleLanguage": "scss",
                         "assets": [
-                            {   
+                            {
                                 "glob": "**/*",
                                 "input": "public"
                             }
@@ -109,6 +109,6 @@
         }
     },
     "cli": {
-      "analytics": false
+        "analytics": false
     }
 }

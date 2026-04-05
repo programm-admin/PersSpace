@@ -7,9 +7,9 @@
         (ngSubmit)="submitForm($event)"
     >
         <nz-form-item>
-            <nz-form-label nzRequired nzFor="inpTitle"
-                ><span class="label">Titel (Pflichtfeld)</span></nz-form-label
-            >
+            <div class="label">
+                <label for="inpTitle">Titel (Pflichtfeld)</label>
+            </div>
             <nz-form-control
                 nzErrorTip="Titel ist ein Pflichtfeld und muss mindestens aus zwei Zeichen bestehen!"
             >
@@ -20,14 +20,16 @@
                     id="inpTitle"
                     nzVariant="outlined"
                     nzSize="large"
+                    autocomplete="off"
                     required
                 />
             </nz-form-control>
         </nz-form-item>
+
         <nz-form-item>
-            <nz-form-label nzFor="inpNotes" class="label"
-                ><span class="label">Notizen (optional)</span></nz-form-label
-            >
+            <div class="label">
+                <label for="inpNotes">Notizen (optional)</label>
+            </div>
             <nz-form-control>
                 <textarea
                     type="text"
@@ -37,16 +39,32 @@
                     nzVariant="outlined"
                     nzSize="large"
                     rows="4"
+                    autocomplete="off"
                 ></textarea>
             </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label nzFor="inpTimeRange" class="label" nzRequired
-                ><span class="label"
-                    >Zeitintervall des Ereignisses (Pflichtfeld)</span
-                ></nz-form-label
-            >
+            <div class="label">
+                <label for="inpMeetingPlace">Ort (optional)</label>
+            </div>
+            <nz-form-control>
+                <input
+                    type="text"
+                    nz-input
+                    formControlName="meetingPlace"
+                    id="inpMeetingPlace"
+                    nzVariant="outlined"
+                    nzSize="large"
+                    autocomplete="off"
+                />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <div class="label">
+                <label for="inpTimeRange"> Zeitintervall des Ereignisses (Pflichtfeld) </label>
+            </div>
             <nz-form-control
                 nzErrorTip="Das Zeitintervall ist ein Pflichtfeld und beide Daten (Start- und Enddatum) müssen ausgefüllt werden!"
             >
@@ -62,10 +80,10 @@
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label nzFor="inpIsDone" class="label" nzRequired
-                ><span class="label">Erledigt? (Pflichtfeld)</span></nz-form-label
-            >
-            <nz-radio-group formControlName="isDone">
+            <div class="label">
+                <label for="inpIsDone">Erledigt? (Pflichtfeld)</label>
+            </div>
+            <nz-radio-group formControlName="isDone" id="inpIsDone">
                 <label nz-radio-button [nzValue]="true">ja</label>
                 <label nz-radio-button [nzValue]="false">nein</label>
             </nz-radio-group>
