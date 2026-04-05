@@ -94,8 +94,12 @@ export class Adapter_GeneralEvents implements AT_GeneralEventRepository {
         ? injectQuery(() => ({
               queryKey: QKEYS_GeneralEvents.singleEvent(this.generalEventId()!),
               queryFn: () =>
-                  firstValueFrom(this.generalEventRepository.getGeneralEvent(this.generalEventId()!)),
-              enabled: computed(() => isPlatformBrowser(this.platformId) && !!this.generalEventId()),
+                  firstValueFrom(
+                      this.generalEventRepository.getGeneralEvent(this.generalEventId()!),
+                  ),
+              enabled: computed(
+                  () => isPlatformBrowser(this.platformId) && !!this.generalEventId(),
+              ),
           }))
         : undefined;
 
@@ -110,20 +114,14 @@ export class Adapter_GeneralEvents implements AT_GeneralEventRepository {
                           queryKey: QKEYS_GeneralEvents.singleEvent(this.generalEventId()!),
                       });
 
-                      this.messageRepository.showMessage(
-                          'success',
-                          'Event erfolgreich gelöscht.',
-                      );
+                      this.messageRepository.showMessage('success', 'Event erfolgreich gelöscht.');
                       this.router.navigateByUrl(
                           APPLICATION_ROUTES.generalEvent.showAllGeneralEvents.route.path!,
                       );
                   }
               },
               onError: () =>
-                  this.messageRepository.showMessage(
-                      'error',
-                      'Fehler beim Löschen des Events.',
-                  ),
+                  this.messageRepository.showMessage('error', 'Fehler beim Löschen des Events.'),
           }))
         : undefined;
 }

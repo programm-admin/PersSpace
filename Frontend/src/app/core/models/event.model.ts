@@ -10,7 +10,7 @@ export type M_GeneralEvent = {
 };
 export type M_GeneralEventResponse = {
     generalEvent: M_GeneralEvent;
-    status: string
+    status: string;
 };
 
 export type M_GeneralEventListItem = Omit<M_GeneralEvent, 'userAccountID' | 'notes'>;

@@ -9,7 +9,8 @@ const isEntryOfTypeObject = (entry: any): entry is T_ApplicationRoute => {
 };
 
 export const getVisibleAppRoutes = (
-    routes: ApplicationRouteNode = APPLICATION_ROUTES, requiredPath: string
+    routes: ApplicationRouteNode = APPLICATION_ROUTES,
+    requiredPath: string,
 ): T_ApplicationRoute[] => {
     return Object.values(routes).flatMap((value) => {
         if (isEntryOfTypeObject(value)) {
@@ -23,7 +24,7 @@ export const getVisibleAppRoutes = (
 export const getEventCreationRoutes = (
     routes: ApplicationRouteNode = APPLICATION_ROUTES,
 ): T_ApplicationRoute[] => {
-    const requiredPath: string = "user/general-event/";
+    const requiredPath: string = 'user/general-event/';
 
     return Object.values(routes).flatMap((value) => {
         if (isEntryOfTypeObject(value)) {
@@ -37,7 +38,7 @@ export const getEventCreationRoutes = (
 export const getUserSettingsRoutes = (
     routes: ApplicationRouteNode = APPLICATION_ROUTES,
 ): T_ApplicationRoute[] => {
-    const requiredPath: string = "user/general/";
+    const requiredPath: string = 'user/general/';
     return Object.values(routes).flatMap((value) => {
         if (isEntryOfTypeObject(value)) {
             return value.isVisible && value.route.path?.startsWith(requiredPath) ? [value] : [];

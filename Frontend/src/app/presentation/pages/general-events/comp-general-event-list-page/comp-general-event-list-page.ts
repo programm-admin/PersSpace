@@ -26,7 +26,7 @@ import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-load
         ReactiveFormsModule,
         ReactiveFormsModule,
         CompNoContent,
-        CompLoadingScreen
+        CompLoadingScreen,
     ],
     templateUrl: './comp-general-event-list-page.html',
     styleUrl: './comp-general-event-list-page.scss',
@@ -45,10 +45,12 @@ export class CompGenerlEventListPage implements OnInit {
     public userGeneralEvents: Signal<M_GeneralEventListItem[] | null> = computed(() =>
         this.filterItemList(
             'ALPHABET',
-            this.generalEventAdapter.Q_getGeneralEvents?.data()?.generalEvents  ,
+            this.generalEventAdapter.Q_getGeneralEvents?.data()?.generalEvents,
         ),
     );
-    public isLoading: Signal<boolean> = computed(() => this.generalEventAdapter.Q_getGeneralEvents?.isLoading() ?? false);
+    public isLoading: Signal<boolean> = computed(
+        () => this.generalEventAdapter.Q_getGeneralEvents?.isLoading() ?? false,
+    );
     public isError: boolean = false;
     public sortingFilterList: T_ListSortingItem[] = LIST_SORTINGS;
     public sortingFilter: T_ListSortingItem = this.sortingFilterList[0];
@@ -70,12 +72,14 @@ export class CompGenerlEventListPage implements OnInit {
         }
 
         newFilter === 'ALPHABET'
-            ? this.userGeneralEvents()!.sort((a: M_GeneralEventListItem, b: M_GeneralEventListItem) =>
-                  a.title.localeCompare(b.title),
+            ? this.userGeneralEvents()!.sort(
+                  (a: M_GeneralEventListItem, b: M_GeneralEventListItem) =>
+                      a.title.localeCompare(b.title),
               )
             : newFilter === 'ALPHABET_INVERTED'
-              ? this.userGeneralEvents()!.sort((a: M_GeneralEventListItem, b: M_GeneralEventListItem) =>
-                    b.title.localeCompare(a.title),
+              ? this.userGeneralEvents()!.sort(
+                    (a: M_GeneralEventListItem, b: M_GeneralEventListItem) =>
+                        b.title.localeCompare(a.title),
                 )
               : this.userGeneralEvents()!.sort(
                     (a: M_GeneralEventListItem, b: M_GeneralEventListItem) =>

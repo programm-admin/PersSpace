@@ -29,7 +29,8 @@ export class CompEventForm implements OnInit {
 
     // input variables
     // if inpMediaEvent === null: create new event -> otherwise: update existing event
-    public inpMediaEvent: InputSignal<M_GeneralEvent | null> = input.required<M_GeneralEvent | null>();
+    public inpMediaEvent: InputSignal<M_GeneralEvent | null> =
+        input.required<M_GeneralEvent | null>();
 
     // output variables
     public outSubmitForm = output<M_GeneralEvent>();
@@ -38,7 +39,7 @@ export class CompEventForm implements OnInit {
     public eventForm = this.formBuilder.group({
         title: this.formBuilder.control<string>('', [Validators.required, Validators.minLength(2)]),
         notes: this.formBuilder.control<string>('', []),
-        meetingPlace: this.formBuilder.control<string>("", []),
+        meetingPlace: this.formBuilder.control<string>('', []),
         timeRange: this.formBuilder.control<[Date, Date]>(
             [new Date(), new Date()],
             [Validators.required],

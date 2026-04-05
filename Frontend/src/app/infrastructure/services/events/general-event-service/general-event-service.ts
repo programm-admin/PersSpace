@@ -16,10 +16,16 @@ import { API_ROUTES } from '../../../../environment/api-routes';
 export class GeneralEventService implements T_GeneralEventRepository {
     private readonly http = inject(HttpClient);
 
-    public createGeneralEvent = (generalEvent: M_GeneralEvent): Observable<M_GeneralEventResponse> => {
-        return this.http.post<M_GeneralEventResponse>(API_ROUTES.generalEvent.create, generalEvent, {
-            withCredentials: true,
-        });
+    public createGeneralEvent = (
+        generalEvent: M_GeneralEvent,
+    ): Observable<M_GeneralEventResponse> => {
+        return this.http.post<M_GeneralEventResponse>(
+            API_ROUTES.generalEvent.create,
+            generalEvent,
+            {
+                withCredentials: true,
+            },
+        );
     };
 
     public getAllGeneralEvents = (): Observable<M_GeneralEventListItemResponse> => {
@@ -36,7 +42,9 @@ export class GeneralEventService implements T_GeneralEventRepository {
             .pipe(take(1));
     };
 
-    public updateGeneralEvent = (newEvent: M_GeneralEvent): Observable<M_GeneralEventUpdateResponse> => {
+    public updateGeneralEvent = (
+        newEvent: M_GeneralEvent,
+    ): Observable<M_GeneralEventUpdateResponse> => {
         return this.http.patch<M_GeneralEventUpdateResponse>(
             API_ROUTES.generalEvent.updateGeneralEvent,
             { ...newEvent },

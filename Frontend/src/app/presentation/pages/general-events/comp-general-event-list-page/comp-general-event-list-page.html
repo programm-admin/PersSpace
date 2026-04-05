@@ -1,17 +1,14 @@
 @if (isLoading()) {
     <app-comp-loading-screen />
-} 
-@else {
+} @else {
     @if (isError) {
         <p>Ein Fehler ist aufgetreten.</p>
-    } 
-    @else {
+    } @else {
         <h1>Meine Events</h1>
 
         <div class="gapDIV"></div>
 
         @if (userGeneralEvents()) {
-        
             @if (userGeneralEvents()!.length > 0) {
                 <div>
                     <form [formGroup]="sortingFilterForm">
@@ -41,8 +38,7 @@
                         </ng-template>
                     }
                 </div>
-            } 
-            @else {
+            } @else {
                 <app-comp-no-content />
             }
         }
