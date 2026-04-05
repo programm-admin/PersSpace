@@ -1,6 +1,7 @@
 @if (isLoading()) {
     <app-comp-loading-screen />
-} @else {
+} 
+@else {
     <h1>Event-Details</h1>
     <button nz-button nzSize="large" (click)="navigateToEventsListPage()">
         <nz-icon nzType="arrow-left" nzTheme="outline" /> Zurück zu meinen Events
@@ -8,7 +9,8 @@
 
     @if (isError()) {
         <div>Es ist ein Fehler aufgetreten.</div>
-    } @else {
+    } 
+    @else {
         @if (generalEvent()) {
             @if (displayScreen === 'DETAILS_PAGE') {
                 <div class="detailsContainer">
@@ -39,7 +41,8 @@
                         (outDelete)="deleteEvent()"
                     />
                 </div>
-            } @else {
+            } 
+            @else {
                 <h1>Event bearbeiten</h1>
                 <app-comp-event-form
                     [inpMediaEvent]="generalEvent()"

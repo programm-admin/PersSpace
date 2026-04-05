@@ -14,9 +14,10 @@ import { Router } from '@angular/router';
 import { APPLICATION_ROUTES } from '../../../../shared/variables/application-routes';
 import { CompNoContent } from '../../../layout/comp-no-content/comp-no-content';
 import { IT_A_GENERAL_EVENT_REPOSITORY } from '../../../../core/repositories/queries/event/general-event.query.repository';
+import { CompLoadingScreen } from '../../../layout/comp-loading-screen/comp-loading-screen';
 
 @Component({
-    selector: 'app-comp-media-event-list-page',
+    selector: 'app-comp-general-event-list-page',
     imports: [
         NzCardModule,
         NzButtonModule,
@@ -25,6 +26,7 @@ import { IT_A_GENERAL_EVENT_REPOSITORY } from '../../../../core/repositories/que
         ReactiveFormsModule,
         ReactiveFormsModule,
         CompNoContent,
+        CompLoadingScreen
     ],
     templateUrl: './comp-general-event-list-page.html',
     styleUrl: './comp-general-event-list-page.scss',
@@ -36,6 +38,7 @@ export class CompGenerlEventListPage implements OnInit {
     private readonly generalEventAdapter = inject(IT_A_GENERAL_EVENT_REPOSITORY);
     private readonly formBuilder = inject(NonNullableFormBuilder);
     private readonly router = inject(Router);
+    public destroyReference = inject(DestroyRef);
 
     public readonly convertSortingFilter = convertSortingFilterToGerman;
 
@@ -45,7 +48,7 @@ export class CompGenerlEventListPage implements OnInit {
             this.generalEventAdapter.Q_getGeneralEvents?.data()?.generalEvents  ,
         ),
     );
-    public destroyReference = inject(DestroyRef);
+    public isLoading: Signal<boolean> = computed(() => this.generalEventAdapter.Q_getGeneralEvents?.isLoading() ?? false);
     public isError: boolean = false;
     public sortingFilterList: T_ListSortingItem[] = LIST_SORTINGS;
     public sortingFilter: T_ListSortingItem = this.sortingFilterList[0];

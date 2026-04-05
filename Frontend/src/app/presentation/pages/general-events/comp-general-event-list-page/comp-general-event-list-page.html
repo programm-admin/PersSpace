@@ -1,43 +1,50 @@
-@if (isError) {
-    <p>Ein Fehler ist aufgetreten.</p>
-} @else {
-    <h1>Meine Events</h1>
+@if (isLoading()) {
+    <app-comp-loading-screen />
+} 
+@else {
+    @if (isError) {
+        <p>Ein Fehler ist aufgetreten.</p>
+    } 
+    @else {
+        <h1>Meine Events</h1>
 
-    <div class="gapDIV"></div>
+        <div class="gapDIV"></div>
 
-    @if (userGeneralEvents()) {
+        @if (userGeneralEvents()) {
         
-        @if (userGeneralEvents()!.length > 0) {
-            <div>
-                <form [formGroup]="sortingFilterForm">
-                    <nz-radio-group nzSize="large" formControlName="currentFilter">
-                        @for (filter of sortingFilterList; track $index) {
-                            <label nz-radio-button [nzValue]="filter">{{
-                                convertSortingFilter(filter)
-                            }}</label>
-                        }
-                    </nz-radio-group>
-                </form>
-            </div>
+            @if (userGeneralEvents()!.length > 0) {
+                <div>
+                    <form [formGroup]="sortingFilterForm">
+                        <nz-radio-group nzSize="large" formControlName="currentFilter">
+                            @for (filter of sortingFilterList; track $index) {
+                                <label nz-radio-button [nzValue]="filter">
+                                    {{ convertSortingFilter(filter) }}
+                                </label>
+                            }
+                        </nz-radio-group>
+                    </form>
+                </div>
 
-            <div class="gapDIV"></div>
+                <div class="gapDIV"></div>
 
-            <div class="mediaEventCardContainer">
-                @for (mediaEvent of userGeneralEvents(); track $index) {
-                    <nz-card
-                        [nzCover]="cover"
-                        class="mediaEventItemCARD"
-                        (click)="navigateToGeneralEventDetailsPage(mediaEvent.id)"
-                    >
-                        <nz-card-meta [nzTitle]="mediaEvent.title" />
-                    </nz-card>
-                    <ng-template #cover>
-                        <img src="Media_Picture.png" [alt]="'Coverbild zu ' + mediaEvent.title" />
-                    </ng-template>
-                }
-            </div>
-        } @else {
-            <app-comp-no-content />
+                <div class="mediaEventCardContainer">
+                    @for (event of userGeneralEvents(); track $index) {
+                        <nz-card
+                            [nzCover]="cover"
+                            class="mediaEventItemCARD"
+                            (click)="navigateToGeneralEventDetailsPage(event.id)"
+                        >
+                            <nz-card-meta [nzTitle]="event.title" />
+                        </nz-card>
+                        <ng-template #cover>
+                            <img src="Media_Picture.png" [alt]="'Coverbild zu ' + event.title" />
+                        </ng-template>
+                    }
+                </div>
+            } 
+            @else {
+                <app-comp-no-content />
+            }
         }
     }
 }

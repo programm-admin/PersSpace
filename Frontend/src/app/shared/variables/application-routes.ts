@@ -22,13 +22,13 @@ export const APPLICATION_ROUTES: T_ApplicationRoutes = {
     },
     user: {
         login: {
-            route: { path: 'login', component: CompLoginPage },
+            route: { path: 'user/general/login', component: CompLoginPage },
             relativePath: '',
             isVisible: true,
             title: 'Loginseite',
         },
         userStart: {
-            route: { path: 'user/start', component: CompUserStartPage },
+            route: { path: 'user/general/start', component: CompUserStartPage },
             relativePath: '',
             isVisible: false,
             title: 'Persönliche Startseite',
